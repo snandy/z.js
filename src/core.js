@@ -71,8 +71,24 @@ Z.prototype = {
     push: push,
     sort: types.sort,
     splice: types.splice
-};
+}
 Z.fn = Z.prototype.init.prototype = Z.prototype
-Z.extend = function() {
-    
+
+Z.extend = Z.fn.extend = function(obj) {
+    var target, start
+    if (arguments.length === 1) {
+        target = this
+        start = 0
+    } else {
+        target = obj
+        start = 1
+    }
+    forEach(slice.call(arguments, start), function(source) {
+        if (source) {
+            for (var prop in source) {
+                target[prop] = source[prop]
+            }
+        }
+    })
+    return target
 }
