@@ -47,11 +47,20 @@
 			// left: 20
 		// });
 		
-		// console.log($('#sub').pos());
-		// $p.css({
-			// width: 100,
-			// height: 300
-		// });
+		// Z('p').one('click', function() {
+		// 	console.log(this)
+		// })
+
+		// Z('p').delay('click', function() {
+		// 	console.log(this)
+		// }, 2000)
+
+		Z('p').on('click', {
+			args: 25,
+			handler: function(e, x) {
+				alert(x)
+			}
+		})
 	</script>
 	</body>
 </html>

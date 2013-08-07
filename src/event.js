@@ -152,7 +152,7 @@ function callback(elem, type, e, handlerObj) {
 // handlerObj class
 function Handler(config) {
     this.handler   = config.handler
-    this.once      = config.once
+    this.one       = config.one
     this.delay     = config.delay
     this.debounce  = config.debounce
     this.immediate = config.immediate
@@ -161,8 +161,10 @@ function Handler(config) {
     this.stop      = config.stop
     this.prevent   = config.prevent
     this.stopBubble = config.stopBubble
-    this.args       = config.args || []
     this.data       = config.data
+    if (config.args) {
+        this.args = config.args.length ? config.args : [config.args]
+    }
 }
 // 删除事件的注册，从缓存中去除
 function remove(elem, type, guid) {
@@ -225,7 +227,8 @@ Event.prototype = {
     isDefaultPrevented: returnFalse,
     isPropagationStopped: returnFalse,
     isImmediatePropagationStopped: returnFalse
-};
+}
+
 // Fix evnet object
 function fix(e, elem) {
     var i, prop, props = [], originalEvent = e
@@ -276,11 +279,9 @@ function fix(e, elem) {
 
 // Add event handler
 function bind(elem, type, handler) {
-    if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) {
-        return
-    }
+    if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) return
     
-    var id     = elem[guidStr] = elem[guidStr] || guid++
+    var id = elem[guidStr] = elem[guidStr] || guid++
     var elData = cache[id] = cache[id] || {}
     var events = elData.events
     var handle = elData.handle
@@ -306,8 +307,8 @@ function bind(elem, type, handler) {
     
     handler = handlerObj.handler
     
-    // once 仅执行一次
-    if (handlerObj.once) {
+    // one 仅执行一次
+    if (handlerObj.one) {
         handlerObj.special = handler
         handlerObj.handler = util.once(handler)
     }
@@ -423,53 +424,44 @@ function trigger(elem, type) {
     }
 }
 
-var E = {
-    on: bind,
-    bind: bind,
-    off: unbind,
-    unbind: unbind,
-    fire: trigger,
-    trigger: trigger,
-    one: function(elem, type, handler) {
-        bind(elem, type, {
-            once: true,
-            handler: handler
-        })
-    },
-    delay: function(elem, type, handler, wait) {
-        bind(elem, type, {
-            delay: wait,
-            handler: handler
-        })
-    },
-    debounce: function(elem, type, handler, wait) {
-        bind(elem, type, {
-            debounce: wait,
-            handler: handler
-        })
-    },
-    immediate: function(elem, type, handler, wait) {
-        bind(elem, type, {
-            immediate: wait,
-            handler: handler
-        })
-    },
-    throttle: function(elem, type, handler, wait) {
-        bind(elem, type, {
-            throttle: wait,
-            handler: handler
-        })
-    },
-    viewCache: function() {
-        if (window.console) {
-            console.log(cache)
-        }
-    },
-    destroy: function() {
-        for (var num in cache) {
-            var elData = cache[num], elem = elData.elem
-            unbind(elem)
-        }
-        guid = 1
+// var E = {
+//     viewCache: function() {
+//         if (window.console) {
+//             console.log(cache)
+//         }
+//     },
+//     destroy: function() {
+//         for (var num in cache) {
+//             var elData = cache[num], elem = elData.elem
+//             unbind(elem)
+//         }
+//         guid = 1
+//     }
+// }
+
+// on / off
+forEach({on: bind, off: unbind}, function(callback, name) {
+    Z.fn[name] = function(type, handler) {
+        return this.each(function(el) {
+            callback(el, type, handler)
+        })        
     }
+})
+
+// one / delay / throttle / debounce / immediate
+forEach(['one', 'delay', 'throttle', 'debounce', 'immediate'], function(name) {
+    Z.fn[name] = function(type, handler, wait) {
+        return this.each(function(el) {
+            var option = {handler: handler}
+            option[name] = name === 'one' ? true : wait
+            bind(el, type, option)
+        })
+    }
+})
+
+// fire
+Z.fn.fire = function(type) {
+    return this.each(function(el) {
+        trigger(el, type)
+    })
 }

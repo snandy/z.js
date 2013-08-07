@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-07 10:32:42
+ * @snandy 2013-08-07 15:50:14
  *
  */
 ~function(window, undefined) {
@@ -668,6 +668,777 @@ Z.fn.extend({
     }
 
 })
+
+
+
+var guid = 1
+var guidStr = '__guid__'
+        
+// 存放所有事件handler, 以guid为key, cache[1] = {}
+// cache[1] = {handle: evnetHandle, events: {}}, events = {click: [handler1, handler2, ..]}
+var cache = {}
+
+// 优先使用标准API
+var w3c = !!window.addEventListener
+
+// Utility functions -----------------------------------------------------------------------------
+function each(arr, callback) {
+    for (var i=0; i<arr.length; i++) {
+        if ( callback(arr[i], i) === true ) return
+    }
+}
+
+var util = {
+    once: function(func) {
+        var run, memo
+        return function() {
+            if (run) return memo
+            run = true
+            return memo = func.apply(this, arguments)
+        }
+    },
+    delay: function(func, wait) {
+        return function() {
+            var context = this, args = arguments
+            setTimeout(function() {
+                func.apply(context, args)
+            }, wait)
+        }
+    },
+    debounce: function(func, wait, immediate) {
+        var timeout
+        return function() {
+            var context = this, args = arguments
+            later = function() {
+                timeout = null
+                if (!immediate) func.apply(context, args)
+            }
+            var callNow = immediate && !timeout
+            clearTimeout(timeout)
+            timeout = setTimeout(later, wait)
+            if (callNow) func.apply(context, args)
+        }
+    },
+    throttle: function(func, wait) {
+        var context, args, timeout, throttling, more, result
+        var whenDone = util.debounce(function() {
+                more = throttling = false
+            }, wait)
+        return function() {
+            context = this, args = arguments
+            var later = function() {
+                timeout = null
+                if (more) func.apply(context, args)
+                whenDone()
+            }
+            if (!timeout) timeout = setTimeout(later, wait)
+            
+            if (throttling) {
+                more = true
+            } else {
+                result = func.apply(context, args)
+            }
+            whenDone()
+            throttling = true
+            return result
+        }
+    },
+    addListener: function() {
+        if (w3c) {
+            return function(el, type, handler) { el.addEventListener(type, handler, false) } 
+        } else {
+            return function(el, type, handler) { el.attachEvent('on' + type, handler) }
+        }
+    }(),
+    removeListener: function() {
+        if (w3c) {
+            return function(el, type, handler) { el.removeEventListener(type, handler, false) }
+        } else {
+            return function(el, type, handler) { el.detachEvent('on' + type, handler) }
+        }
+    }()
+}
+
+// Private functions ---------------------------------------------------------------------------
+
+function returnFalse() {
+    return false
+}
+function returnTrue() {
+    return true
+}
+function now() {
+    return (new Date).getTime()
+}
+function excuteHandler(elem, e, args /*only for trigger*/) {
+    if (!elem || !e) return
+    
+    var e = fix(e, elem)
+    var type = e.type
+    var id = elem[guidStr]
+    var elData = cache[id]
+    var events = elData.events
+    var handlers = events[type]
+    
+    for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
+        if (args) handlerObj.args = handlerObj.args.concat(args)
+        if (e.namespace) {
+            if (e.namespace===handlerObj.namespace) {
+                callback(elem, type, e, handlerObj)
+            }
+        } else {
+            callback(elem, type, e, handlerObj)
+        }
+    }
+}
+function callback(elem, type, e, handlerObj) {
+    var args      = handlerObj.args
+    var stop      = handlerObj.stop
+    var data      = handlerObj.data
+    var handler   = handlerObj.handler
+    var prevent   = handlerObj.prevent
+    var context   = handlerObj.context || elem
+    var stopBubble = handlerObj.stopBubble
+    
+    // 如果数组第一个元素不是事件对象，将事件对象插入到数组第一个位置; 如果是则用新的事件对象替换
+    if (args[0] && args[0].type === e.type) {
+        args.shift()
+        args.unshift(e)
+    } else {
+        args.unshift(e)
+    }
+    
+    if (stop) {
+        e.preventDefault()
+        e.stopPropagation()
+    }
+    
+    if (prevent) e.preventDefault()
+    
+    if (data) e.data = data
+    
+    if (stopBubble) e.stopPropagation()
+    
+    handler.apply(context, args)
+}
+// handlerObj class
+function Handler(config) {
+    this.handler   = config.handler
+    this.one       = config.one
+    this.delay     = config.delay
+    this.debounce  = config.debounce
+    this.immediate = config.immediate
+    this.throttle  = config.throttle
+    this.context   = config.context
+    this.stop      = config.stop
+    this.prevent   = config.prevent
+    this.stopBubble = config.stopBubble
+    this.data       = config.data
+    if (config.args) {
+        this.args = config.args.length ? config.args : [config.args]
+    }
+}
+// 删除事件的注册，从缓存中去除
+function remove(elem, type, guid) {
+    var elData = cache[guid]
+    var handle = elData.handle
+    var events = elData.events
+    
+    // 从缓存中删除指定类型事件相关数据
+    delete events[type]
+    delete elData.elem
+    delete elData.handle
+    
+    // DOM中事件取消注册
+    util.removeListener(elem, type, handle)
+    // events是空对象时，从cache中删除
+    if ( Z.isEmptyObject(events) ) {
+        delete elData.events
+        delete cache[guid]
+    }
+}
+// Custom event class
+function Event(event) {
+    var namespace
+    if (event.type) {
+        this.originalEvent = event
+        this.type = event.type
+    } else {
+        if (event.indexOf('.') > -1) {
+            namespace = event.split('.')
+            this.type = namespace[0]
+            this.namespace = namespace[1]
+        } else {
+            this.type = event
+            this.namespace = ''
+        }
+    }
+    this.timeStamp = now()
+}
+Event.prototype = {
+    preventDefault: function() {
+        this.isDefaultPrevented = returnTrue
+        var e = this.originalEvent
+        if (e.preventDefault) {
+            e.preventDefault()
+        }
+        e.returnValue = false
+    },
+    stopPropagation: function() {
+        this.isPropagationStopped = returnTrue
+        var e = this.originalEvent
+        if (e.stopPropagation) {
+            e.stopPropagation()
+        }
+        e.cancelBubble = true
+    },
+    stopImmediatePropagation: function() {
+        this.isImmediatePropagationStopped = returnTrue
+        this.stopPropagation()
+    },
+    isDefaultPrevented: returnFalse,
+    isPropagationStopped: returnFalse,
+    isImmediatePropagationStopped: returnFalse
+}
+
+// Fix evnet object
+function fix(e, elem) {
+    var i, prop, props = [], originalEvent = e
+    
+    props = props.concat('altKey bubbles button cancelable charCode clientX clientY ctrlKey currentTarget'.split(' '))
+    props = props.concat('data detail eventPhase fromElement handler keyCode layerX layerY metaKey'.split(' '))
+    props = props.concat('newValue offsetX offsetY originalTarget pageX pageY prevValue relatedTarget'.split(' '))
+    props = props.concat('screenX screenY shiftKey target toElement view wheelDelta which'.split(' '))
+    
+    e = new Event(originalEvent)
+    for (i=props.length; i;) {
+        prop = props[--i]
+        e[prop] = originalEvent[prop]
+    }
+    
+    if (!e.target) {
+        e.target = originalEvent.srcElement || elem // elem for trigger event
+    }
+    if (e.target.nodeType === 3) {
+        e.target = e.target.parentNode
+    }
+    if (!e.relatedTarget && e.fromElement) {
+        e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement
+    }
+    if (e.pageX == null && e.clientX != null) {
+        var doc = document.documentElement, body = document.body
+        e.pageX = e.clientX + 
+            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
+            (doc && doc.clientLeft || body && body.clientLeft || 0)
+        e.pageY = e.clientY + 
+            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
+            (doc && doc.clientTop  || body && body.clientTop  || 0)
+    }
+    if (!e.which && ((e.charCode || e.charCode === 0) ? e.charCode : e.keyCode)) {
+        e.which = e.charCode || e.keyCode
+    }
+    if (!e.metaKey && e.ctrlKey) {
+        e.metaKey = e.ctrlKey
+    }
+    if (!e.which && e.button !== undefined) {
+        e.which = (e.button & 1 ? 1 : ( e.button & 2 ? 3 : ( e.button & 4 ? 2 : 0 ) ))
+    }
+    
+    return e
+}
+
+// Public functions -----------------------------------------------------------------------------
+
+// Add event handler
+function bind(elem, type, handler) {
+    if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) return
+    
+    var id = elem[guidStr] = elem[guidStr] || guid++
+    var elData = cache[id] = cache[id] || {}
+    var events = elData.events
+    var handle = elData.handle
+    var handlerObj, eventType, i = 0, arrType, namespace
+    
+    // 批量添加, 递归
+    if ( Z.isObject(type) ) {
+        for (eventType in type) {
+            bind(elem, eventType, type[eventType])
+        }
+        return
+    } else {
+        arrType = type.split(' ')
+    }
+    
+    // handle parameter handler
+    if ( Z.isFunction(handler) ) {
+        handlerObj = new Handler({handler: handler})
+    } else {
+        if ( !Z.isFunction(handler.handler) ) return
+        handlerObj = new Handler(handler)
+    }
+    
+    handler = handlerObj.handler
+    
+    // one 仅执行一次
+    if (handlerObj.one) {
+        handlerObj.special = handler
+        handlerObj.handler = util.once(handler)
+    }
+    
+    // delay延迟执行
+    if (handlerObj.delay) {
+        handlerObj.special = handler
+        handlerObj.handler = util.delay(handler, handlerObj.delay)
+    }
+    
+    // debounce防弹跳
+    if (handlerObj.debounce) {
+        handlerObj.special = handler
+        handlerObj.handler = util.debounce(handler, handlerObj.debounce)
+    }
+    
+    // immediate 执行后立即延迟指定时间，如避免重复提交
+    if (handlerObj.immediate) {
+        handlerObj.special = handler
+        handlerObj.handler = util.debounce(handler, handlerObj.immediate, true)
+    }
+    
+    // throttle 事件节流
+    if (handlerObj.throttle) {
+        handlerObj.special = handler
+        handlerObj.handler = util.throttle(handler, handlerObj.throttle)
+    }
+    
+    // 初始化events
+    if (!events) {
+        elData.events = events = {}
+    }
+    
+    // 初始化handle
+    if (!handle) {
+        elData.handle = handle = function(e) {
+            excuteHandler(elData.elem, e)
+        }
+    }
+    
+    // elem暂存到handle
+    elData.elem = elem
+    
+    while ( eventType=arrType[i++] ) {
+        // Namespaced event handlers
+        if ( eventType.indexOf('.') > -1 ) {
+            namespace = type.split('.')
+            eventType = namespace[0]
+            handlerObj.namespace = namespace[1]
+        } else {
+            handlerObj.namespace = ''
+        }
+        
+        // 取指定类型事件(如click)的所有handlers, 如果有则是一个数组, 第一次是undefined则初始化为空数组
+        // 也仅在handlers为undefined时注册事件, 即每种类型事件仅注册一次, 再次添加handler只是push到数组handlers中
+        handlers  = events[eventType]
+        if (!handlers) {
+            handlers = events[eventType] = []
+            util.addListener(elem, eventType, handle)
+        }
+        // 添加到数组
+        handlers.push(handlerObj)
+    }
+    
+    // 避免IE低版本内存泄露
+    elem = null
+}
+
+// Remove event handler
+function unbind(elem, type, handler) {
+    if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
+    
+    var id       = elem[guidStr]
+    var elData   = id && cache[id]
+    var events   = elData && elData.events
+    var handlers = events && events[type]
+    var length   = arguments.length
+    
+    switch (length) {
+        case 1:
+            for (var type in events) remove(elem, type, id)
+            break
+        case 2:
+            remove(elem, type, id)
+            break
+        case 3:
+            each(handlers, function(handlerObj, i) {
+                if (handlerObj.handler === handler || handlerObj.special === handler) {
+                    handlers.splice(i, 1)
+                    return true
+                }
+            })
+            if (handlers.length === 0) remove(elem, type, id)
+            break
+    }
+}
+
+// Fire event
+function trigger(elem, type) {
+    if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
+
+    var id       = elem[guidStr]
+    var elData   = id && cache[id]
+    var events   = elData && elData.events
+    var handlers = events && events[type]
+    var args     = slice.call(arguments, 2)
+    var length   = arguments.length
+    
+    if (length===1 && elem.nodeType===1) {
+        for (var type in events) excuteHandler(elem, type, args)
+    } else {
+        excuteHandler(elem, type, args)
+    }
+}
+
+// var E = {
+//     viewCache: function() {
+//         if (window.console) {
+//             console.log(cache)
+//         }
+//     },
+//     destroy: function() {
+//         for (var num in cache) {
+//             var elData = cache[num], elem = elData.elem
+//             unbind(elem)
+//         }
+//         guid = 1
+//     }
+// }
+
+// on / off
+forEach({on: bind, off: unbind}, function(callback, name) {
+    Z.fn[name] = function(type, handler) {
+        return this.each(function(el) {
+            callback(el, type, handler)
+        })        
+    }
+})
+
+// one / delay / throttle / debounce / immediate
+forEach(['one', 'delay', 'throttle', 'debounce', 'immediate'], function(name) {
+    Z.fn[name] = function(type, handler, wait) {
+        return this.each(function(el) {
+            var option = {handler: handler}
+            option[name] = name === 'one' ? true : wait
+            bind(el, type, option)
+        })
+    }
+})
+
+// fire
+Z.fn.fire = function(type) {
+    return this.each(function(el) {
+        trigger(el, type)
+    })
+}
+
+// object to queryString
+function serialize(obj) {
+    var a = []
+    forEach(obj, function(val, key) {
+        if ( Z.isArray(val) ) {
+            forEach(val, function(v, i) {
+                a.push( key + '=' + encodeURIComponent(v) )
+            })
+        } else {
+            a.push(key + '=' + encodeURIComponent(val))
+        }
+    })
+    return a.join('&')
+}
+
+// parse json string
+function parseJSON(str) {
+    try {
+        return JSON.parse(str)
+    } catch(e) {
+        try {
+            return (new Function('return ' + str))()
+        } catch(e) {
+        }
+    }
+}
+
+// exports 
+Z.parseJSON = parseJSON
+    
+// empty function
+function noop() {}
+
+
+/**
+ *  Ajax API
+ *     Z.ajax, Z.get, Z.post, Z.text, Z.json, Z.xml
+ *  
+ */
+var createXHR = window.XMLHttpRequest ?
+    function() {
+        try{
+            return new XMLHttpRequest()
+        } catch(e){}
+    } :
+    function() {
+        try{
+            return new window.ActiveXObject('Microsoft.XMLHTTP')
+        } catch(e){}
+    }
+    
+function ajax(url, options) {
+    if ( Z.isObject(url) ) {
+        options = url
+        url = options.url
+    }
+    if ( Z.isFunction(options) ) {
+        options = {success: options}
+    }
+    var xhr, isTimeout, timer, options = options || {}
+
+    var async      = options.async !== false
+    var method     = options.method  || 'GET'
+    var type       = options.type    || 'json'
+    var encode     = options.encode  || 'UTF-8'
+    var timeout    = options.timeout || 0
+    var credential = options.credential
+    var data       = options.data
+    var scope      = options.scope
+    var success    = options.success || noop
+    var failure    = options.failure || noop
+    
+    // 大小写都行，但大写是匹配HTTP协议习惯
+    method  = method.toUpperCase()
+    
+    // 对象转换成字符串键值对
+    if ( Z.isObject(data) ) {
+        data = serialize(data)
+    }
+    if (method === 'GET' && data) {
+        url += (url.indexOf('?') === -1 ? '?' : '&') + data
+    }
+    
+    xhr = createXHR()
+    if (!xhr) return
+    
+    isTimeout = false
+    if (async && timeout>0) {
+        timer = setTimeout(function() {
+            // 先给isTimeout赋值，不能先调用abort
+            isTimeout = true
+            xhr.abort()
+        }, timeout)
+    }
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            if (isTimeout) {
+                failure(xhr, 'request timeout')
+            } else {
+                onStateChange(xhr, type, success, failure, scope)
+                clearTimeout(timer)
+            }
+        }
+    }
+    xhr.open(method, url, async)
+    if (credential) {
+        xhr.withCredentials = true
+    }
+    if (method == 'POST') {
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=' + encode)
+    }
+    xhr.send(data)
+    return xhr
+}
+
+function onStateChange(xhr, type, success, failure, scope) {
+    var s = xhr.status, result
+    if (s>= 200 && s < 300) {
+        switch (type) {
+            case 'text':
+                result = xhr.responseText
+                break
+            case 'json':
+                result = parseJSON(xhr.responseText)
+                break
+            case 'xml':
+                result = xhr.responseXML
+                break
+        }
+        // text, 返回空字符时执行success
+        // json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
+        result !== undefined && success.call(scope, result)
+        
+    } else {
+        failure(xhr, xhr.status)
+    }
+    xhr = null
+}
+
+// exports to Z
+var ajaxOptions = {
+    method: ['get', 'post'],
+    type: ['text','json','xml'],
+    async: ['sync', 'async']
+}
+
+// Low-level Interface: Z.ajax
+Z.ajax = ajax
+
+// Shorthand Methods: Z.get, Z.post, Z.text, Z.json, Z.xml
+forEach(ajaxOptions, function(val, key) {
+    forEach(val, function(item, index) {
+        Z[item] = function(key, item) {
+            return function(url, opt, success) {
+                if ( Z.isObject(url) ) {
+                    opt = url
+                }
+                if ( Z.isFunction(opt) ) {
+                    opt = {success: opt}
+                }
+                if ( Z.isFunction(success) ) {
+                    opt = {data: opt}
+                    opt.success = success
+                }
+                if (key === 'async') {
+                    item = item==='async' ? true : false
+                }
+                opt = opt || {}
+                opt[key] = item
+                return ajax(url, opt)
+            }
+        }(key, item)
+    })
+})
+
+
+/**
+ *  JSONP API
+ *  Z.jsonp
+ *  
+ */    
+var ie678 = !-[1,]
+var opera = window.opera
+var head = doc.head || doc.getElementsByTagName('head')[0]
+var jsonpDone = false
+
+//Thanks to Kevin Hakanson
+//http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
+function generateRandomName() {
+    var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF';
+    for (i = 0; i < 32; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    // bits 12-15 of the time_hi_and_version field to 0010
+    s[12] = '4';
+    // bits 6-7 of the clock_seq_hi_and_reserved to 01    
+    s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
+    uuid = 'jsonp_' + s.join('');
+    return uuid;
+}
+
+function jsonp(url, options) {
+    if ( Z.isObject(url) ) {
+        options = url;
+        url = options.url;
+    }
+    var options = options || {}
+    var me      = this
+    var timeout = 3000
+    var url     = url + '?'
+    var data    = options.data
+    var charset = options.charset
+    var success = options.success || noop
+    var failure = options.failure || noop
+    var scope   = options.scope || window
+    var timestamp = options.timestamp
+    var jsonpName = options.jsonpName || 'callback'
+    var callbackName = options.jsonpCallback || generateRandomName()
+    
+    if ( Z.isObject(data) ) {
+        data = serialize(data)
+    }
+    var script = doc.createElement('script')
+    
+    function callback(isSucc) {
+        if (isSucc) {
+            jsonpDone = true
+        } else {
+            failure.call(scope)
+        }
+        // Handle memory leak in IE
+        script.onload = script.onerror = script.onreadystatechange = null
+        if ( head && script.parentNode ) {
+            head.removeChild(script)
+            script = null
+            window[callbackName] = undefined
+        }
+    }
+    function fixOnerror() {
+        setTimeout(function() {
+            if (!jsonpDone) {
+                callback()
+            }
+        }, timeout)
+    }
+    if (ie678) {
+        script.onreadystatechange = function() {
+            var readyState = this.readyState
+            if (!jsonpDone && (readyState == 'loaded' || readyState == 'complete')) {
+                callback(true)
+            }
+        };
+        
+    } else {
+        script.onload = function() {
+            callback(true)
+        }
+        script.onerror = function() {
+            callback()
+        }
+        if (opera) {
+            fixOnerror()
+        }
+    }
+    
+    url += jsonpName + '=' + callbackName
+    
+    if (charset) {
+        script.charset = charset
+    }
+    if (data) {
+        url += '&' + data
+    }
+    if (timestamp) {
+        url += '&ts='
+        url += (new Date).getTime()
+    }
+    
+    window[callbackName] = function(json) {
+        success.call(scope, json)
+    };
+    
+    script.src = url
+    head.insertBefore(script, head.firstChild)
+}
+
+// exports to Z
+Z.jsonp = function(url, opt, success) {
+    if ( Z.isObject(url) ) {
+        opt = url
+    }
+    if ( Z.isFunction(opt) ) {
+        opt = {success: opt}
+    }
+    if ( Z.isFunction(success) ) {
+        opt = {data: opt}
+        opt.success = success
+    }
+    
+    return jsonp(url, opt)
+}
 
 
 
