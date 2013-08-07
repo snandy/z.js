@@ -14,7 +14,7 @@ var trimRight = /\s+$/
 var rroot = /^(?:body|html)$/i
     
 // IE6/7/8 return false
-if(!rwhite.test( '\xA0' )) {
+if (!rwhite.test( '\xA0' )) {
     trimLeft = /^[\s\xA0]+/
     trimRight = /[\s\xA0]+$/
 }
@@ -24,7 +24,7 @@ var makeArray = function(obj) {
     return slice.call(obj, 0)
 }
 // For IE6/7/8
-try{
+try {
     slice.call(doc.documentElement.childNodes, 0)[0].nodeType
 } catch(e) {
     makeArray = function(obj) {
