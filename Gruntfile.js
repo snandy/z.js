@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 		return str;
 	}();
 	
-	var concat = ['src/intro.js', 'src/selector.js', 'src/core.js', 'src/is.js', 'src/dom.js', 'src/outro.js']
+	var concat = ['src/intro.js', 'src/selector.js', 'src/core.js', 'src/is.js', 'src/dom.js', 'event.js', 'src/outro.js']
 	// 配置
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
