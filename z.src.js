@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-07 15:50:14
+ * @snandy 2013-08-07 16:17:43
  *
  */
 ~function(window, undefined) {
@@ -836,6 +836,8 @@ function Handler(config) {
     this.data       = config.data
     if (config.args) {
         this.args = config.args.length ? config.args : [config.args]
+    } else {
+        this.args = []
     }
 }
 // 删除事件的注册，从缓存中去除
@@ -1137,6 +1139,18 @@ Z.fn.fire = function(type) {
         trigger(el, type)
     })
 }
+
+// Shorthand Methods
+forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouseup,keydown,keyup,keypress,focus,blur'.split(','), function(name) {
+    Z.fn[name] = function(handler) {
+        if (arguments.length === 0) {
+            this.fire(name)
+        } else {
+            this.on(name, handler)
+        }
+        return this
+    };
+});
 
 // object to queryString
 function serialize(obj) {

@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>zchain.js</title>
+		<title>Z.js</title>
 		<style type="text/css">
 			html, body {
 				margin: 0;
@@ -55,11 +55,18 @@
 		// 	console.log(this)
 		// }, 2000)
 
-		Z('p').on('click', {
-			args: 25,
-			handler: function(e, x) {
-				alert(x)
-			}
+		// Z('p').on('click', {
+		// 	args: 25,
+		// 	handler: function(e, x) {
+		// 		alert(x)
+		// 	}
+		// })
+		// Z('p').click(function() {
+		// 	console.log(3)
+		// })
+
+		Z('p').on('click', function() {
+			console.log(1)
 		})
 	</script>
 	</body>
