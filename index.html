@@ -42,37 +42,37 @@
   
   <ul class=toc_section>
   
-  <li><a href="#$()">$()</a></li>
+  <li><a href="#Z()">Z()</a></li>
   
-  <li><a href="#$.camelCase">$.camelCase</a></li>
+  <li><a href="#Z.camelCase">Z.camelCase</a></li>
   
-  <li><a href="#$.contains">$.contains</a></li>
+  <li><a href="#Z.contains">Z.contains</a></li>
   
-  <li><a href="#$.each">$.each</a></li>
+  <li><a href="#Z.each">Z.each</a></li>
   
-  <li><a href="#$.extend">$.extend</a></li>
+  <li><a href="#Z.extend">Z.extend</a></li>
   
-  <li><a href="#$.fn">$.fn</a></li>
+  <li><a href="#Z.fn">Z.fn</a></li>
   
-  <li><a href="#$.grep">$.grep</a></li>
+  <li><a href="#Z.grep">Z.grep</a></li>
   
-  <li><a href="#$.inArray">$.inArray</a></li>
+  <li><a href="#Z.inArray">Z.inArray</a></li>
   
-  <li><a href="#$.isArray">$.isArray</a></li>
+  <li><a href="#Z.isArray">Z.isArray</a></li>
   
-  <li><a href="#$.isFunction">$.isFunction</a></li>
+  <li><a href="#Z.isFunction">Z.isFunction</a></li>
   
-  <li><a href="#$.isPlainObject">$.isPlainObject</a></li>
+  <li><a href="#Z.isPlainObject">Z.isPlainObject</a></li>
   
-  <li><a href="#$.isWindow">$.isWindow</a></li>
+  <li><a href="#Z.isWindow">Z.isWindow</a></li>
   
-  <li><a href="#$.map">$.map</a></li>
+  <li><a href="#Z.map">Z.map</a></li>
   
-  <li><a href="#$.parseJSON">$.parseJSON</a></li>
+  <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
   
-  <li><a href="#$.trim">$.trim</a></li>
+  <li><a href="#Z.trim">Z.trim</a></li>
   
-  <li><a href="#$.type">$.type</a></li>
+  <li><a href="#Z.type">Z.type</a></li>
   
   <li><a href="#add">add</a></li>
   
@@ -224,9 +224,9 @@
   
   <ul class=toc_section>
   
-  <li><a href="#$.Event">$.Event</a></li>
+  <li><a href="#Z.Event">Z.Event</a></li>
   
-  <li><a href="#$.proxy">$.proxy</a></li>
+  <li><a href="#Z.proxy">Z.proxy</a></li>
   
   <li><a href="#bind">bind</a></li>
   
@@ -257,19 +257,19 @@
   
   <ul class=toc_section>
   
-  <li><a href="#$.ajax">$.ajax</a></li>
+  <li><a href="#Z.ajax">Z.ajax</a></li>
   
-  <li><a href="#$.ajaxJSONP">$.ajaxJSONP</a></li>
+  <li><a href="#Z.ajaxJSONP">Z.ajaxJSONP</a></li>
   
-  <li><a href="#$.ajaxSettings">$.ajaxSettings</a></li>
+  <li><a href="#Z.ajaxSettings">Z.ajaxSettings</a></li>
   
-  <li><a href="#$.get">$.get</a></li>
+  <li><a href="#Z.get">Z.get</a></li>
   
-  <li><a href="#$.getJSON">$.getJSON</a></li>
+  <li><a href="#Z.getJSON">Z.getJSON</a></li>
   
-  <li><a href="#$.param">$.param</a></li>
+  <li><a href="#Z.param">Z.param</a></li>
   
-  <li><a href="#$.post">$.post</a></li>
+  <li><a href="#Z.post">Z.post</a></li>
   
   <li><a href="#load">load</a></li>
   
@@ -293,7 +293,7 @@
   
   <ul class=toc_section>
   
-  <li><a href="#$.fx">$.fx</a></li>
+  <li><a href="#Z.fx">Z.fx</a></li>
   
   <li><a href="#animate">animate</a></li>
   
@@ -326,11 +326,6 @@
     <em>Core, Ajax, Event, DOM, isXXX, and Detect</em>.
   </p>
 
-  <p class=important>
-    There are more modules; a list of all modules
-    is available in the <a href="https://github.com/madrobby/Z.js#readme">README</a>.
-  </p>
-
   <ul class=downloads>
     <li>
       <a href="Z.js" class="download">Z.js v1.0 (for development)</a>
@@ -351,11 +346,6 @@
 <span class="nt">&lt;/body&gt;</span>
 <span class="nt">&lt;/html&gt;</span>
 </code></pre></div>
-
-  <p class=compat>
-    Z.js will only set the <code>$</code> global to itself if it is 
-    not yet defined. There is no <code>Z.js.noConflict</code> method.
-  </p>
 
   <p>
     <b>If you need to support Internet Explorer, you can fall back on jQuery.</b>
@@ -380,31 +370,6 @@
     <li>Opera 10+ (Win, Mac, Linux)</li>
   </ul>
 
-  <h4>Mobile browsers</h4>  
-  <ul>
-    <li>iOS 4+ Safari</li>
-    <li>Chrome for Android</li>
-    <li>Chrome for iOS</li>
-    <li>Android 2.2+ Browser</li>
-    <li>webOS 1.4.5+ Browser</li>
-    <li>BlackBerry Tablet OS 1.0.7+ Browser</li>
-    <li>Amazon Silk 1.0+</li>
-    <li>Firefox for Android</li>
-    <li>Firefox OS Browser</li>
-    <li>Practically any WebKit-based browsers/runtimes</li>
-  </ul>
-
-  <p>
-    <em>Note that some optional features of Z.js specifically target
-    mobile browsers; as the original project goal was to specifically
-    provide a leaner alternative to jQuery for the mobile web.</em>
-  </p>
-
-  <p>
-    Z.js is a good choice for browser extensions (for Safari and Chrome) and
-    to develop HTML-based views within native app frameworks, such as
-    <a href="http://phonegap.com/">PhoneGap</a>.
-  <p>
 
   <p>
     In short, Z.js is expected to work in every modern browser
@@ -433,11 +398,11 @@
 
   <p>
     Plugins can be written by adding methods as properties of
-    <a href="#$.fn"><code>$.fn</code></a>:
+    <a href="#Z.fn"><code>Z.fn</code></a>:
   </p>
 
-<div class="highlight"><pre><code class="js"><span class="p">;(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
-  <span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">,</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="js"><span class="p">;(</span><span class="kd">function</span><span class="p">(</span><span class="nx">Z</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">Z</span><span class="p">.</span><span class="nx">fn</span><span class="p">,</span> <span class="p">{</span>
     <span class="nx">foo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
       <span class="c1">// `this` refers to the current Z.js collection.</span>
       <span class="c1">// When possible, return the Z.js collection to allow chaining.</span>
@@ -460,19 +425,19 @@
     <h2 id="core">Core methods</h2>
     
     
-<article class=method id="$()">
-  <h3>$()
+<article class=method id="Z()">
+  <h3>Z()
   
    
   </h3>
   
   
-  <pre class=signature><code>$(selector, [context]) ⇒ collection
-$(&lt;Z.js collection&gt;) ⇒ same collection
-$(&lt;DOM nodes&gt;) ⇒ collection
-$(htmlString) ⇒ collection
-$(htmlString, attributes) ⇒ collection [v1.0]
-Z.js(function($){ ... })
+  <pre class=signature><code>Z(selector, [context]) ⇒ collection
+Z(&lt;Z.js collection&gt;) ⇒ same collection
+Z(&lt;DOM nodes&gt;) ⇒ collection
+Z(htmlString) ⇒ collection
+Z(htmlString, attributes) ⇒ collection [v1.0]
+Z.js(function(Z){ ... })
 </code></pre>
   
   <p>Create a Z.js collection object by performing a CSS selector, wrapping DOM
@@ -481,11 +446,11 @@ nodes, or creating elements from an HTML string.</p>
 <p>A Z.js collection is an array-like object that has chainable methods for
 manipulating the DOM nodes it references. All of the methods in this documentation
 are collection methods, except the ones directly on the dollar (<code>Z.js</code>) object,
-such as <code>$.extend</code>.</p>
+such as <code>Z.extend</code>.</p>
 
 <p>If a context (CSS selector, DOM node or Z.js collection object) is
 given, perform the CSS selector only within nodes of the context; this is
-functionally the same as calling <code>$(context).find(selector)</code>.</p>
+functionally the same as calling <code>Z(context).find(selector)</code>.</p>
 
 <p>When an HTML string is given, use it to create DOM nodes. If an attributes map
 is given via argument, apply them to all created elements. For fast single
@@ -494,17 +459,17 @@ element creation, use <code>&lt;div&gt;</code> or <code>&lt;div/&gt;</code> form
 <p>When a function is given, attach it as a handler for the <code>DOMContentLoaded</code> event.
 If the page is already loaded, executes the function immediately.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; all DIV elements on the page</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">)</span> <span class="c1">//=&gt; element with ID &quot;foo&quot;</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; all DIV elements on the page</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">)</span> <span class="c1">//=&gt; element with ID &quot;foo&quot;</span>
 
 <span class="c1">// create element:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;Hello&lt;/p&gt;&quot;</span><span class="p">)</span> <span class="c1">//=&gt; the new P element</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;Hello&lt;/p&gt;&quot;</span><span class="p">)</span> <span class="c1">//=&gt; the new P element</span>
 <span class="c1">// create element with attributes:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;&lt;p /&gt;&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">text</span><span class="o">:</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;greeting&quot;</span><span class="p">,</span> <span class="nx">css</span><span class="o">:</span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s1">&#39;darkblue&#39;</span><span class="p">}</span> <span class="p">})</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s2">&quot;&lt;p /&gt;&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">text</span><span class="o">:</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;greeting&quot;</span><span class="p">,</span> <span class="nx">css</span><span class="o">:</span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s1">&#39;darkblue&#39;</span><span class="p">}</span> <span class="p">})</span>
 <span class="c1">//=&gt; &lt;p id=greeting style=&quot;color:darkblue&quot;&gt;Hello&lt;/p&gt;</span>
 
 <span class="c1">// execute callback when the page is ready:</span>
-<span class="nx">Z.js</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$</span><span class="p">){</span>
+<span class="nx">Z.js</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">Z</span><span class="p">){</span>
   <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Ready to Z.js!&#39;</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -524,31 +489,31 @@ If the page is already loaded, executes the function immediately.</p>
 
 
 <p class=compat>
-  Z.js will only set the <code>$</code> global to itself if it is not yet defined.
+  Z.js will only set the <code>Z</code> global to itself if it is not yet defined.
   This allows you to use Z.js with legacy code that uses, for example,
   Prototype.js. Just load Prototype first, and Z.js will not touch
-  Prototype's <code>$</code> function. Z.js will always set the <code>Z.js</code> global
+  Prototype's <code>Z</code> function. Z.js will always set the <code>Z.js</code> global
   to itself.
 </p>
 
 
 </article>
 
-<article class=method id="$.camelCase">
-  <h3>$.camelCase
+<article class=method id="Z.camelCase">
+  <h3>Z.camelCase
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.camelCase(string) ⇒ string
+  <pre class=signature><code>Z.camelCase(string) ⇒ string
 </code></pre>
   
   <p>Turn a dasherized string into &ldquo;camel case&rdquo;. Doesn&rsquo;t affect already camel-cased
 strings.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;hello-there&#39;</span><span class="p">)</span> <span class="c1">//=&gt; &quot;helloThere&quot;</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;helloThere&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; &quot;helloThere&quot;</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;hello-there&#39;</span><span class="p">)</span> <span class="c1">//=&gt; &quot;helloThere&quot;</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;helloThere&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; &quot;helloThere&quot;</span>
 </code></pre></div>
 
 
@@ -556,14 +521,14 @@ strings.</p>
 
 </article>
 
-<article class=method id="$.contains">
-  <h3>$.contains
+<article class=method id="Z.contains">
+  <h3>Z.contains
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.contains(parent, node) ⇒ boolean
+  <pre class=signature><code>Z.contains(parent, node) ⇒ boolean
 </code></pre>
   
   <p>Check if the parent node contains the given DOM node. Returns false if both
@@ -571,25 +536,25 @@ are the same node.</p>
 
 </article>
 
-<article class=method id="$.each">
-  <h3>$.each
+<article class=method id="Z.each">
+  <h3>Z.each
   
    
   </h3>
   
   
-  <pre class=signature><code>$.each(collection, function(index, item){ ... }) ⇒ collection
+  <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection
 </code></pre>
   
   <p>Iterate over array elements or object key-value pairs. Returning
 <code>false</code> from the iterator function stops the iteration.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;item %d is: %s&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
 <span class="p">})</span>
 
 <span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="s1">&#39;micro&#39;</span> <span class="p">}</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s: %s&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -599,15 +564,15 @@ are the same node.</p>
 
 </article>
 
-<article class=method id="$.extend">
-  <h3>$.extend
+<article class=method id="Z.extend">
+  <h3>Z.extend
   
    
   </h3>
   
   
-  <pre class=signature><code>$.extend(target, [source, [source2, ...]]) ⇒ target
-$.extend(true, target, [source, ...]) ⇒ target [v1.0]
+  <pre class=signature><code>Z.extend(target, [source, [source2, ...]]) ⇒ target
+Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
 </code></pre>
   
   <p>Extend target object with properties from each of the source objects,
@@ -619,7 +584,7 @@ triggers deep (recursive) copying.</p>
 <div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="s1">&#39;patridge&#39;</span> <span class="p">},</span>
     <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">two</span><span class="o">:</span> <span class="s1">&#39;turtle doves&#39;</span> <span class="p">}</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">source</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">source</span><span class="p">)</span>
 <span class="c1">//=&gt; { one: &#39;patridge&#39;,</span>
 <span class="c1">//     two: &#39;turtle doves&#39; }</span>
 </code></pre></div>
@@ -629,8 +594,8 @@ triggers deep (recursive) copying.</p>
 
 </article>
 
-<article class=method id="$.fn">
-  <h3>$.fn
+<article class=method id="Z.fn">
+  <h3>Z.fn
   
    
   </h3>
@@ -643,7 +608,7 @@ Z.js collection.</p>
 
 <p>Here&rsquo;s an example implementation of Z.js&rsquo;s <a href="#empty"><code>empty()</code></a> method:</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
   <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -653,14 +618,14 @@ Z.js collection.</p>
 
 </article>
 
-<article class=method id="$.grep">
-  <h3>$.grep
+<article class=method id="Z.grep">
+  <h3>Z.grep
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.grep(items, function(item){ ... }) ⇒ array
+  <pre class=signature><code>Z.grep(items, function(item){ ... }) ⇒ array
 </code></pre>
   
   <p>Get a new array containing only the items for which the callback function
@@ -668,65 +633,65 @@ returned true.</p>
 
 </article>
 
-<article class=method id="$.inArray">
-  <h3>$.inArray
+<article class=method id="Z.inArray">
+  <h3>Z.inArray
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.inArray(element, array, [fromIndex]) ⇒ number
+  <pre class=signature><code>Z.inArray(element, array, [fromIndex]) ⇒ number
 </code></pre>
   
   <p>Get the position of element inside an array, or <code>-1</code> if not found.</p>
 
 </article>
 
-<article class=method id="$.isArray">
-  <h3>$.isArray
+<article class=method id="Z.isArray">
+  <h3>Z.isArray
   
    
   </h3>
   
   
-  <pre class=signature><code>$.isArray(object) ⇒ boolean
+  <pre class=signature><code>Z.isArray(object) ⇒ boolean
 </code></pre>
   
   <p>True if the object is an array.</p>
 
 </article>
 
-<article class=method id="$.isFunction">
-  <h3>$.isFunction
+<article class=method id="Z.isFunction">
+  <h3>Z.isFunction
   
    
   </h3>
   
   
-  <pre class=signature><code>$.isFunction(object) ⇒ boolean
+  <pre class=signature><code>Z.isFunction(object) ⇒ boolean
 </code></pre>
   
   <p>True if the object is a function.</p>
 
 </article>
 
-<article class=method id="$.isPlainObject">
-  <h3>$.isPlainObject
+<article class=method id="Z.isPlainObject">
+  <h3>Z.isPlainObject
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.isPlainObject(object) ⇒ boolean
+  <pre class=signature><code>Z.isPlainObject(object) ⇒ boolean
 </code></pre>
   
   <p>True if the object is a &ldquo;plain&rdquo; JavaScript object, which is only true for object
 literals and objects created with <code>new Object</code>.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">({})</span>         <span class="c1">// =&gt; true</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Object</span><span class="p">)</span> <span class="c1">// =&gt; true</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">)</span>   <span class="c1">// =&gt; false</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="nb">window</span><span class="p">)</span>     <span class="c1">// =&gt; false</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">({})</span>         <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Object</span><span class="p">)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">)</span>   <span class="c1">// =&gt; false</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="nb">window</span><span class="p">)</span>     <span class="c1">// =&gt; false</span>
 </code></pre></div>
 
 
@@ -734,14 +699,14 @@ literals and objects created with <code>new Object</code>.</p>
 
 </article>
 
-<article class=method id="$.isWindow">
-  <h3>$.isWindow
+<article class=method id="Z.isWindow">
+  <h3>Z.isWindow
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.isWindow(object) ⇒ boolean
+  <pre class=signature><code>Z.isWindow(object) ⇒ boolean
 </code></pre>
   
   <p>True if the object is a window object. This is useful for iframes where each one
@@ -750,14 +715,14 @@ check.</p>
 
 </article>
 
-<article class=method id="$.map">
-  <h3>$.map
+<article class=method id="Z.map">
+  <h3>Z.map
   
    
   </h3>
   
   
-  <pre class=signature><code>$.map(collection, function(item, index){ ... }) ⇒ collection
+  <pre class=signature><code>Z.map(collection, function(item, index){ ... }) ⇒ collection
 </code></pre>
   
   <p>Iterate through elements of collection and return all results of running the
@@ -765,28 +730,28 @@ iterator function, with <code>null</code> and <code>undefined</code> values filt
 
 </article>
 
-<article class=method id="$.parseJSON">
-  <h3>$.parseJSON
+<article class=method id="Z.parseJSON">
+  <h3>Z.parseJSON
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.parseJSON(string) ⇒ object
+  <pre class=signature><code>Z.parseJSON(string) ⇒ object
 </code></pre>
   
   <p>Alias for the native <code>JSON.parse</code> method.</p>
 
 </article>
 
-<article class=method id="$.trim">
-  <h3>$.trim
+<article class=method id="Z.trim">
+  <h3>Z.trim
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.trim(string) ⇒ string
+  <pre class=signature><code>Z.trim(string) ⇒ string
 </code></pre>
   
   <p>Remove whitespace from beginning and end of a string; just like
@@ -794,21 +759,21 @@ String.prototype.trim().</p>
 
 </article>
 
-<article class=method id="$.type">
-  <h3>$.type
+<article class=method id="Z.type">
+  <h3>Z.type
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.type(object) ⇒ string
+  <pre class=signature><code>Z.type(object) ⇒ string
 </code></pre>
   
   <p>Get string type of an object. Possible types are:
 null undefined boolean number string function array date regexp object error.</p>
 
 <p>For other objects it will simply report &ldquo;object&rdquo;. To find out if an object is a
-plain JavaScript object, use <a href="#$.isPlainObject">isPlainObject</a>.</p>
+plain JavaScript object, use <a href="#Z.isPlainObject">isPlainObject</a>.</p>
 
 </article>
 
@@ -857,7 +822,7 @@ names can be given in a space-separated string.</p>
   <p>Add content to the DOM after each elements in the collection. The content can
 be an HTML string, a DOM node or an array of nodes.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form label&#39;</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;A note below the label&lt;/p&gt;&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form label&#39;</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;A note below the label&lt;/p&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -878,7 +843,7 @@ be an HTML string, a DOM node or an array of nodes.</p>
   <p>Append content to the DOM inside each individual element in the collection. The
 content can be an HTML string, a DOM node or an array of nodes.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -899,7 +864,7 @@ content can be an HTML string, a DOM node or an array of nodes.</p>
   <p>Append elements from the current collection to the target element. This is
 like <a href="#append">append</a>, but with reversed operands.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -928,7 +893,7 @@ attributes can be set by passing an object with name-value pairs.</p>
 
 <p>To read DOM properties such as <code>checked</code> or <code>selected</code>, use <a href="#prop">prop</a>.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">)</span>             <span class="c1">//=&gt; read value</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="s1">&#39;/create&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; set value</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;action&#39;</span><span class="p">,</span> <span class="kc">null</span><span class="p">)</span>       <span class="c1">//=&gt; remove attribute</span>
@@ -958,7 +923,7 @@ attributes can be set by passing an object with name-value pairs.</p>
   <p>Add content to the DOM before each element in the collection. The content can
 be an HTML string, a DOM node or an array of nodes.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">).</span><span class="nx">before</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">).</span><span class="nx">before</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -979,7 +944,7 @@ be an HTML string, a DOM node or an array of nodes.</p>
   <p>Get immediate children of each element in the current collection. If selector
 is given, filter the results to only include ones matching the CSS selector.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;ol&#39;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;*:nth-child(2n)&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol&#39;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;*:nth-child(2n)&#39;</span><span class="p">)</span>
 <span class="c1">//=&gt; every other list item from every ordered list</span>
 </code></pre></div>
 
@@ -1028,7 +993,7 @@ it only returns the first ancestor matched.</p>
 <p>If a Z.js collection or element is given, the resulting element will have to
 match one of the given elements instead of a selector.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
 <span class="nx">input</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1093,7 +1058,7 @@ can be set by passing an object to the method.</p>
 property is removed. When a unitless number value is given, &ldquo;px&rdquo; is appended to
 it for properties that require units.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">)</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">)</span>          <span class="c1">// read property</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#369&#39;</span><span class="p">)</span>  <span class="c1">// set property</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>      <span class="c1">// remove property</span>
@@ -1155,7 +1120,7 @@ data(name, value) ⇒ self
 <code>this</code> keyword refers to the current item (also passed as the second argument to
 the function). If the iterator function returns <code>false</code>, iteration stops.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form input&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form input&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;input %d is: %o&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="k">this</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -1191,8 +1156,8 @@ the function). If the iterator function returns <code>false</code>, iteration st
   
   <p>Get the item at position specified by index from the current collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">//=&gt; only the first list item</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">//=&gt; only the last list item</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">//=&gt; only the first list item</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">//=&gt; only the last list item</span>
 </code></pre></div>
 
 
@@ -1238,7 +1203,7 @@ current collection.</p>
 <p>If a Z.js collection or element is given, filter those elements down to only
 ones that are descendants of element in the current collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#myform&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#myform&#39;</span><span class="p">)</span>
 <span class="nx">form</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input, select&#39;</span><span class="p">)</span>
 </code></pre></div>
 
@@ -1259,7 +1224,7 @@ ones that are descendants of element in the current collection.</p>
   
   <p>Get the first element of the current collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">first</span><span class="p">()</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">first</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -1304,7 +1269,7 @@ is given, returns all elements in an ordinary array. When index is specified,
 return only the element at that position. This is different than <a href="#eq">eq</a> in
 the way that the returned node is <em>not</em> wrapped in a Z.js collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
 <span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span>   <span class="c1">//=&gt; get all headings as an array</span>
 <span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">//=&gt; get first heading node</span>
 </code></pre></div>
@@ -1328,7 +1293,7 @@ has(node) ⇒ collection
   <p>Filter the current collection to include only elements that have any number of
 descendants that match a selector, or that contain a specific DOM node.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;ol &gt; li&#39;</span><span class="p">).</span><span class="nx">has</span><span class="p">(</span><span class="s1">&#39;a[href]&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol &gt; li&#39;</span><span class="p">).</span><span class="nx">has</span><span class="p">(</span><span class="s1">&#39;a[href]&#39;</span><span class="p">)</span>
 <span class="c1">//=&gt; get only LI elements that contain links</span>
 </code></pre></div>
 
@@ -1365,9 +1330,9 @@ height(function(index, oldHeight){ ... }) ⇒ self
   
   <p>Get the height of the first element in the collection; or set the height of all elements in the collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>   <span class="c1">// =&gt; 123</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>   <span class="c1">// =&gt; 838 (viewport height)</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="c1">// =&gt; 22302</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>   <span class="c1">// =&gt; 123</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span>   <span class="c1">// =&gt; 838 (viewport height)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">height</span><span class="p">()</span> <span class="c1">// =&gt; 22302</span>
 </code></pre></div>
 
 
@@ -1408,9 +1373,9 @@ contents of each element. Content can be any of the types described in
 <a href="#append">append</a>.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// autolink everything that looks like a Twitter username</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.comment p&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">idx</span><span class="p">,</span> <span class="nx">oldHtml</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.comment p&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">idx</span><span class="p">,</span> <span class="nx">oldHtml</span><span class="p">){</span>
   <span class="k">return</span> <span class="nx">oldHtml</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(^|\W)@(\w{1,15})/g</span><span class="p">,</span>
-    <span class="s1">&#39;$1@&lt;a href=&quot;http://twitter.com/$2&quot;&gt;$2&lt;/a&gt;&#39;</span><span class="p">)</span>
+    <span class="s1">&#39;Z1@&lt;a href=&quot;http://twitter.com/Z2&quot;&gt;Z2&lt;/a&gt;&#39;</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
 
@@ -1433,7 +1398,7 @@ contents of each element. Content can be any of the types described in
 the current element among its siblings. When an element is given, returns its
 position in the current collection. Returns <code>-1</code> if not found.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;li:nth-child(2)&#39;</span><span class="p">).</span><span class="nx">index</span><span class="p">()</span>  <span class="c1">//=&gt; 1</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li:nth-child(2)&#39;</span><span class="p">).</span><span class="nx">index</span><span class="p">()</span>  <span class="c1">//=&gt; 1</span>
 </code></pre></div>
 
 
@@ -1476,7 +1441,7 @@ method.</p>
   <p>Insert elements from the current collection after the target element in the
 DOM. This is like <a href="#after">after</a>, but with reversed operands.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;Emphasis mine.&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="s1">&#39;blockquote&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;Emphasis mine.&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="s1">&#39;blockquote&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1497,7 +1462,7 @@ DOM. This is like <a href="#after">after</a>, but with reversed operands.</p>
   <p>Insert elements from the current collection before each of the target elements
 in the DOM. This is like <a href="#before">before</a>, but with reversed operands.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertBefore</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertBefore</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1542,7 +1507,7 @@ include the optional &ldquo;selector&rdquo; module.</p>
   
   <p>Get the last element of the current collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()</span>
 </code></pre></div>
 
 
@@ -1568,7 +1533,7 @@ item (also passed as the second argument to the function).</p>
 <code>undefined</code> values filtered out.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// get text contents of all elements in collection</span>
-<span class="nx">elements</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">()</span> <span class="p">}).</span><span class="nx">get</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+<span class="nx">elements</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">Z</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">()</span> <span class="p">}).</span><span class="nx">get</span><span class="p">().</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1590,7 +1555,7 @@ next(selector) ⇒ collection [v1.0]
   <p>Get the next sibling&mdash;optinally filtered by selector&mdash;of each element in the
 collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;dl dt&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">()</span>   <span class="c1">//=&gt; the DD elements</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;dl dt&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">()</span>   <span class="c1">//=&gt; the DD elements</span>
 </code></pre></div>
 
 
@@ -1686,7 +1651,7 @@ filter results to include only ones matching the selector.</p>
 <p>To get only immediate parents, use <a href="#parent">parent</a>. To only get the first
 ancestor that matches the selector, use <a href="#closest">closest</a>.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">).</span><span class="nx">parents</span><span class="p">()</span>   <span class="c1">//=&gt; [&lt;div#container&gt;, &lt;body&gt;, &lt;html&gt;]</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">).</span><span class="nx">parents</span><span class="p">()</span>   <span class="c1">//=&gt; [&lt;div#container&gt;, &lt;body&gt;, &lt;html&gt;]</span>
 </code></pre></div>
 
 
@@ -1707,11 +1672,11 @@ ancestor that matches the selector, use <a href="#closest">closest</a>.</p>
   <p>Get values from a named property of each element in the collection, with <code>null</code>
 and <code>undefined</code> values filtered out.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body &gt; *&#39;</span><span class="p">).</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nodeName&#39;</span><span class="p">)</span> <span class="c1">// =&gt; [&quot;DIV&quot;, &quot;SCRIPT&quot;]</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;body &gt; *&#39;</span><span class="p">).</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nodeName&#39;</span><span class="p">)</span> <span class="c1">// =&gt; [&quot;DIV&quot;, &quot;SCRIPT&quot;]</span>
 
 <span class="c1">// implementation of Z.js&#39;s `next` method</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> 
-  <span class="k">return</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nextElementSibling&#39;</span><span class="p">))</span> 
+<span class="nx">Z</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> 
+  <span class="k">return</span> <span class="nx">Z</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nextElementSibling&#39;</span><span class="p">))</span> 
 <span class="p">}</span>
 </code></pre></div>
 
@@ -1744,7 +1709,7 @@ positioning an element to appear aligned with another.</p>
 <div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">position</span><span class="p">()</span>
 
 <span class="c1">// position a tooltip relative to the element</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#tooltip&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#tooltip&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
   <span class="nx">position</span><span class="o">:</span> <span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
   <span class="nx">top</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">top</span> <span class="o">-</span> <span class="mi">30</span><span class="p">,</span>
   <span class="nx">left</span><span class="o">:</span> <span class="nx">pos</span><span class="p">.</span><span class="nx">left</span>
@@ -1769,7 +1734,7 @@ positioning an element to appear aligned with another.</p>
   <p>Prepend content to the DOM inside each element in the collection. The content
 can be an HTML string, a DOM node or an array of nodes.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1790,7 +1755,7 @@ can be an HTML string, a DOM node or an array of nodes.</p>
   <p>Prepend elements of the current collection inside each of the target elements. This is
 like <a href="#prepend">prepend</a>, only with reversed operands.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">prependTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">prependTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -1858,11 +1823,11 @@ time, such as <code>checked</code> and <code>selected</code>.</p>
   </h3>
   
   
-  <pre class=signature><code>ready(function($){ ... }) ⇒ self
+  <pre class=signature><code>ready(function(Z){ ... }) ⇒ self
 </code></pre>
   
   <p>Attach an event handler for the &ldquo;DOMContentLoaded&rdquo; event that fires when the DOM
-on the page is ready. It&rsquo;s recommended to use the <a href="#$()">$()</a> function instead
+on the page is ready. It&rsquo;s recommended to use the <a href="#Z()">Z()</a> function instead
 of this method.</p>
 
 </article>
@@ -2056,8 +2021,8 @@ used for getting or setting HTML.</p>
 first element is visible or not. If <code>setting</code> is present, this method behaves
 like <a href="#show">show</a> if setting is truthy or <a href="#hide">hide</a> otherwise.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#too_long&#39;</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">140</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#too_long&#39;</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">140</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -2097,8 +2062,8 @@ is truthy or <a href="#removeClass">removeClass</a> otherwise.</p>
 children in their place. Basically, this method removes one level of ancestry
 while keeping current elements in the DOM.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div id=wrapper&gt;&lt;p&gt;Content&lt;/p&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#wrapper p&#39;</span><span class="p">).</span><span class="nx">unwrap</span><span class="p">().</span><span class="nx">parents</span><span class="p">()</span>  <span class="c1">//=&gt; [&lt;body&gt;, &lt;html&gt;]</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div id=wrapper&gt;&lt;p&gt;Content&lt;/p&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#wrapper p&#39;</span><span class="p">).</span><span class="nx">unwrap</span><span class="p">().</span><span class="nx">parents</span><span class="p">()</span>  <span class="c1">//=&gt; [&lt;body&gt;, &lt;html&gt;]</span>
 </code></pre></div>
 
 
@@ -2138,9 +2103,9 @@ width(function(index, oldWidth){ ... }) ⇒ self
   
   <p>Get the width of the first element in the collection; or set the width of all elements in the collection.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>   <span class="c1">// =&gt; 123</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>   <span class="c1">// =&gt; 768 (viewport width)</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="c1">// =&gt; 768 </span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>   <span class="c1">// =&gt; 123</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">window</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span>   <span class="c1">// =&gt; 768 (viewport width)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">width</span><span class="p">()</span> <span class="c1">// =&gt; 768 </span>
 </code></pre></div>
 
 
@@ -2169,23 +2134,23 @@ of the DOM. When calling <code>wrap()</code> on a new element and then inserting
 in the document, the element will lose the wrapping.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// wrap each button in a separate span:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.buttons a&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;span&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.buttons a&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;span&gt;&#39;</span><span class="p">)</span>
 
 <span class="c1">// wrap each code block in a div and pre:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;div class=highlight&gt;&lt;pre /&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;div class=highlight&gt;&lt;pre /&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
 
 <span class="c1">// wrap all form inputs in a span with classname</span>
 <span class="c1">// corresponding to input type:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">){</span>
   <span class="k">return</span> <span class="s1">&#39;&lt;span class=&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s1">&#39;field /&gt;&#39;</span>
 <span class="p">})</span>
 <span class="c1">//=&gt; &lt;span class=textfield&gt;&lt;input type=text /&gt;&lt;/span&gt;,</span>
 <span class="c1">//   &lt;span class=searchfield&gt;&lt;input type=search /&gt;&lt;/span&gt;</span>
 
 <span class="c1">// WARNING: will not work as expected!</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;em&gt;broken&lt;/em&gt;&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;em&gt;broken&lt;/em&gt;&#39;</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
 <span class="c1">// do this instead:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;em&gt;better&lt;/em&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;em&gt;better&lt;/em&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">wrap</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -2207,7 +2172,7 @@ in the document, the element will lose the wrapping.</p>
 several nested elements, and can be passed in as a HTML string or DOM node.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// wrap all buttons in a single div:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;a.button&#39;</span><span class="p">).</span><span class="nx">wrapAll</span><span class="p">(</span><span class="s1">&#39;&lt;div id=buttons /&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;a.button&#39;</span><span class="p">).</span><span class="nx">wrapAll</span><span class="p">(</span><span class="s1">&#39;&lt;div id=buttons /&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -2232,10 +2197,10 @@ or DOM node, or as a function that is called for each element and returns one of
 the first two types.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// wrap the contents of each navigation link in a span:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;nav a&#39;</span><span class="p">).</span><span class="nx">wrapInner</span><span class="p">(</span><span class="s1">&#39;&lt;span&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;nav a&#39;</span><span class="p">).</span><span class="nx">wrapInner</span><span class="p">(</span><span class="s1">&#39;&lt;span&gt;&#39;</span><span class="p">)</span>
 
 <span class="c1">// wrap the contents of each list item in a paragraph and emphasis:</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;ol li&#39;</span><span class="p">).</span><span class="nx">wrapInner</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;&lt;em /&gt;&lt;/p&gt;&#39;</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol li&#39;</span><span class="p">).</span><span class="nx">wrapInner</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;&lt;em /&gt;&lt;/p&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -2263,36 +2228,36 @@ the first two types.</p>
 <span class="c1">// We recommend accessing them with `!!` prefixed to coerce to a boolean. </span>
 
 <span class="c1">// general device type</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">tablet</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">tablet</span>
 
 <span class="c1">// specific OS</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">android</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">webos</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">blackberry</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">bb10</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">rimtabletos</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">android</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">webos</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">blackberry</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">bb10</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">rimtabletos</span>
 
 <span class="c1">// specific device type</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ipad</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">touchpad</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">kindle</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ipad</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">touchpad</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">kindle</span>
 
 <span class="c1">// specific browser</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">chrome</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">firefox</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">silk</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">playbook</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">chrome</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">firefox</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">silk</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">playbook</span>
 
 <span class="c1">// Additionally, version information is available as well.</span>
 <span class="c1">// Here&#39;s what&#39;s returned for an iPhone running iOS 6.1.</span>
-<span class="o">!!</span><span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>         <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>        <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>           <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">$</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">version</span>       <span class="c1">// =&gt; &quot;6.1&quot;</span>
-<span class="o">!!</span><span class="nx">$</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">version</span>  <span class="c1">// =&gt; &quot;536.26&quot;</span>
+<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>         <span class="c1">// =&gt; true</span>
+<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>        <span class="c1">// =&gt; true</span>
+<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>           <span class="c1">// =&gt; true</span>
+<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">version</span>       <span class="c1">// =&gt; &quot;6.1&quot;</span>
+<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">version</span>  <span class="c1">// =&gt; &quot;536.26&quot;</span>
 </code></pre></div>
 
 
@@ -2304,14 +2269,14 @@ the first two types.</p>
     <h2 id="event">Event handling</h2>
     
     
-<article class=method id="$.Event">
-  <h3>$.Event
+<article class=method id="Z.Event">
+  <h3>Z.Event
   
    
   </h3>
   
   
-  <pre class=signature><code>$.Event(type, [properties]) ⇒ event
+  <pre class=signature><code>Z.Event(type, [properties]) ⇒ event
 </code></pre>
   
   <p>Create and initialize a DOM event of the specified type. If a properties object
@@ -2321,7 +2286,7 @@ bubble by default; this can be turned off by setting the <code>bubbles</code> pr
 <p>An event initialized with this function can be triggered with
 <a href="#trigger">trigger</a>.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">Event</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">bubbles</span><span class="o">:</span> <span class="kc">false</span> <span class="p">})</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">Event</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">bubbles</span><span class="o">:</span> <span class="kc">false</span> <span class="p">})</span>
 </code></pre></div>
 
 
@@ -2329,15 +2294,15 @@ bubble by default; this can be turned off by setting the <code>bubbles</code> pr
 
 </article>
 
-<article class=method id="$.proxy">
-  <h3>$.proxy
+<article class=method id="Z.proxy">
+  <h3>Z.proxy
   
   <span class=version>v1.0+</span> 
   </h3>
   
   
-  <pre class=signature><code>$.proxy(fn, context) ⇒ function
-$.proxy(context, property) ⇒ function
+  <pre class=signature><code>Z.proxy(fn, context) ⇒ function
+Z.proxy(context, property) ⇒ function
 </code></pre>
   
   <p>Get a function that ensures that the value of <code>this</code> in the original function
@@ -2348,7 +2313,7 @@ from the specific property of the context object.</p>
     <span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;hello from + &quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">}</span>
 
 <span class="c1">// ensures that the handler will be executed in the context of `obj`:</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">.</span><span class="nx">proxy</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">obj</span><span class="p">))</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">Z</span><span class="p">.</span><span class="nx">proxy</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">obj</span><span class="p">))</span>
 </code></pre></div>
 
 
@@ -2476,13 +2441,13 @@ is attached, or the matching element in case a selector is provided. When an
 event handler returns <code>false</code>, <code>preventDefault()</code> is called for the current
 event, preventing the default browser action such as following links.</p>
 
-<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">)</span>
 <span class="c1">// observe all clicks inside #content:</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 <span class="c1">// observe clicks inside navigation links in #content</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;nav a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 <span class="c1">// all clicks inside links in the document</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 </code></pre></div>
 
 
@@ -2517,15 +2482,15 @@ the handler only fires once.</p>
 </code></pre>
   
   <p>Trigger the specified event on elements of the collection. Event can either be a
-string type, or a full event object obtained with <a href="#$.Event">$.Event</a>. If a data
+string type, or a full event object obtained with <a href="#Z.Event">Z.Event</a>. If a data
 array is given, it is passed as additional arguments to event handlers.</p>
 
 <div class="highlight"><pre><code class="js"><span class="c1">// add a handler for a custom event</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;change on %o with data %s, %s&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">)</span>
 <span class="p">})</span>
 <span class="c1">// trigger the custom event</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">])</span>
+<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">])</span>
 </code></pre></div>
 
 
@@ -2597,14 +2562,14 @@ undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
     <h2 id="ajax">Ajax requests</h2>
     
     
-<article class=method id="$.ajax">
-  <h3>$.ajax
+<article class=method id="Z.ajax">
+  <h3>Z.ajax
   
    
   </h3>
   
   
-  <pre class=signature><code>$.ajax(options) ⇒ XMLHttpRequest
+  <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest
 </code></pre>
   
   <p>Perform an Ajax request. It can be to a local resource, or cross-domain via
@@ -2617,7 +2582,7 @@ undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
 <li><code>url</code> (default: current URL): URL to which the request is made</li>
 <li><code>data</code> (default: none): data for the request; for GET requests it is appended
 to query string of the URL. Non-string objects will get serialized with
-<a href="#$.param">$.param</a></li>
+<a href="#Z.param">Z.param</a></li>
 <li><code>processData</code> (default: true): whether to automatically serialize <code>data</code> for
 non-GET requests to string</li>
 <li><code>contentType</code> (default: &ldquo;application/x-www-form-urlencoded&rdquo;): the Content-Type
@@ -2630,7 +2595,7 @@ Pass <code>false</code> to skip setting the default value.</li>
 <li><code>global</code> (default: true): trigger global Ajax events on this request</li>
 <li><code>context</code> (default: window): context to execute callbacks in</li>
 <li><code>traditional</code> (default: false): activate traditional (shallow) serialization
-of <code>data</code> parameters with <a href="#$.param">$.param</a></li>
+of <code>data</code> parameters with <a href="#Z.param">Z.param</a></li>
 </ul>
 
 
@@ -2678,13 +2643,13 @@ of error or success</p></li>
 bubble up the DOM. The only exceptions to this are the global events <code>ajaxStart</code>
 &amp; <code>ajaxStop</code>.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ajaxBeforeSend&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ajaxBeforeSend&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
   <span class="c1">// This gets fired for every Ajax request performed on the page.</span>
-  <span class="c1">// The xhr object and $.ajax() options are available for editing.</span>
+  <span class="c1">// The xhr object and Z.ajax() options are available for editing.</span>
   <span class="c1">// Return false to cancel this request.</span>
 <span class="p">})</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
   <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
   <span class="c1">// data to be added to query string:</span>
@@ -2692,7 +2657,7 @@ bubble up the DOM. The only exceptions to this are the global events <code>ajaxS
   <span class="c1">// type of data we are expecting in return:</span>
   <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
   <span class="nx">timeout</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
-  <span class="nx">context</span><span class="o">:</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
+  <span class="nx">context</span><span class="o">:</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
   <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
     <span class="c1">// Supposing this JSON payload was received:</span>
     <span class="c1">//   {&quot;project&quot;: {&quot;id&quot;: 42, &quot;html&quot;: &quot;&lt;div&gt;...&quot; }}</span>
@@ -2705,7 +2670,7 @@ bubble up the DOM. The only exceptions to this are the global events <code>ajaxS
 <span class="p">})</span>
 
 <span class="c1">// post a JSON payload:</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
   <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
   <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
   <span class="c1">// post payload:</span>
@@ -2719,35 +2684,35 @@ bubble up the DOM. The only exceptions to this are the global events <code>ajaxS
 
 </article>
 
-<article class=method id="$.ajaxJSONP">
-  <h3>$.ajaxJSONP
+<article class=method id="Z.ajaxJSONP">
+  <h3>Z.ajaxJSONP
   <span class=emoji title=deprecated>🐶🔫</span>
    
   </h3>
   
   <p class=warning>
-    Deprecated, use <a href="#$.ajax">$.ajax</a> instead.
+    Deprecated, use <a href="#Z.ajax">Z.ajax</a> instead.
   </p>
   
   
-  <pre class=signature><code>$.ajaxJSONP(options) ⇒ mock XMLHttpRequest
+  <pre class=signature><code>Z.ajaxJSONP(options) ⇒ mock XMLHttpRequest
 </code></pre>
   
   <p>Perform a JSONP request to fetch data from another domain.</p>
 
-<p>This method has no advantages over <a href="#$.ajax">$.ajax</a> and should not be used.</p>
+<p>This method has no advantages over <a href="#Z.ajax">Z.ajax</a> and should not be used.</p>
 
 </article>
 
-<article class=method id="$.ajaxSettings">
-  <h3>$.ajaxSettings
+<article class=method id="Z.ajaxSettings">
+  <h3>Z.ajaxSettings
   
    
   </h3>
   
   
   <p>Object containing the default settings for Ajax requests. Most settings are
-described in <a href="#$.ajax">$.ajax</a>. The ones that are useful when set globally are:</p>
+described in <a href="#Z.ajax">Z.ajax</a>. The ones that are useful when set globally are:</p>
 
 <ul>
 <li><code>timeout</code> (default: <code>0</code>): set to a non-zero value to specify a default timeout
@@ -2771,22 +2736,22 @@ values:
 
 </article>
 
-<article class=method id="$.get">
-  <h3>$.get
+<article class=method id="Z.get">
+  <h3>Z.get
   
    
   </h3>
   
   
-  <pre class=signature><code>$.get(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
-$.get(url, [data], [function(data, status, xhr){ ... }], [dataType]) ⇒ XMLHttpRequest [v1.0]
+  <pre class=signature><code>Z.get(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.get(url, [data], [function(data, status, xhr){ ... }], [dataType]) ⇒ XMLHttpRequest [v1.0]
 </code></pre>
   
-  <p>Perform an Ajax GET request. This is a shortcut for the <a href="#$.ajax">$.ajax</a>
+  <p>Perform an Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
 method.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/whatevs.html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/whatevs.html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
 
@@ -2795,26 +2760,26 @@ method.</p>
 
 </article>
 
-<article class=method id="$.getJSON">
-  <h3>$.getJSON
+<article class=method id="Z.getJSON">
+  <h3>Z.getJSON
   
    
   </h3>
   
   
-  <pre class=signature><code>$.getJSON(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
-$.getJSON(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest [v1.0]
+  <pre class=signature><code>Z.getJSON(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.getJSON(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest [v1.0]
 </code></pre>
   
-  <p>Get JSON data via Ajax GET request. This is a shortcut for the <a href="#$.ajax">$.ajax</a>
+  <p>Get JSON data via Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
 method.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 <span class="p">})</span>
 
 <span class="c1">// fetch data from another domain with JSONP</span>
-<span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;//example.com/awesome.json?callback=?&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">remoteData</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;//example.com/awesome.json?callback=?&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">remoteData</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">remoteData</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -2824,15 +2789,15 @@ method.</p>
 
 </article>
 
-<article class=method id="$.param">
-  <h3>$.param
+<article class=method id="Z.param">
+  <h3>Z.param
   
    
   </h3>
   
   
-  <pre class=signature><code>$.param(object, [shallow]) ⇒ string
-$.param(array) ⇒ string
+  <pre class=signature><code>Z.param(object, [shallow]) ⇒ string
+Z.param(array) ⇒ string
 </code></pre>
   
   <p>Serialize an object to a URL-encoded string representation for use in Ajax
@@ -2842,19 +2807,19 @@ not serialized and nested array values won&rsquo;t use square brackets on their 
 <p>Also accepts an array in <a href="#serializeArray">serializeArray</a> format, where each
 item has &ldquo;name&rdquo; and &ldquo;value&rdquo; properties.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">two</span><span class="o">:</span> <span class="mi">2</span> <span class="p">}})</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">two</span><span class="o">:</span> <span class="mi">2</span> <span class="p">}})</span>
 <span class="c1">//=&gt; &quot;foo[one]=1&amp;foo[two]=2)&quot;</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">ids</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">})</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">ids</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">})</span>
 <span class="c1">//=&gt; &quot;ids[]=1&amp;ids[]=2&amp;ids[]=3&quot;</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">ids</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">},</span> <span class="kc">true</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">ids</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">},</span> <span class="kc">true</span><span class="p">)</span>
 <span class="c1">//=&gt; &quot;ids=1&amp;ids=2&amp;ids=3&quot;</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">nested</span><span class="o">:</span> <span class="p">{</span> <span class="nx">will</span><span class="o">:</span> <span class="s1">&#39;not be ignored&#39;</span> <span class="p">}})</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">nested</span><span class="o">:</span> <span class="p">{</span> <span class="nx">will</span><span class="o">:</span> <span class="s1">&#39;not be ignored&#39;</span> <span class="p">}})</span>
 <span class="c1">//=&gt; &quot;foo=bar&amp;nested[will]=not+be+ignored&quot;</span>
 
-<span class="nx">$</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">nested</span><span class="o">:</span> <span class="p">{</span> <span class="nx">will</span><span class="o">:</span> <span class="s1">&#39;be ignored&#39;</span> <span class="p">}},</span> <span class="kc">true</span><span class="p">)</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">nested</span><span class="o">:</span> <span class="p">{</span> <span class="nx">will</span><span class="o">:</span> <span class="s1">&#39;be ignored&#39;</span> <span class="p">}},</span> <span class="kc">true</span><span class="p">)</span>
 <span class="c1">//=&gt; &quot;foo=bar&amp;nested=[object+Object]&quot;</span>
 </code></pre></div>
 
@@ -2863,20 +2828,20 @@ item has &ldquo;name&rdquo; and &ldquo;value&rdquo; properties.</p>
 
 </article>
 
-<article class=method id="$.post">
-  <h3>$.post
+<article class=method id="Z.post">
+  <h3>Z.post
   
    
   </h3>
   
   
-  <pre class=signature><code>$.post(url, [data], function(data, status, xhr){ ... }, [dataType]) ⇒ XMLHttpRequest
+  <pre class=signature><code>Z.post(url, [data], function(data, status, xhr){ ... }, [dataType]) ⇒ XMLHttpRequest
 </code></pre>
   
-  <p>Perform an Ajax POST request. This is a shortcut for the <a href="#$.ajax">$.ajax</a>
+  <p>Perform an Ajax POST request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
 method.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sample</span><span class="o">:</span> <span class="s1">&#39;payload&#39;</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sample</span><span class="o">:</span> <span class="s1">&#39;payload&#39;</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
   <span class="c1">// process response</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -2884,7 +2849,7 @@ method.</p>
 
 <p><code>data</code> can also be a string:</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#some_form&#39;</span><span class="p">).</span><span class="nx">serialize</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#some_form&#39;</span><span class="p">).</span><span class="nx">serialize</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
   <span class="c1">// ...</span>
 <span class="p">})</span>
 </code></pre></div>
@@ -2906,7 +2871,7 @@ method.</p>
   
   <p>Set the html contents of the current collection to the result of a GET Ajax call to the given URL. Optionally, a CSS selector can be specified in the URL, like so, to use only the HTML content matching the selector for updating the collection:</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#some_element&#39;</span><span class="p">).</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;/foo.html #bar&#39;</span><span class="p">)</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#some_element&#39;</span><span class="p">).</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;/foo.html #bar&#39;</span><span class="p">)</span>
 </code></pre></div>
 
 
@@ -2950,7 +2915,7 @@ method.</p>
 Disabled form controls, buttons, and unchecked radio buttons/checkboxes are skipped.
 The result doesn&rsquo;t include data from file inputs.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">serializeArray</span><span class="p">()</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">serializeArray</span><span class="p">()</span>
 <span class="c1">//=&gt; [{ name: &#39;size&#39;, value: &#39;micro&#39; },</span>
 <span class="c1">//    { name: &#39;name&#39;, value: &#39;Z.js&#39; }]</span>
 </code></pre></div>
@@ -2986,8 +2951,8 @@ event on current elements.</p>
     <h2 id="fx">Effects</h2>
     
     
-<article class=method id="$.fx">
-  <h3>$.fx
+<article class=method id="Z.fx">
+  <h3>Z.fx
   
    
   </h3>
@@ -2996,9 +2961,9 @@ event on current elements.</p>
   <p>Global settings for animations:</p>
 
 <ul>
-<li><p><code>$.fx.off</code> (default false in browsers that support CSS transitions): set to
+<li><p><code>Z.fx.off</code> (default false in browsers that support CSS transitions): set to
 true to disable all <a href="#animate"><code>animate()</code></a> transitions.</p></li>
-<li><p><code>$.fx.speeds</code>: an object with duration settings for animations:</p>
+<li><p><code>Z.fx.speeds</code>: an object with duration settings for animations:</p>
 
 <ul>
 <li><code>_default</code> (400 ms)</li>
@@ -3036,7 +3001,7 @@ animation name</li>
 <ul>
 <li><code>fast</code> (200 ms)</li>
 <li><code>slow</code> (600 ms)</li>
-<li>any custom property of <a href="#$.fx"><code>$.fx.speeds</code></a></li>
+<li>any custom property of <a href="#Z.fx"><code>Z.fx.speeds</code></a></li>
 </ul>
 </li>
 <li><code>easing</code> (default <code>linear</code>): specifies the type of animation easing to use, one of:
@@ -3065,7 +3030,7 @@ animation name</li>
 </ul>
 
 
-<p>If the duration is <code>0</code> or <code>$.fx.off</code> is true (default in a browser that doesn&rsquo;t
+<p>If the duration is <code>0</code> or <code>Z.fx.off</code> is true (default in a browser that doesn&rsquo;t
 support CSS transitions), animations will not be executed; instead the target
 values will take effect instantly. Similarly, when the target CSS properties
 match the current state of the element, there will be no animation and the
@@ -3074,7 +3039,7 @@ match the current state of the element, there will be no animation and the
 <p>If the first argument is a string instead of object, it is taken as a <a href="http://www.w3.org/TR/css3-animations/#animations">CSS
 keyframe animation</a> name.</p>
 
-<div class="highlight"><pre><code class="js"><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#some_element&quot;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span>
+<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s2">&quot;#some_element&quot;</span><span class="p">).</span><span class="nx">animate</span><span class="p">({</span>
   <span class="nx">opacity</span><span class="o">:</span> <span class="mf">0.25</span><span class="p">,</span> <span class="nx">left</span><span class="o">:</span> <span class="s1">&#39;50px&#39;</span><span class="p">,</span>
   <span class="nx">color</span><span class="o">:</span> <span class="s1">&#39;#abcdef&#39;</span><span class="p">,</span>
   <span class="nx">rotateZ</span><span class="o">:</span> <span class="s1">&#39;45deg&#39;</span><span class="p">,</span> <span class="nx">translate3d</span><span class="o">:</span> <span class="s1">&#39;0,10px,0&#39;</span>
@@ -3131,14 +3096,14 @@ keyframe animation</a> name.</p>
 
 <span class="nt">&lt;script&gt;</span>
 <span class="c1">// show delete buttons on swipe</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#items li&#39;</span><span class="p">).</span><span class="nx">swipe</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#items li&#39;</span><span class="p">).</span><span class="nx">swipe</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">).</span><span class="nx">hide</span><span class="p">()</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">).</span><span class="nx">show</span><span class="p">()</span>
 <span class="p">})</span>
 
 <span class="c1">// delete row on tapping delete button</span>
-<span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">).</span><span class="nx">tap</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.delete&#39;</span><span class="p">).</span><span class="nx">tap</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">remove</span><span class="p">()</span>
 <span class="p">})</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre></div>
@@ -3176,38 +3141,38 @@ keyframe animation</a> name.</p>
 <h4>New features</h4>
 
 <ul>
-<li><code>$.fn.filter(function(index){ ... })</code></li>
-<li><code>$.fn.contents()</code></li>
-<li><code>$.fn.wrapInner()</code></li>
-<li><code>$.fn.scrollTop()</code></li>
-<li><code>$.contains()</code></li>
-<li><code>$.fn.has()</code></li>
-<li><code>$.fn.position()</code></li>
-<li><code>$.fn.offsetParent()</code></li>
-<li><code>$.parseJSON()</code></li>
-<li><code>$.camelCase()</code></li>
-<li><code>$.isWindow()</code></li>
-<li><code>$.grep()</code> (interface to <code>Array.filter</code>)</li>
-<li>Support <code>$(html, attributes)</code> syntax for element creation</li>
+<li><code>Z.fn.filter(function(index){ ... })</code></li>
+<li><code>Z.fn.contents()</code></li>
+<li><code>Z.fn.wrapInner()</code></li>
+<li><code>Z.fn.scrollTop()</code></li>
+<li><code>Z.contains()</code></li>
+<li><code>Z.fn.has()</code></li>
+<li><code>Z.fn.position()</code></li>
+<li><code>Z.fn.offsetParent()</code></li>
+<li><code>Z.parseJSON()</code></li>
+<li><code>Z.camelCase()</code></li>
+<li><code>Z.isWindow()</code></li>
+<li><code>Z.grep()</code> (interface to <code>Array.filter</code>)</li>
+<li>Support <code>Z(html, attributes)</code> syntax for element creation</li>
 <li>Emulate <code>mouseenter</code> and <code>mouseleave</code> events</li>
-<li>Bootstrap compat: support <code>$.fn.offset(coordinates)</code></li>
-<li>Bootstrap compat: implement <code>$.fn.detach()</code></li>
+<li>Bootstrap compat: support <code>Z.fn.offset(coordinates)</code></li>
+<li>Bootstrap compat: implement <code>Z.fn.detach()</code></li>
 <li>Add support for Ajax <code>cache: false</code> option</li>
 <li>Prevent scrolling when horizontal swipe events are detected</li>
 <li><code>cancelTouch</code> for tap events</li>
 <li><code>prev</code> and <code>next</code> now support an optional selector argument</li>
-<li><code>$.fn.find</code> and <code>$.fn.closest</code> now support Z.js objects as arguments</li>
-<li>Enable deep copy via <code>$.extend(true, target, source)</code></li>
-<li>Enable nested structures for <code>$.fn.wrap()</code> and <code>$.fn.wrapAll()</code></li>
-<li>Enable function arguments for <code>$.fn.wrap()</code> and <code>$.fn.wrapInner()</code></li>
+<li><code>Z.fn.find</code> and <code>Z.fn.closest</code> now support Z.js objects as arguments</li>
+<li>Enable deep copy via <code>Z.extend(true, target, source)</code></li>
+<li>Enable nested structures for <code>Z.fn.wrap()</code> and <code>Z.fn.wrapAll()</code></li>
+<li>Enable function arguments for <code>Z.fn.wrap()</code> and <code>Z.fn.wrapInner()</code></li>
 <li>Support number, boolean, JSON types in data attributes</li>
 <li>Support manipulating classnames on SVG elements</li>
 <li>Enable named durations for <code>animate</code>, e.g. <code>slow</code>.</li>
 <li>Support <code>timing-function</code> for <code>animate</code></li>
-<li>Support event properties passed to <code>$.fn.trigger()</code> or <code>$.Event()</code></li>
+<li>Support event properties passed to <code>Z.fn.trigger()</code> or <code>Z.Event()</code></li>
 <li>Selector module: support child <code>&gt; *</code> queries</li>
 <li>Add detect support for mobile Chrome browser</li>
-<li>Add <code>$.os.phone</code> and <code>$.os.tablet</code> (booleans)</li>
+<li>Add <code>Z.os.phone</code> and <code>Z.os.tablet</code> (booleans)</li>
 <li>Detect Firefox mobile, Playbooks and BB10</li>
 </ul>
 
@@ -3222,29 +3187,29 @@ keyframe animation</a> name.</p>
 <li>Corrected parameters of <code>load</code> success callback to match jQuery.</li>
 <li>Fix <code>css</code> with 0 values and falsy values</li>
 <li>Fix a <code>css</code> performance issues with string values</li>
-<li>Fix <code>$.ajaxJSONP</code> when invoked directly</li>
+<li>Fix <code>Z.ajaxJSONP</code> when invoked directly</li>
 <li>Fix <code>animate</code> with 0 durations.</li>
 <li>Fix <code>toggle</code> and <code>fadeToggle</code> for multiple elements.</li>
-<li>Fix ajax <code>$.fn.load</code> behavior with selector</li>
+<li>Fix ajax <code>Z.fn.load</code> behavior with selector</li>
 <li>Make <code>attr(name, null)</code> unset attribute</li>
 <li>Fix <code>animate</code> in Firefox</li>
 <li>Fix <code>animate</code> for elements just added to DOM</li>
-<li>Fix an escaping issue with <code>$.param</code></li>
-<li>Respect <code>traditional: true</code> option in <code>$.ajax</code></li>
+<li>Fix an escaping issue with <code>Z.param</code></li>
+<li>Respect <code>traditional: true</code> option in <code>Z.ajax</code></li>
 <li>Fix <code>focus</code> &amp; <code>blur</code> event delegation and enable unbind</li>
-<li>Simple wrapping for any object passed to <code>$()</code></li>
+<li>Simple wrapping for any object passed to <code>Z()</code></li>
 <li>Enable <code>children</code> method for XML documents</li>
 <li>Don&rsquo;t eval <code>&lt;script&gt;</code> content when <code>src</code> is present</li>
-<li>Support <code>processData</code> option for <code>$.ajax()</code></li>
-<li>Enable passing <code>contentType: false</code> to <code>$.ajax()</code></li>
+<li>Support <code>processData</code> option for <code>Z.ajax()</code></li>
+<li>Enable passing <code>contentType: false</code> to <code>Z.ajax()</code></li>
 <li>Apply <code>focus()</code> and <code>blur()</code> to all elements in collection</li>
-<li>Change <code>$.fn.map()</code> to return a Z.js collection</li>
+<li>Change <code>Z.fn.map()</code> to return a Z.js collection</li>
 <li>Selector argument for <code>on(evt, selector, fn)</code> can be false</li>
-<li>Don&rsquo;t raise error on <code>$('#')</code></li>
-<li>Provide empty object in <code>$.support</code></li>
+<li>Don&rsquo;t raise error on <code>Z('#')</code></li>
+<li>Provide empty object in <code>Z.support</code></li>
 <li><code>return false</code> in event handler calls stopPropagation()</li>
-<li>Fix <code>$.isPlainObject()</code> for <code>window</code> in Opera</li>
-<li><code>$.ajax</code> error callback correctly reports <code>abort</code> status</li>
+<li>Fix <code>Z.isPlainObject()</code> for <code>window</code> in Opera</li>
+<li><code>Z.ajax</code> error callback correctly reports <code>abort</code> status</li>
 <li>Fix <code>hasClass</code> in collections of multiple elements</li>
 <li>Stop iteration in <code>each()</code> when the callback returns false</li>
 <li>Add ability to set <code>xhr</code> factory per-request</li>
@@ -3253,7 +3218,7 @@ keyframe animation</a> name.</p>
 <li>Fix error callbacks for <code>ajaxJSONP</code></li>
 <li>Support optional <code>data</code> argument for various Ajax methods</li>
 <li>Fix DOM insertion operators for null values</li>
-<li>Fix dataType being set for <code>$.getJSON</code></li>
+<li>Fix dataType being set for <code>Z.getJSON</code></li>
 </ul>
 
 
@@ -3274,10 +3239,10 @@ from the source and tests. <a href="http://mislav.uniqpath.com/2010/05/semicolon
 <ul>
 <li><a href="#clone">clone</a></li>
 <li><a href="#prop">prop</a></li>
-<li><a href="#$.isPlainObject">$.isPlainObject</a></li>
-<li><a href="#$.inArray">$.inArray</a></li>
-<li><a href="#$.trim">$.trim</a></li>
-<li><a href="#$.proxy">$.proxy</a></li>
+<li><a href="#Z.isPlainObject">Z.isPlainObject</a></li>
+<li><a href="#Z.inArray">Z.inArray</a></li>
+<li><a href="#Z.trim">Z.trim</a></li>
+<li><a href="#Z.proxy">Z.proxy</a></li>
 </ul>
 
 
@@ -3293,16 +3258,16 @@ pseudo-selectors such as <code>:visible</code> and <code>:first</code></li>
 
 <ul>
 <li>added missing methods for Ember.js compatibility</li>
-<li>improved creating DOM fragments from HTML with <a href="#$()">$()</a></li>
+<li>improved creating DOM fragments from HTML with <a href="#Z()">Z()</a></li>
 <li>enable <a href="#append">append</a> &amp; family to accept multiple arguments</li>
-<li>fix <a href="#$.each">$.each</a> context</li>
+<li>fix <a href="#Z.each">Z.each</a> context</li>
 <li>fix calling <a href="#get">get</a> without index</li>
 <li>fix calling <a href="#val">val</a> on empty collection</li>
 <li>using <code>css(property, '')</code> removes the property</li>
 <li>fix <a href="#filter">filter</a>, <a href="#is">is</a>, and <a href="#closest">closest</a> when operating on
 nodes that are detached from the document</li>
 <li>remove <code>end</code> &amp; <code>andSelf</code> from core to the new &ldquo;stack.js&rdquo; plugin</li>
-<li>exposed important internal Z.js functions through the <code>$.Z.js</code> object for
+<li>exposed important internal Z.js functions through the <code>Z.Z.js</code> object for
 extending or overriding Z.js functionality.</li>
 <li><a href="#data">data</a> method returns undefined when there is no data</li>
 <li>support camelized names in <a href="#data">data</a> method</li>
@@ -3324,8 +3289,8 @@ improvements as well:</p>
 <ul>
 <li>have correct ajaxComplete argument order for JSONP abort and timeout</li>
 <li>JSONP requests that hit a 404 will now correctly invoke the error callback</li>
-<li>add support for <code>dataType: 'jsonp'</code> in <a href="#$.ajax">$.ajax</a></li>
-<li>add support for <code>data</code> in <a href="#$.ajaxJSONP">$.ajaxJSONP</a></li>
+<li>add support for <code>dataType: 'jsonp'</code> in <a href="#Z.ajax">Z.ajax</a></li>
+<li>add support for <code>data</code> in <a href="#Z.ajaxJSONP">Z.ajaxJSONP</a></li>
 <li>HTTP 304 status is treated as success instead of an error</li>
 <li>made <a href="#load">load</a> more compatible with jQuery</li>
 <li>allow Content-Type to be set via request headers</li>
@@ -3373,7 +3338,7 @@ within an animated element, and improve handling of transition CSS properties</l
         </small>
       </h3>
       <ul>
-<li>add <code>$.each</code>, <code>$.map</code>, <code>$.slice</code>;</li>
+<li>add <code>Z.each</code>, <code>Z.map</code>, <code>Z.slice</code>;</li>
 <li>add <code>.serializeArray()</code>, <code>.serialize()</code>;</li>
 <li>add <code>.triggerHandler()</code>;</li>
 <li>add <code>.wrap</code>, <code>.wrapAll</code>, <code>.unwrap</code>, <code>.width/height</code> setters, <code>.append</code> (and
@@ -3410,7 +3375,7 @@ friends) improvements;</li>
         </small>
       </h3>
       <ul>
-<li>add <code>.not</code>, <code>.children</code>, <code>.siblings</code>, <code>$.param</code>;</li>
+<li>add <code>.not</code>, <code>.children</code>, <code>.siblings</code>, <code>Z.param</code>;</li>
 <li>improve <code>.attr</code> &amp; <code>.html</code>;</li>
 <li>support callback for <code>.anim</code>.</li>
 </ul>
@@ -3446,7 +3411,7 @@ friends) improvements;</li>
       <ul>
 <li>add <code>.toggleClass</code>, <code>.attr</code> setter, <code>.last</code>, <code>.undelegate</code>, <code>.die</code>;</li>
 <li>proxied event objects for event delegation;</li>
-<li>support <code>$</code> fragments.</li>
+<li>support <code>Z</code> fragments.</li>
 </ul>
 
 
@@ -3512,16 +3477,13 @@ friends) improvements;</li>
 
 </div>
 
-<script src="Z.js.min.js"></script>
-<script src="touch.js"></script>
-
 <script>
   var reflowTimeout;
   
   function injectScript(src) {
     var s = document.createElement('script')
     s.src = src; s.async = true
-    $('script').first().before(s)
+    Z('script').first().before(s)
   }
 
   // Reflow all elements on the page. <david@14islands.com>
@@ -3531,27 +3493,27 @@ friends) improvements;</li>
     setTimeout(function(){ docStyle.paddingRight = '' }, 0)
   }
 
-  $('.signature code').html(function(i, html){
+  Z('.signature code').html(function(i, html){
     return html
-      .replace(/\[([^\[]+)\]$/mg, '<span class=version>$1+</span>')
-      .replace(/\)([^()]+)$/mg, ') <span class=return>$1</span>')
+      .replace(/\[([^\[]+)\]Z/mg, '<span class=version>Z1+</span>')
+      .replace(/\)([^()]+)Z/mg, ') <span class=return>Z1</span>')
   })
 
-  $(document).on('mouseover', 'span.version', function(){
-    var el = $(this)
+  Z(document).on('mouseover', 'span.version', function(){
+    var el = Z(this)
     if (!el.attr('title'))
       el.attr('title', "This feature is only available in Z.js " + el.text())
   })
 
-  if ($.os.ios || /\bMac.+\bSafari\b/.test(navigator.userAgent))
-    $(document.body).addClass('emoji-enabled')
+  if (Z.os.ios || /\bMac.+\bSafari\b/.test(navigator.userAgent))
+    Z(document.body).addClass('emoji-enabled')
     
   // don't follow links when the sidebar is tap-enabled
-  $('#sidebar').on('click', 'a', function(e){
-    return !$('body').hasClass('navigating')
+  Z('#sidebar').on('click', 'a', function(e){
+    return !Z('body').hasClass('navigating')
   })
 
-  $('#sidebar').on('tap', 'a', function(e){
+  Z('#sidebar').on('tap', 'a', function(e){
     location.href = this.href;
 
     closeMenu()
@@ -3562,44 +3524,44 @@ friends) improvements;</li>
     return false
   })
   
-  $(window).on('scroll', function(){
+  Z(window).on('scroll', function(){
     if(reflowTimeout) clearTimeout(reflowTimeout)
     reflowTimeout = setTimeout(reflowFixedPositions, 200)
   })
   
   function closeMenu(){
-    if ($('body').hasClass('navigating')) {
-      $('body').removeClass('navigating')
+    if (Z('body').hasClass('navigating')) {
+      Z('body').removeClass('navigating')
       setTimeout(function(){
-        $('#sidebar').css('display','none')
+        Z('#sidebar').css('display','none')
       }, 350)
     }
   }
   
   // show/hide menu on mobile
-  $('#menu_icon').on('tap', function(){
-    if ($('body').hasClass('navigating')) {
+  Z('#menu_icon').on('tap', function(){
+    if (Z('body').hasClass('navigating')) {
       closeMenu()
     } else {
-      $('#sidebar').css('display','block')
-      $('#sidebar')[0].offsetLeft // force render
-      $('body').addClass('navigating')
+      Z('#sidebar').css('display','block')
+      Z('#sidebar')[0].offsetLeft // force render
+      Z('body').addClass('navigating')
     }
     return false
   })
 
   // change the title of the page so bookmarks have a better default
-  if ($.os.ios || $.os.android)
+  if (Z.os.ios || Z.os.android)
     document.title = 'Z.js Docs'
 
   // For retina screens, use a hi-res version of the tour image.
   // We're swapping this out on-demand (not an ideal solution)
   // to avoid rendering bugs on iOS.
-  $('#tour > img')[0].src =
+  Z('#tour > img')[0].src =
     ('devicePixelRatio' in window && devicePixelRatio > 1) ?
     'intro2x.jpg' : 'intro.jpg'
 
-  var tour = $('#tour'), tourSlides = tour.children(),
+  var tour = Z('#tour'), tourSlides = tour.children(),
       tourSlide = 0, tourSlidesTotal = 5
 
   function advanceTourSlide(delta){
@@ -3611,26 +3573,13 @@ friends) improvements;</li>
   tour.on('click swipeLeft', function(){ advanceTourSlide(+1) })
       .on('swipeRight', function(){ advanceTourSlide(-1) })
 
-  if (/^localhost|\.(dev|local)$/.test(location.hostname) && $.os.iphone && !/Simulator/.test(navigator.userAgent))
+  if (/^localhost|\.(dev|local)Z/.test(location.hostname) && Z.os.iphone && !/Simulator/.test(navigator.userAgent))
     injectScript('livereload.js')
 
-  if (/\.com$/.test(location.hostname))
+  if (/\.comZ/.test(location.hostname))
     injectScript('http://platform.twitter.com/widgets.js')
 </script>
 
-<script>
-  var _gauges = _gauges || [];
-  if (/\.com$/.test(location.hostname)) (function() {
-    var t   = document.createElement('script');
-    t.type  = 'text/javascript';
-    t.async = true;
-    t.id    = 'gauges-tracker';
-    t.setAttribute('data-site-id', '4f46b5c5f5a1f573c300004c');
-    t.src = '//secure.gaug.es/track.js';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(t, s);
-  })();
-</script>
 
 
 </body>
