@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-07 17:53:25
+ * @snandy 2013-08-07 18:07:14
  *
  */
 ~function(window, undefined) {
@@ -89,7 +89,7 @@ function forEach(obj, iterator, context) {
  */
 
 function byId(id) {
-    return doc.getElementById(id)
+    return document.getElementById(id)
 }
 var query = function() {
     // selector regular expression
@@ -928,13 +928,14 @@ function fix(e, elem) {
         e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement
     }
     if (e.pageX == null && e.clientX != null) {
-        var doc = document.documentElement, body = document.body
+        var docElem = document.documentElement
+        var body = document.body
         e.pageX = e.clientX + 
-            (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-            (doc && doc.clientLeft || body && body.clientLeft || 0)
+            (docElem && docElem.scrollLeft || body && body.scrollLeft || 0) -
+            (docElem && docElem.clientLeft || body && body.clientLeft || 0)
         e.pageY = e.clientY + 
-            (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-            (doc && doc.clientTop  || body && body.clientTop  || 0)
+            (docElem && docElem.scrollTop  || body && body.scrollTop  || 0) -
+            (docElem && docElem.clientTop  || body && body.clientTop  || 0)
     }
     if (!e.which && ((e.charCode || e.charCode === 0) ? e.charCode : e.keyCode)) {
         e.which = e.charCode || e.keyCode

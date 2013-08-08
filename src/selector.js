@@ -34,7 +34,7 @@
  */
 
 function byId(id) {
-    return doc.getElementById(id)
+    return document.getElementById(id)
 }
 var query = function() {
     // selector regular expression
