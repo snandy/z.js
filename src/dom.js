@@ -173,6 +173,45 @@ Z.contains = function(a, b) {
     } catch(e) {}
 }
 
+Z.ready = function(callback) {
+    var done = false, top = true
+
+    var root = doc.documentElement
+    var add = doc.addEventListener ? 'addEventListener' : 'attachEvent'
+    var rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent'
+    var pre = doc.addEventListener ? '' : 'on'
+
+    function init(e) {
+        if (e.type == 'readystatechange' && doc.readyState != 'complete') return
+        (e.type == 'load' ? window : doc)[rem](pre + e.type, init, false)
+        if (!done && (done = true)) callback(Z)
+    }
+
+    function poll() {
+        try { 
+            root.doScroll('left') 
+        } catch(e) { 
+            setTimeout(poll, 50)
+            return
+        }
+        init('poll')
+    }
+
+    if (doc.readyState == 'complete') {
+        callback(Z)
+    } else {
+        if (doc.createEventObject && root.doScroll) {
+            try {
+                top = !window.frameElement
+            } catch(e) { }
+            if (top) poll()
+        }
+        doc[add](pre + 'DOMContentLoaded', init, false)
+        doc[add](pre + 'readystatechange', init, false)
+        window[add](pre + 'load', init, false)
+    }
+}
+
 Z.fn.extend({
     hasClass: function(name) {
         return domClass.has(this[0], name)
@@ -328,7 +367,6 @@ Z.fn.extend({
 
         offset.top  -= parseFloat( this.css('marginTop') ) || 0
         offset.left -= parseFloat( this.css('marginLeft') ) || 0
-
         parentOffset.top  += parseFloat( $parent.css('borderTopWidth') ) || 0
         parentOffset.left += parseFloat( $parent.css('borderLeftWidth') ) || 0
 

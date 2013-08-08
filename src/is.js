@@ -24,3 +24,11 @@ Z.isPlainObject = function(obj) {
 Z.isWindow = function(obj) {
     return obj != null && obj === obj.window
 }
+
+Z.isDocument = function(obj) { 
+    return obj != null && obj.nodeType === obj.DOCUMENT_NODE 
+}
+
+Z.isArrayLike = function(obj) {
+    return obj.length === +obj.length
+}

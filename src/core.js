@@ -10,8 +10,7 @@ Z.prototype = {
 
         // for DOM-ready
         if (typeof selector === 'function') {
-            Z.ready(selector)
-            return
+            return Z.ready(selector)
         }
 
         // for HTMLElement or window

@@ -8,9 +8,22 @@
 				margin: 0;
 			}
 		</style>
+		<link onload="console.log('css')" rel="stylesheet" type="text/css" href="http://jquery.com/jquery-wp-content/themes/jquery/css/base.css">
 		<script type="text/javascript" src="../z.src.js"></script>
+		<script type="text/javascript">
+			Z.ready(function() {
+				console.log(Z('p').get(0))
+			})
+			Z.ready(function() {
+				console.log(Z('p').get(1))
+			})
+			Z.ready(function() {
+				console.log(arguments[0])
+			})
+		</script>
 	</head>
 	<body style="height: 1000px">
+	<img onload="console.log('img loaded')" src="http://img.itc.cn/ph0/jNBLkVoy3pc"><br/>
 		<p id="pid">id</p>
 		<p class="cls">className</p>
 		
