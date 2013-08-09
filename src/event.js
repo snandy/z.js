@@ -478,5 +478,5 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
             this.on(name, handler)
         }
         return this
-    };
-});
+    }
+})
