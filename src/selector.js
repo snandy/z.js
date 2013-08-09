@@ -131,3 +131,19 @@ var query = function() {
 
     return query
 }()
+
+var tempParent = document.createElement('div')
+function matches(el, selector) {
+    if (!el || el.nodeType !== 1) return false
+    var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                          el.oMatchesSelector || el.matchesSelector
+    if (matchesSelector) return matchesSelector.call(el, selector)
+    // fall back to performing a selector:
+    var match, parent = el.parentNode, temp = !parent
+    if (temp) (parent = tempParent).appendChild(el)
+    match = query(selector, parent)
+    temp && tempParent.removeChild(el)
+    return !!match.length
+}
+
+Z.matches = matches

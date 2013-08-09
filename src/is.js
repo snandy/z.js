@@ -32,3 +32,7 @@ Z.isDocument = function(obj) {
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length
 }
+
+Z.isZ = function(obj) {
+    return obj.constructor === Z
+}

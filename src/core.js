@@ -5,24 +5,28 @@ function Z(selector, context) {
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
-        // for slice
+        // For slice
         if (!selector) return
 
-        // for DOM-ready
-        if (typeof selector === 'function') {
-            return Z.ready(selector)
-        }
+        // For DOM-ready
+        if (typeof selector === 'function') return Z.ready(selector)
 
-        // for HTMLElement or window
+        // For Z() object
+        if ( Z.isZ(selector) ) return selector
+
+        // For Array or nodes
+        if ( Z.isArrayLike(selector) && !Z.isString(selector) ) return this.pushStack(selector)
+
+        // For HTMLElement or window
         if (selector.nodeType || selector === window) {
             this[0] = selector
             this.length = 1
             return
         }
 
-        // for CSS selector
+        // For CSS selector
         var nodes = query(selector, context)
-        push.apply(this, makeArray(nodes))
+        this.pushStack(nodes)
     },
 
     length: 0,
@@ -33,7 +37,11 @@ Z.prototype = {
     },
 
     toArray: function() {
-        return makeArray(this)
+        return slice.call(this)
+    },
+
+    pushStack: function(arr) {
+        push.apply(this, makeArray(arr))
     },
 
     slice: function() {
@@ -67,6 +75,27 @@ Z.prototype = {
         forEach(this, iterator)
         return this
     },
+
+    map: function(iterator) {
+        return Z(map(this, function(el, i) {
+            return iterator.call(el, el, i)
+        }))
+    },
+
+    remove: function() {
+        return this.each(function() {
+            if (this.parentNode != null)
+            this.parentNode.removeChild(this)
+        })
+    },
+
+    closest: function(selector, context) {
+        var node = this[0], collection = false
+        while ( node && !matches(node, selector) )
+            node = node !== context && !Z.isDocument(node) && node.parentNode
+        return Z(node)
+    },
+
     push: push,
     sort: types.sort,
     splice: types.splice
@@ -91,3 +120,7 @@ Z.extend = Z.fn.extend = function(obj) {
     })
     return target
 }
+
+Z.each = forEach
+
+Z.map = map

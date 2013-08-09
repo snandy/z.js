@@ -8,7 +8,6 @@
 				margin: 0;
 			}
 		</style>
-		<link onload="console.log('css')" rel="stylesheet" type="text/css" href="http://jquery.com/jquery-wp-content/themes/jquery/css/base.css">
 		<script type="text/javascript" src="../z.src.js"></script>
 		<script type="text/javascript">
 			Z.ready(function() {
@@ -23,12 +22,16 @@
 		</script>
 	</head>
 	<body style="height: 1000px">
-	<img onload="console.log('img loaded')" src="http://img.itc.cn/ph0/jNBLkVoy3pc"><br/>
+	
 		<p id="pid">id</p>
 		<p class="cls">className</p>
 		
 		<div data-attr="ddd">
-			<div id="sub" style="top:10px;">test</div>
+			<div id="sub" style="top:10px;">
+				<p>
+					<a href="http://www.sohu.com" id="ll">链接</a>
+				</p>
+			</div>
 			<p>段落</p>
 		</div>
 		<p id="p2">
@@ -79,7 +82,8 @@
 		// })
 
 		Z('p').on('click', function() {
-			console.log(1)
+			// console.log(this.mozMatchesSelector)
+			console.log(this.matchesSelector)
 		})
 	</script>
 	</body>

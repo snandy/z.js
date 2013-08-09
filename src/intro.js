@@ -1,7 +1,7 @@
 ~function(window, undefined) {
 
 var OP = Object.prototype
-var types = ['Array', 'Boolean', 'Function', 'Object', 'String', 'Number']
+var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
 
 var toString = OP.toString
 var slice = types.slice
@@ -47,5 +47,15 @@ function forEach(obj, iterator, context) {
             if (iterator.call(obj[k] || context, obj[k], k, obj) === true) return
         }
     }
+}
+
+// Return the results of applying the iterator to each element
+function map(obj, iterator, context) {
+    var results = []
+    if (obj == null) return results
+    forEach(obj, function(val, i, coll) {
+        results[i] = iterator.call(context, val, i, coll)
+    })
+    return results
 }
 
