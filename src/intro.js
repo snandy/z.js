@@ -9,15 +9,7 @@ var push  = types.push
 var doc = window.document
 var isStrict = doc.compatMode == 'CSS1Compat'
 var rwhite = /\s/
-var trimLeft = /^\s+/
-var trimRight = /\s+$/
 var rroot = /^(?:body|html)$/i
-    
-// IE6/7/8 return false
-if (!rwhite.test( '\xA0' )) {
-    trimLeft = /^[\s\xA0]+/
-    trimRight = /[\s\xA0]+$/
-}
 
 // For IE9/Firefox/Safari/Chrome/Opera
 var makeArray = function(obj) {
