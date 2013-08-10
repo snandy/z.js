@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-09 17:51:49
+ * @snandy 2013-08-10 15:27:50
  *
  */
 ~function(window, undefined) {
@@ -363,6 +363,10 @@ Z.isPlainObject = function(obj) {
     return 'isPrototypeOf' in obj && Z.isObject(obj)
 }
 
+Z.isArrayLike = function(obj) {
+    return obj.length === +obj.length && !Z.isString(obj)
+}
+
 Z.isWindow = function(obj) {
     return obj != null && obj === obj.window
 }
@@ -371,13 +375,18 @@ Z.isDocument = function(obj) {
     return obj != null && obj.nodeType === obj.DOCUMENT_NODE 
 }
 
-Z.isArrayLike = function(obj) {
-    return obj.length === +obj.length
+Z.isElement = function(obj) {
+    return obj ? obj.nodeType === 1 : false
+}
+
+Z.isTextNode = function(obj) {
+    return obj ? obj.nodeName === "#text" : false;
 }
 
 Z.isZ = function(obj) {
     return obj.constructor === Z
 }
+
 
 var rroot = /^(?:body|html)$/i
 // 特性检测
@@ -1259,8 +1268,8 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
             this.on(name, handler)
         }
         return this
-    };
-});
+    }
+})
 
 // object to queryString
 function serialize(obj) {
@@ -1451,16 +1460,19 @@ var jsonpDone = false
 //Thanks to Kevin Hakanson
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
 function generateRandomName() {
-    var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF';
+    var uuid = ''
+    var s = []
+    var i = 0
+    var hexDigits = '0123456789ABCDEF'
     for (i = 0; i < 32; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
     }
     // bits 12-15 of the time_hi_and_version field to 0010
-    s[12] = '4';
+    s[12] = '4'
     // bits 6-7 of the clock_seq_hi_and_reserved to 01    
-    s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
-    uuid = 'jsonp_' + s.join('');
-    return uuid;
+    s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)
+    uuid = 'jsonp_' + s.join('')
+    return uuid
 }
 
 function jsonp(url, options) {

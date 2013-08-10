@@ -21,6 +21,10 @@ Z.isPlainObject = function(obj) {
     return 'isPrototypeOf' in obj && Z.isObject(obj)
 }
 
+Z.isArrayLike = function(obj) {
+    return obj.length === +obj.length && !Z.isString(obj)
+}
+
 Z.isWindow = function(obj) {
     return obj != null && obj === obj.window
 }
@@ -29,8 +33,12 @@ Z.isDocument = function(obj) {
     return obj != null && obj.nodeType === obj.DOCUMENT_NODE 
 }
 
-Z.isArrayLike = function(obj) {
-    return obj.length === +obj.length
+Z.isElement = function(obj) {
+    return obj ? obj.nodeType === 1 : false
+}
+
+Z.isTextNode = function(obj) {
+    return obj ? obj.nodeName === "#text" : false;
 }
 
 Z.isZ = function(obj) {
