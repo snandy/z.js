@@ -9,6 +9,18 @@
 			}
 		</style>
 		<script type="text/javascript" src="../z.src.js"></script>
+		<script type="text/javascript">
+			// DOM ready
+			Z.ready(function() {
+				console.log(Z('p').get(0))
+			})
+			Z.ready(function() {
+				console.log(Z('p').get(1))
+			})
+			Z.ready(function() {
+				console.log(arguments[0])
+			})
+		</script>
 	</head>
 	<body style="height: 1000px">
 	
@@ -16,6 +28,7 @@
 		<p class="cls">className</p>
 		
 		<div data-attr="ddd">
+			div
 			<div id="sub" style="top:10px;">
 				<p>
 					<a href="http://www.sohu.com" id="ll">链接</a>
@@ -28,7 +41,16 @@
 		</p>
 		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
 	<script>
-		
+		function fn1(e) {
+			console.log(e)
+		}
+		function fn2() {
+			alert(this)
+		}
+
+		Z('p').on('click', fn1)
+		Z('div').click(fn2)
+		Z('p').mouseover(fn1)
 	</script>
 	</body>
 </html>

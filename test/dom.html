@@ -7,11 +7,13 @@
 			html, body {
 				margin: 0;
 			}
+			.red {
+				color: red;
+			}
 		</style>
 		<script type="text/javascript" src="../z.src.js"></script>
 	</head>
 	<body style="height: 1000px">
-	
 		<p id="pid">id</p>
 		<p class="cls">className</p>
 		
@@ -27,8 +29,13 @@
 			<span class="cls">span.cls</span>
 		</p>
 		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
+
 	<script>
 		
+		Z('p').on('click', function() {
+			Z(this).addClass('red')
+		})
+
 	</script>
 	</body>
 </html>
