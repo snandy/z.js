@@ -7,10 +7,7 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   <title>A super-tiny jQuery-like JavaScript Library (756 bytes | 447 gzipped) </title>
-  
-  <meta name=description content="The aerogel-weight jQuery-compatible JavaScript library
-">
-  
+  <meta name=description content="The aerogel-weight jQuery-compatible JavaScript library">
   <link rel=stylesheet href=stylesheets/style.css>
   <meta name=apple-mobile-web-app-capable content=yes>
   <meta name=apple-mobile-web-app-status-bar-style content=white>
@@ -43,8 +40,6 @@
   <ul class=toc_section>
   
   <li><a href="#Z()">Z()</a></li>
-  
-  <li><a href="#Z.camelCase">Z.camelCase</a></li>
   
   <li><a href="#Z.contains">Z.contains</a></li>
   
@@ -364,9 +359,10 @@
 
   <h4>Desktop browsers</h4>
   <ul>
-    <li>Safari 5+ (Mac, Win)</li>
-    <li>Chrome 5+ (Win, Mac, Linux, Chrome OS)</li>
-    <li>Mozilla Firefox 4+ (Win, Mac, Linux)</li>
+    <li>Internet Explorer 6+ (Win)</li>
+    <li>Safari 4+ (Mac, Win)</li>
+    <li>Chrome 4+ (Win, Mac, Linux, Chrome OS)</li>
+    <li>Mozilla Firefox 3+ (Win, Mac, Linux)</li>
     <li>Opera 10+ (Win, Mac, Linux)</li>
   </ul>
 
@@ -426,24 +422,19 @@
     
     
 <article class=method id="Z()">
-  <h3>Z()
-  
-   
-  </h3>
-  
+  <h3>Z()</h3>
   
   <pre class=signature><code>Z(selector, [context]) ⇒ collection
-Z(&lt;Z.js collection&gt;) ⇒ same collection
+Z(&lt;Z collection&gt;) ⇒ same collection
 Z(&lt;DOM nodes&gt;) ⇒ collection
 Z(htmlString) ⇒ collection
-Z(htmlString, attributes) ⇒ collection [v1.0]
-Z.js(function(Z){ ... })
+Z(function(Z){ ... })
 </code></pre>
   
-  <p>Create a Z.js collection object by performing a CSS selector, wrapping DOM
+  <p>Create a Z collection object by performing a CSS selector, wrapping DOM
 nodes, or creating elements from an HTML string.</p>
 
-<p>A Z.js collection is an array-like object that has chainable methods for
+<p>A Z collection is an array-like object that has chainable methods for
 manipulating the DOM nodes it references. All of the methods in this documentation
 are collection methods, except the ones directly on the dollar (<code>Z.js</code>) object,
 such as <code>Z.extend</code>.</p>
@@ -486,8 +477,6 @@ If the page is already loaded, executes the function immediately.</p>
 </p>
 
 
-
-
 <p class=compat>
   Z.js will only set the <code>Z</code> global to itself if it is not yet defined.
   This allows you to use Z.js with legacy code that uses, for example,
@@ -499,31 +488,8 @@ If the page is already loaded, executes the function immediately.</p>
 
 </article>
 
-<article class=method id="Z.camelCase">
-  <h3>Z.camelCase
-  
-  <span class=version>v1.0+</span> 
-  </h3>
-  
-  
-  <pre class=signature><code>Z.camelCase(string) ⇒ string
-</code></pre>
-  
-  <p>Turn a dasherized string into &ldquo;camel case&rdquo;. Doesn&rsquo;t affect already camel-cased
-strings.</p>
-
-<div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;hello-there&#39;</span><span class="p">)</span> <span class="c1">//=&gt; &quot;helloThere&quot;</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">camelCase</span><span class="p">(</span><span class="s1">&#39;helloThere&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; &quot;helloThere&quot;</span>
-</code></pre></div>
-
-
-
-
-</article>
-
 <article class=method id="Z.contains">
   <h3>Z.contains
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -537,10 +503,7 @@ are the same node.</p>
 </article>
 
 <article class=method id="Z.each">
-  <h3>Z.each
-  
-   
-  </h3>
+  <h3>Z.each</h3>
   
   
   <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection
@@ -1869,11 +1832,7 @@ detaching them from the DOM.</p>
 </article>
 
 <article class=method id="removeAttr">
-  <h3>removeAttr
-  
-   
-  </h3>
-  
+  <h3>removeAttr</h3>
   
   <pre class=signature><code>removeAttr(name) ⇒ self
 </code></pre>
@@ -1883,11 +1842,7 @@ detaching them from the DOM.</p>
 </article>
 
 <article class=method id="removeClass">
-  <h3>removeClass
-  
-   
-  </h3>
-  
+  <h3>removeClass</h3>
   
   <pre class=signature><code>removeClass([name]) ⇒ self
 removeClass(function(index, oldClassName){ ... }) ⇒ self
@@ -1899,11 +1854,7 @@ class name isn&rsquo;t given, remove all class names. Multiple class names can b
 </article>
 
 <article class=method id="replaceWith">
-  <h3>replaceWith
-  
-   
-  </h3>
-  
+  <h3>replaceWith</h3>
   
   <pre class=signature><code>replaceWith(content) ⇒ self
 </code></pre>
@@ -1916,7 +1867,6 @@ itself&mdash;with the new content. Content can be of any type described in
 
 <article class=method id="scrollTop">
   <h3>scrollTop
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -1930,11 +1880,7 @@ element on the page.</p>
 </article>
 
 <article class=method id="show">
-  <h3>show
-  
-   
-  </h3>
-  
+  <h3>show</h3>
   
   <pre class=signature><code>show() ⇒ self
 </code></pre>
@@ -1945,10 +1891,7 @@ array, effectively showing them if they were hidden with <a href="#hide">hide</a
 </article>
 
 <article class=method id="siblings">
-  <h3>siblings
-  
-   
-  </h3>
+  <h3>siblings</h3>
   
   
   <pre class=signature><code>siblings([selector]) ⇒ collection
@@ -1960,10 +1903,7 @@ specified, filter the results to contain only elements that match the selector.<
 </article>
 
 <article class=method id="size">
-  <h3>size
-  
-   
-  </h3>
+  <h3>size</h3>
   
   
   <pre class=signature><code>size() ⇒ number
@@ -2024,8 +1964,6 @@ like <a href="#show">show</a> if setting is truthy or <a href="#hide">hide</a> o
 <div class="highlight"><pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
 <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#too_long&#39;</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">140</span><span class="p">)</span>
 </code></pre></div>
-
-
 
 
 </article>
@@ -2203,12 +2141,7 @@ the first two types.</p>
 <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol li&#39;</span><span class="p">).</span><span class="nx">wrapInner</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;&lt;em /&gt;&lt;/p&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
-
-
-
 </article>
-
-
     
     <hr>
     <h2 id="detect">Detect methods</h2>
@@ -2263,11 +2196,8 @@ the first two types.</p>
 
 </article>
 
-
-
     <hr>
     <h2 id="event">Event handling</h2>
-    
     
 <article class=method id="Z.Event">
   <h3>Z.Event
@@ -3150,7 +3080,6 @@ keyframe animation</a> name.</p>
 <li><code>Z.fn.position()</code></li>
 <li><code>Z.fn.offsetParent()</code></li>
 <li><code>Z.parseJSON()</code></li>
-<li><code>Z.camelCase()</code></li>
 <li><code>Z.isWindow()</code></li>
 <li><code>Z.grep()</code> (interface to <code>Array.filter</code>)</li>
 <li>Support <code>Z(html, attributes)</code> syntax for element creation</li>
