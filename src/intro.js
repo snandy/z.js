@@ -4,12 +4,10 @@ var OP = Object.prototype
 var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
 
 var toString = OP.toString
-var slice = types.slice
-var push  = types.push
+var slice  = types.slice
+var push   = types.push
+var concat = types.concat
 var doc = window.document
-var isStrict = doc.compatMode == 'CSS1Compat'
-var rwhite = /\s/
-var rroot = /^(?:body|html)$/i
 
 // For IE9/Firefox/Safari/Chrome/Opera
 var makeArray = function(obj) {
@@ -49,5 +47,9 @@ function map(obj, iterator, context) {
         results[i] = iterator.call(context, val, i, coll)
     })
     return results
+}
+
+function Z(selector, context) {
+    return new Z.prototype.init(selector, context)
 }
 

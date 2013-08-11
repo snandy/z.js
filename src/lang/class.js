@@ -1,9 +1,11 @@
 /**
- * JavaScript OOP library. 
- * Support class, inheritance, namespace, private and more.
- *
+ * @class Z.Class
+ * 
+ * JavaScript OOP, Support class, inheritance, namespace, private and more.
+ * @Singleton
  */
-~function(Z) {
+Z.Class = function() {
+
     function Observer(type, context) {
         this.type = type
         this.scope = context || window
@@ -222,6 +224,5 @@
         }
     }
 
-    Z.Class = Class
-
-}(Z)
+    return Class
+}()

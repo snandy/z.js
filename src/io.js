@@ -1,19 +1,4 @@
 
-// object to queryString
-function serialize(obj) {
-    var a = []
-    forEach(obj, function(val, key) {
-        if ( Z.isArray(val) ) {
-            forEach(val, function(v, i) {
-                a.push( key + '=' + encodeURIComponent(v) )
-            })
-        } else {
-            a.push(key + '=' + encodeURIComponent(val))
-        }
-    })
-    return a.join('&')
-}
-
 // parse json string
 function parseJSON(str) {
     try {
@@ -76,7 +61,7 @@ function ajax(url, options) {
     
     // 对象转换成字符串键值对
     if ( Z.isObject(data) ) {
-        data = serialize(data)
+        data = Z.Object.toQueryString(data)
     }
     if (method === 'GET' && data) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + data

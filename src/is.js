@@ -16,6 +16,13 @@ Z.isEmptyObject = function(obj) {
     return true
 }
 
+Z.isEmpty = function(obj) {
+    if (obj == null) return true
+    if (Z.isArray(obj) || Z.isString(obj)) return obj.length === 0
+    for (var key in obj) return false
+    return true
+}
+
 Z.isPlainObject = function(obj) {
     if (!obj || obj === window || obj === doc || obj === doc.body) return false
     return 'isPrototypeOf' in obj && Z.isObject(obj)

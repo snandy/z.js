@@ -1,7 +1,4 @@
 
-function Z(selector, context) {
-    return new Z.prototype.init(selector, context)
-}
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
