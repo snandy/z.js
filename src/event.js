@@ -9,6 +9,12 @@ var cache = {}
 // 优先使用标准API
 var w3c = !!window.addEventListener
 
+var ZFunc = Z.Function
+var onceFunc = ZFunc.once
+var delayFunc = ZFunc.delay
+var debounceFunc = ZFunc.debounce
+var throttleFunc = ZFunc.throttle
+
 // Utility functions -----------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
@@ -16,76 +22,21 @@ function each(arr, callback) {
     }
 }
 
-var util = {
-    once: function(func) {
-        var run, memo
-        return function() {
-            if (run) return memo
-            run = true
-            return memo = func.apply(this, arguments)
-        }
-    },
-    delay: function(func, wait) {
-        return function() {
-            var context = this, args = arguments
-            setTimeout(function() {
-                func.apply(context, args)
-            }, wait)
-        }
-    },
-    debounce: function(func, wait, immediate) {
-        var timeout
-        return function() {
-            var context = this, args = arguments
-            later = function() {
-                timeout = null
-                if (!immediate) func.apply(context, args)
-            }
-            var callNow = immediate && !timeout
-            clearTimeout(timeout)
-            timeout = setTimeout(later, wait)
-            if (callNow) func.apply(context, args)
-        }
-    },
-    throttle: function(func, wait) {
-        var context, args, timeout, throttling, more, result
-        var whenDone = util.debounce(function() {
-                more = throttling = false
-            }, wait)
-        return function() {
-            context = this, args = arguments
-            var later = function() {
-                timeout = null
-                if (more) func.apply(context, args)
-                whenDone()
-            }
-            if (!timeout) timeout = setTimeout(later, wait)
-            
-            if (throttling) {
-                more = true
-            } else {
-                result = func.apply(context, args)
-            }
-            whenDone()
-            throttling = true
-            return result
-        }
-    },
-    addListener: function() {
-        if (w3c) {
-            return function(el, type, handler) { el.addEventListener(type, handler, false) } 
-        } else {
-            return function(el, type, handler) { el.attachEvent('on' + type, handler) }
-        }
-    }(),
-    removeListener: function() {
-        if (w3c) {
-            return function(el, type, handler) { el.removeEventListener(type, handler, false) }
-        } else {
-            return function(el, type, handler) { el.detachEvent('on' + type, handler) }
-        }
-    }()
-}
+var addListener = function() {
+    if (w3c) {
+        return function(el, type, handler) { el.addEventListener(type, handler, false) } 
+    } else {
+        return function(el, type, handler) { el.attachEvent('on' + type, handler) }
+    }
+}()
+var removeListener = function() {
+    if (w3c) {
+        return function(el, type, handler) { el.removeEventListener(type, handler, false) }
+    } else {
+        return function(el, type, handler) { el.detachEvent('on' + type, handler) }
+    }
+}()
+
 
 // Private functions ---------------------------------------------------------------------------
 
@@ -180,7 +131,7 @@ function remove(elem, type, guid) {
     delete elData.handle
     
     // DOM中事件取消注册
-    util.removeListener(elem, type, handle)
+    removeListener(elem, type, handle)
     // events是空对象时，从cache中删除
     if ( Z.isEmptyObject(events) ) {
         delete elData.events
@@ -313,31 +264,31 @@ function bind(elem, type, handler) {
     // one 仅执行一次
     if (handlerObj.one) {
         handlerObj.special = handler
-        handlerObj.handler = util.once(handler)
+        handlerObj.handler = onceFunc(handler)
     }
     
     // delay延迟执行
     if (handlerObj.delay) {
         handlerObj.special = handler
-        handlerObj.handler = util.delay(handler, handlerObj.delay)
+        handlerObj.handler = delayFunc(handler, handlerObj.delay)
     }
     
     // debounce防弹跳
     if (handlerObj.debounce) {
         handlerObj.special = handler
-        handlerObj.handler = util.debounce(handler, handlerObj.debounce)
+        handlerObj.handler = debounceFunc(handler, handlerObj.debounce)
     }
     
     // immediate 执行后立即延迟指定时间，如避免重复提交
     if (handlerObj.immediate) {
         handlerObj.special = handler
-        handlerObj.handler = util.debounce(handler, handlerObj.immediate, true)
+        handlerObj.handler = debounceFunc(handler, handlerObj.immediate, true)
     }
     
     // throttle 事件节流
     if (handlerObj.throttle) {
         handlerObj.special = handler
-        handlerObj.handler = util.throttle(handler, handlerObj.throttle)
+        handlerObj.handler = throttleFunc(handler, handlerObj.throttle)
     }
     
     // 初始化events
@@ -370,7 +321,7 @@ function bind(elem, type, handler) {
         handlers  = events[eventType]
         if (!handlers) {
             handlers = events[eventType] = []
-            util.addListener(elem, eventType, handle)
+            addListener(elem, eventType, handle)
         }
         // 添加到数组
         handlers.push(handlerObj)
@@ -426,21 +377,6 @@ function trigger(elem, type) {
         excuteHandler(elem, type, args)
     }
 }
-
-// var E = {
-//     viewCache: function() {
-//         if (window.console) {
-//             console.log(cache)
-//         }
-//     },
-//     destroy: function() {
-//         for (var num in cache) {
-//             var elData = cache[num], elem = elData.elem
-//             unbind(elem)
-//         }
-//         guid = 1
-//     }
-// }
 
 // on / off
 forEach({on: bind, off: unbind}, function(callback, name) {

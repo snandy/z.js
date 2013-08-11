@@ -22,7 +22,20 @@ module.exports = function(grunt) {
 		return str;
 	}();
 	
-	var concat = ['src/intro.js', 'src/selector.js', 'src/core.js', 'src/is.js', 'src/dom.js', 'src/event.js', 'src/io.js', 'src/outro.js']
+	var concat = function() {
+		var intro = ['src/intro.js', 'src/support.js', 'src/util.js']
+		var lang = ['object.js', 'function.js', 'array.js', 'string.js', 'class.js'].map(function(fileName) {
+			return 'src/lang/' + fileName
+		})
+		var core = ['selector.js', 'core.js', 'is.js', 'dom.js', 'event.js', 'io.js'].map(function(fileName) {
+			return 'src/' + fileName
+		})
+		var outro = ['src/outro.js']
+
+		return intro.concat(lang, core, outro)
+	}()
+
+
 	// 配置
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),

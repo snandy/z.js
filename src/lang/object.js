@@ -8,14 +8,14 @@
     // Retrieve the keys of an object's properties.
     var keys = Object.keys || function(obj) {
         obj = Object(obj)
-        var result = []    
-        for (var a in obj) result.push(a)
+        var result = [], i = 0
+        for (var a in obj) result[i++] = a
         return result
     }
     // Retrieve the values of an object's properties.
     var values = function(obj) {
-        var result = []
-        for (var key in obj) result.push(obj[key])
+        var result = [], i = 0
+        for (var key in obj) result[i++] = obj[key]
         return result
     }
     // Invert the keys and values of an object. The values must be serializable.
@@ -27,8 +27,8 @@
     }
     // Convert an object into a list of `[key, value]` pairs.
     var pairs = function(obj) {
-        var result = []
-        for (var a in obj) result.push([a, obj[a]])
+        var result = [], i = 0
+        for (var a in obj) result[i] = [a, obj[a]]
         return result
     }
     // Return a copy of the object only containing the whitelisted properties.

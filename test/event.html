@@ -48,9 +48,12 @@
 			alert(this)
 		}
 
-		Z('p').on('click', fn1)
-		Z('div').click(fn2)
-		Z('p').mouseover(fn1)
+		// Z('p').on('click', fn1)
+		// Z('div').click(fn2)
+		// Z('p').mouseover(fn1)
+		Z('#sub').delay('click', fn1, 2000)
+		Z('p')
+			.one('click', fn2)
 	</script>
 	</body>
 </html>

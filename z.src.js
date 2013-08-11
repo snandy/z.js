@@ -1,49 +1,91 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-10 15:27:50
+ * @snandy 2013-08-11 18:16:44
  *
  */
 ~function(window, undefined) {
 
 var OP = Object.prototype
+var FP = Function.prototype
 var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
 
 var toString = OP.toString
-var slice = types.slice
-var push  = types.push
+var slice  = types.slice
+var push   = types.push
+var concat = types.concat
+
+var nativeForEach = types.forEach
+var nativeMap = types.map
+var nativeEvery = types.every
+var nativeSome = types.some
+var nativeIndexOf = types.indexOf
+var nativeFilter = types.filter
+var nativeBind = FP.bind
+
 var doc = window.document
-var isStrict = doc.compatMode == 'CSS1Compat'
-var rwhite = /\s/
-var trimLeft = /^\s+/
-var trimRight = /\s+$/
-var rroot = /^(?:body|html)$/i
-    
-// IE6/7/8 return false
-if (!rwhite.test( '\xA0' )) {
-    trimLeft = /^[\s\xA0]+/
-    trimRight = /[\s\xA0]+$/
+
+function Z(selector, context) {
+    return new Z.prototype.init(selector, context)
 }
 
-// For IE9/Firefox/Safari/Chrome/Opera
-var makeArray = function(obj) {
-    return slice.call(obj, 0)
-}
-// For IE6/7/8
-try {
-    slice.call(doc.documentElement.childNodes, 0)[0].nodeType
-} catch(e) {
-    makeArray = function(obj) {
-        var res = []
-        for (var i = 0, len = obj.length; i < len; i++) {
-            res[i] = obj[i]
+Z.identity = function(val) { return val }
+
+
+// 特性检测
+var support = function() {
+    var div = doc.createElement('div')
+    div.className = 'a'
+    div.innerHTML = '<p style="color:red;"><a href="#" style="opacity:.4;float:left;">a</a></p>'
+    div.setAttribute('class', 't')
+    
+    var p = div.getElementsByTagName('p')[0]
+    var a = p.getElementsByTagName('a')[0]
+    
+    // http://www.cnblogs.com/snandy/archive/2011/08/27/2155300.html
+    var setAttr = div.className === 't'
+    // http://www.cnblogs.com/snandy/archive/2011/03/11/1980545.html
+    var cssText = /;/.test(p.style.cssText)
+    var opacity = /^0.4$/.test(a.style.opacity)
+    var getComputedStyle = !!(doc.defaultView && doc.defaultView.getComputedStyle)
+    
+    var sliceOnNodeList = true
+    try {
+        // IE 6 - 8 will throw an error when using Array.prototype.slice on NodeList
+        if (typeof doc !== 'undefined') {
+            slice.call(doc.getElementsByTagName('body'))
         }
-        return res
+    } catch (e) {
+        sliceOnNodeList = false
     }
+
+    return {
+        setAttr : setAttr,
+        cssText : cssText,
+        opacity : opacity,
+        classList : !!div.classList,
+        cssFloat : !!a.style.cssFloat,
+        getComputedStyle : getComputedStyle,
+        sliceOnNodeList: sliceOnNodeList
+
+    }
+}()
+// For IE9/Firefox/Safari/Chrome/Opera
+var makeArray = support.sliceOnNodeList ? function(obj) {
+    return slice.call(obj, 0)
+} : function(obj) {
+    var res = []
+    for (var i = 0, len = obj.length; i < len; i++) {
+        res[i] = obj[i]
+    }
+    return res
 }
 
 // Iterator
 function forEach(obj, iterator, context) {
-    if ( obj.length === +obj.length ) {
+    if (obj == null) return
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context)
+    } else if ( obj.length === +obj.length ) {
         for (var i = 0; i < obj.length; i++) {
             if (iterator.call(obj[i] || context, obj[i], i, obj) === true) return
         }
@@ -58,13 +100,541 @@ function forEach(obj, iterator, context) {
 function map(obj, iterator, context) {
     var results = []
     if (obj == null) return results
+    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context)     
     forEach(obj, function(val, i, coll) {
         results[i] = iterator.call(context, val, i, coll)
     })
     return results
 }
 
+/**
+ * @class Z.Object
+ *
+ * A collection of useful static methods to deal with objects.
+ * @singleton
+ */
+ Z.Object = function() {
+    // Retrieve the keys of an object's properties.
+    var keys = Object.keys || function(obj) {
+        obj = Object(obj)
+        var result = [], i = 0
+        for (var a in obj) result[i++] = a
+        return result
+    }
+    // Retrieve the values of an object's properties.
+    var values = function(obj) {
+        var result = [], i = 0
+        for (var key in obj) result[i++] = obj[key]
+        return result
+    }
+    // Invert the keys and values of an object. The values must be serializable.
+    var invert = function(obj) {
+        obj = Object(obj)
+        var result = {}
+        for (var a in obj) result[obj[a]] = a
+        return result
+    }
+    // Convert an object into a list of `[key, value]` pairs.
+    var pairs = function(obj) {
+        var result = [], i = 0
+        for (var a in obj) result[i] = [a, obj[a]]
+        return result
+    }
+    // Return a copy of the object only containing the whitelisted properties.
+    var pick = function(obj) {
+        var copy = {}
+        var keys = slice.call(arguments, 1)
+        forEach(keys, function(key) {
+          if (key in obj) copy[key] = obj[key]
+        })
+        return copy
+    }
+    var toQueryString = function(obj) {
+        var a = []
+        forEach(obj, function(val, key) {
+            if ( Z.isArray(val) ) {
+                forEach(val, function(v, i) {
+                    a.push( key + '=' + encodeURIComponent(v) )
+                })
+            } else {
+                a.push(key + '=' + encodeURIComponent(val))
+            }
+        })
+        return a.join('&')
+    }
 
+    return {
+        keys: keys,
+        values: values,
+        pairs: pairs,
+        invert: invert,
+        pick: pick,
+        toQueryString: toQueryString
+    }
+
+ }()
+/**
+ * @class Z.Function
+ * 
+ * Create a function bound to a given object (assigning `this`, and arguments, optionally)
+ * @singleton
+ */
+Z.Function = function() {
+    function bind(func, context) {
+        var args, bound
+        if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1))
+        if (!Z.isFunction(func)) throw new TypeError
+        args = slice.call(arguments, 2)
+        return bound = function() {
+            if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)))
+            noop.prototype = func.prototype
+            var self = new noop
+            noop.prototype = null
+            var result = func.apply(self, args.concat(slice.call(arguments)))
+            if (Object(result) === result) return result
+            return self
+        }
+    }
+    function once(func) {
+        var run, memo
+        return function() {
+            if (run) return memo
+            run = true
+            return memo = func.apply(this, arguments)
+        }
+    }
+    function delay(func, wait) {
+        return function() {
+            var context = this, args = arguments
+            setTimeout(function() {
+                func.apply(context, args)
+            }, wait)
+        }
+    }
+    function debounce(func, wait, immediate) {
+        var timeout
+        return function() {
+            var context = this, args = arguments
+            later = function() {
+                timeout = null
+                if (!immediate) func.apply(context, args)
+            }
+            var callNow = immediate && !timeout
+            clearTimeout(timeout)
+            timeout = setTimeout(later, wait)
+            if (callNow) func.apply(context, args)
+        }
+    }
+    function throttle(func, wait) {
+        var context, args, timeout, throttling, more, result
+        var whenDone = debounce(function() {
+                more = throttling = false
+            }, wait)
+        return function() {
+            context = this, args = arguments
+            var later = function() {
+                timeout = null
+                if (more) func.apply(context, args)
+                whenDone()
+            }
+            if (!timeout) timeout = setTimeout(later, wait)
+            
+            if (throttling) {
+                more = true
+            } else {
+                result = func.apply(context, args)
+            }
+            whenDone()
+            throttling = true
+            return result
+        }
+    }
+
+    return {
+        bind: bind,
+        once: once,
+        delay: delay,
+        debounce: debounce,
+        throttle: throttle
+    }
+}()
+/**
+ * @class Z.Array
+ *
+ * A set of useful static methods to deal with arrays; provide missing methods for older browsers.
+ * @singleton
+ */
+ Z.Array = function() {
+
+    function every(obj, iterator, context) {
+        iterator || (iterator = Z.identity)
+        var result = true
+        if (obj == null) return result
+        if (nativeEvery && obj.every === nativeEvery) return obj.every(iterator, context)
+        forEach(obj, function(value, index, list) {
+            if ( !(result = result && iterator.call(context, value, index, list)) ) return true
+        })
+        return !!result
+    }
+
+    function some(obj, iterator, context) {
+        iterator || (iterator = Z.identity)
+        var result = false
+        if (obj == null) return result
+        if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context)
+        forEach(obj, function(value, index, list) {
+          if (result || (result = iterator.call(context, value, index, list))) return true
+        })
+        return !!result
+    }
+
+    function contains(obj, target) {
+        if (obj == null) return false
+        if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1
+        return some(obj, function(value) {
+            return value === target
+        })
+    }
+
+    function filter(obj, iterator, context) {
+        var results = []
+        if (obj == null) return results
+        if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context)
+        forEach(obj, function(value, index, list) {
+          if (iterator.call(context, value, index, list)) results[index] = value
+        })
+        return results
+    }
+
+    // Returns a new array with unique items
+    function unique(obj) {
+        var result = []
+        forEach(obj, function(item) {
+            if ( !contains(result, item) ) result.push(item)
+        })
+        return result
+    }
+
+    return {
+        forEach: forEach,
+        map: map,
+        every: every,
+        some: some,
+        contains: contains,
+        filter: filter,
+        unique: unique
+    }
+
+ }()
+
+/**
+ * @class Z.String
+ *
+ * A collection of useful static methods to deal with strings. 
+ * @singleton
+ */
+Z.String = function() {
+
+    var ZO = Z.Object
+
+    var regFormat = /\{(\d+)\}/g
+    var regTrim   = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g
+    var entityMap = {
+        escape: {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#x27;'
+        }
+    }
+    entityMap.unescape = ZO.invert(entityMap.escape)
+    var entityReg = {
+        escape: RegExp('[' + ZO.keys(entityMap.escape).join('') + ']', 'g'),
+        unescape: RegExp('(' + ZO.keys(entityMap.unescape).join('|') + ')', 'g')
+    }
+
+    function escape(html) {
+        if (typeof html !== 'string') return ''
+        return html.replace(entityReg.escape, function(match) {
+            return entityMap.escape[match]
+        })
+    }
+
+    function unescape(str) {
+        if (typeof str !== 'string') return ''
+        return str.replace(entityReg.unescape, function(match) {
+            return entityMap.unescape[match]
+        })    
+    }
+
+    return {
+        htmlEscape: escape,
+        htmlUnescape: unescape,
+
+        urlAppend : function(url, str) {
+            if (Z.isString(str) && str.length) {
+                return url + (url.indexOf('?') === -1 ? '?' : '&') + str    
+            }
+            return url
+        },
+
+        trim: function(str) {
+            return str.replace(regTrim, '')
+        },
+
+        ellipsis: function(val, len, word) {
+            if (val && val.length > len) {
+                if (word) {
+                    var vs = val.substr(0, len - 2)
+                    var i = Math.max(vs.lastIndexOf(' '), vs.lastIndexOf('.'), vs.lastIndexOf('!'), vs.lastIndexOf('?'))
+                    if (i !== -1 && i >= (len - 15)) {
+                        return vs.substr(0, i) + '...'
+                    }
+                }
+                return val.substr(0, len - 3) + '...'
+            }
+            return val
+        },
+
+        format: function(str) {
+            var args = slice.call(arguments, 1)
+            return str.replace(regFormat, function(m, i) {
+                return args[i]
+            })
+        }
+
+    }
+
+}()
+/**
+ * @class Z.Class
+ * 
+ * JavaScript OOP, Support class, inheritance, namespace, private and more.
+ * @Singleton
+ */
+Z.Class = function() {
+
+    function Observer(type, context) {
+        this.type = type
+        this.scope = context || window
+        this.listeners = []
+    }
+    Observer.prototype = {
+        subscribe: function(fn, scope, options) {
+            var listeners = this.listeners
+            if (!fn || this._find(fn, scope) !== -1) return false
+
+            var listener = {
+                fn: fn,
+                scope: scope || this.scope,
+                opt: options
+            }
+
+            if (this.firing) {
+                // if we are currently firing this event, don't disturb the listener loop
+                listeners = this.listeners = listeners.slice(0)
+            }
+            listeners.push(listener)
+
+            return true
+        },
+        unsubscribe: function(fn, scope) {
+            if (!fn) {
+                return this.clear()
+            }
+
+            var index = this._find(fn, scope)
+            if (index !== -1) {
+                this._delete(index)
+                return true
+            }
+
+            return false
+        },
+        publish: function() {
+            var listeners = this.listeners
+            var count = listeners.length
+            var i = 0, xargs, listener
+
+            if (count > 0) {
+                this.firing = true
+                while (listener = listeners[i++]) {
+                    xargs = slice.call(arguments, 0)
+                    if (listener.opt) {
+                        xargs.push(listener.opt)
+                    }
+                    if (listener && listener.fn.apply(listener.scope, xargs) === false) {
+                        return (this.firing = false)
+                    }
+                }
+            }
+            this.firing = false
+
+            return true
+        },
+        clear: function() {
+            var l = this.listeners.length, i = l
+            while (i--) this._delete(i)
+            this.listeners = []
+            return l
+        },
+        _find: function(fn, scope) {
+            var listeners = this.listeners
+            var i = listeners.length
+            var listener, s
+
+            while (i--) {
+                if (listener = listeners[i]) {
+                    if (listener.fn === fn && (!scope || listener.scope === scope)) return i
+                }
+            }
+            return -1
+        },
+        _delete: function(index) {
+            var listeners = this.listeners
+            var o = listeners[index]
+            if (o) {
+                delete o.fn
+                delete o.scope
+                delete o.opt
+            }
+            listeners.splice(index, 1)
+        }
+    }
+
+    var Event = {
+        on: function(type, fn, scope, o) {
+            var config, ev
+            if (typeof type === 'object') {
+                o = type
+                for (type in o) {
+                    if (!o.hasOwnProperty(type)) continue
+                    config = o[type]
+                    this.on(type, config.fn || config, config.scope || o.scope, config.fn ? config : o)
+                }
+            } else {
+                this._events = this._events || {}
+                ev = this._events[type] || false
+                if (!ev) {
+                    ev = this._events[type] = new Observer(type, this)
+                }
+                ev.subscribe(fn, scope, o)
+            }
+        },
+        off: function(type, fn, scope) {
+            var config, ev, o, index
+            if (typeof type === 'object') {
+                o = type
+                for (type in o) {
+                    if (!o.hasOwnProperty(type)) continue
+                    config = o[type]
+                    this.un(type, config.fn || config, config.scope || o.scope)
+                }
+            } else {
+                ev = this._events[type]
+                if (ev) ev.unsubscribe(fn, scope)
+            }
+        },
+        clearEvent: function(type) {
+            var ev = this._events && this._events[type]
+            if (ev) ev.clear()
+        },
+        fire: function(type) {
+            var ev
+            if (!this._events || !(ev = this._events[type])) {
+                return true
+            }
+            return ev.publish.apply(ev, slice.call(arguments, 1))
+        }
+    }
+
+    // initialize namespace
+    function namespace(classPath, globalNamespace) {
+        if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
+        globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
+        var arr = classPath.split('.')
+        var namespace = globalNamespace
+        var className = arr.pop()
+
+        while (arr.length) {
+            var name = arr.shift()
+            var obj = namespace[name]
+            if (!obj) {
+                namespace[name] = obj = {}
+            }
+            namespace = obj
+        }
+
+        var clazz = namespace[className]
+        if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
+        namespace[className] = undefined
+        return {
+            namespace: namespace,
+            className: className
+        }
+    }
+
+    var create = Object.create ? 
+            function(o) { return Object.create(o) } : 
+            (function() { // Reusable constructor function for the Object.create() shim.
+                function F() {}
+                return function(o) {
+                    F.prototype = o
+                    return new F
+                }
+            }())
+
+    // define a class
+    function Class(name, superClass, factory) {
+        if (!factory) {
+            if (!superClass) {
+                throw new Error('class create failed, verify definitions')
+            }
+            factory = superClass
+            superClass = Object
+        }
+
+        function Constructor() {
+            if ( Z.isFunction(this.init) ) {
+                this.init.apply(this, arguments)
+            }
+        }
+        Constructor.toString = function() { return name }
+
+        var supr = superClass.prototype
+        // var proto = Constructor.prototype = new superClass
+        var proto = Constructor.prototype = create(supr)
+        proto.constructor = factory
+        factory.call(proto, supr)
+        
+        Z.extend(proto, Event)
+
+        if (Class.amd) return Constructor
+        var obj = namespace(name, Class.globalNamespace)
+        obj.namespace[obj.className] = Constructor
+    }
+
+    Class.statics = function(clazz, obj) {
+        Z.extend(clazz, obj)
+    }
+
+    Class.methods = function(clazz, obj, override) {
+        var proto = clazz.prototype
+        for (var m in obj) {
+            if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
+            if (override) {
+                proto[m] = obj[m]
+            } else {
+                if (!proto[m]) {
+                    proto[m] = obj[m]
+                }
+            }
+        }
+    }
+
+    return Class
+}()
 /**
  * CSS Selector
  * 
@@ -215,9 +785,7 @@ function matches(el, selector) {
 
 Z.matches = matches
 
-function Z(selector, context) {
-    return new Z.prototype.init(selector, context)
-}
+
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
@@ -358,6 +926,13 @@ Z.isEmptyObject = function(obj) {
     return true
 }
 
+Z.isEmpty = function(obj) {
+    if (obj == null) return true
+    if (Z.isArray(obj) || Z.isString(obj)) return obj.length === 0
+    for (var key in obj) return false
+    return true
+}
+
 Z.isPlainObject = function(obj) {
     if (!obj || obj === window || obj === doc || obj === doc.body) return false
     return 'isPrototypeOf' in obj && Z.isObject(obj)
@@ -389,32 +964,6 @@ Z.isZ = function(obj) {
 
 
 var rroot = /^(?:body|html)$/i
-// 特性检测
-var support = Z.support = function() {
-    var div = doc.createElement('div')
-    div.className = 'a'
-    div.innerHTML = '<p style="color:red;"><a href="#" style="opacity:.4;float:left;">a</a></p>'
-    div.setAttribute('class', 't')
-    
-    var p = div.getElementsByTagName('p')[0]
-    var a = p.getElementsByTagName('a')[0]
-    
-    // http://www.cnblogs.com/snandy/archive/2011/08/27/2155300.html
-    var setAttr = div.className === 't'
-    // http://www.cnblogs.com/snandy/archive/2011/03/11/1980545.html
-    var cssText = /;/.test(p.style.cssText)
-    var opacity = /^0.4$/.test(a.style.opacity)
-    var getComputedStyle = !!(doc.defaultView && doc.defaultView.getComputedStyle)
-    
-    return {
-        setAttr : setAttr,
-        cssText : cssText,
-        opacity : opacity,
-        classList : !!div.classList,
-        cssFloat : !!a.style.cssFloat,
-        getComputedStyle : getComputedStyle
-    }
-}()
 
 // 元素class属性操作
 var domClass = function() {
@@ -556,6 +1105,7 @@ function camelFn(name) {
     })
 }
 
+Z.support = support
 Z.contains = function(a, b) {
     try {
         return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
@@ -799,6 +1349,12 @@ var cache = {}
 // 优先使用标准API
 var w3c = !!window.addEventListener
 
+var ZFunc = Z.Function
+var onceFunc = ZFunc.once
+var delayFunc = ZFunc.delay
+var debounceFunc = ZFunc.debounce
+var throttleFunc = ZFunc.throttle
+
 // Utility functions -----------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
@@ -806,76 +1362,21 @@ function each(arr, callback) {
     }
 }
 
-var util = {
-    once: function(func) {
-        var run, memo
-        return function() {
-            if (run) return memo
-            run = true
-            return memo = func.apply(this, arguments)
-        }
-    },
-    delay: function(func, wait) {
-        return function() {
-            var context = this, args = arguments
-            setTimeout(function() {
-                func.apply(context, args)
-            }, wait)
-        }
-    },
-    debounce: function(func, wait, immediate) {
-        var timeout
-        return function() {
-            var context = this, args = arguments
-            later = function() {
-                timeout = null
-                if (!immediate) func.apply(context, args)
-            }
-            var callNow = immediate && !timeout
-            clearTimeout(timeout)
-            timeout = setTimeout(later, wait)
-            if (callNow) func.apply(context, args)
-        }
-    },
-    throttle: function(func, wait) {
-        var context, args, timeout, throttling, more, result
-        var whenDone = util.debounce(function() {
-                more = throttling = false
-            }, wait)
-        return function() {
-            context = this, args = arguments
-            var later = function() {
-                timeout = null
-                if (more) func.apply(context, args)
-                whenDone()
-            }
-            if (!timeout) timeout = setTimeout(later, wait)
-            
-            if (throttling) {
-                more = true
-            } else {
-                result = func.apply(context, args)
-            }
-            whenDone()
-            throttling = true
-            return result
-        }
-    },
-    addListener: function() {
-        if (w3c) {
-            return function(el, type, handler) { el.addEventListener(type, handler, false) } 
-        } else {
-            return function(el, type, handler) { el.attachEvent('on' + type, handler) }
-        }
-    }(),
-    removeListener: function() {
-        if (w3c) {
-            return function(el, type, handler) { el.removeEventListener(type, handler, false) }
-        } else {
-            return function(el, type, handler) { el.detachEvent('on' + type, handler) }
-        }
-    }()
-}
+var addListener = function() {
+    if (w3c) {
+        return function(el, type, handler) { el.addEventListener(type, handler, false) } 
+    } else {
+        return function(el, type, handler) { el.attachEvent('on' + type, handler) }
+    }
+}()
+var removeListener = function() {
+    if (w3c) {
+        return function(el, type, handler) { el.removeEventListener(type, handler, false) }
+    } else {
+        return function(el, type, handler) { el.detachEvent('on' + type, handler) }
+    }
+}()
+
 
 // Private functions ---------------------------------------------------------------------------
 
@@ -970,7 +1471,7 @@ function remove(elem, type, guid) {
     delete elData.handle
     
     // DOM中事件取消注册
-    util.removeListener(elem, type, handle)
+    removeListener(elem, type, handle)
     // events是空对象时，从cache中删除
     if ( Z.isEmptyObject(events) ) {
         delete elData.events
@@ -1103,31 +1604,31 @@ function bind(elem, type, handler) {
     // one 仅执行一次
     if (handlerObj.one) {
         handlerObj.special = handler
-        handlerObj.handler = util.once(handler)
+        handlerObj.handler = onceFunc(handler)
     }
     
     // delay延迟执行
     if (handlerObj.delay) {
         handlerObj.special = handler
-        handlerObj.handler = util.delay(handler, handlerObj.delay)
+        handlerObj.handler = delayFunc(handler, handlerObj.delay)
     }
     
     // debounce防弹跳
     if (handlerObj.debounce) {
         handlerObj.special = handler
-        handlerObj.handler = util.debounce(handler, handlerObj.debounce)
+        handlerObj.handler = debounceFunc(handler, handlerObj.debounce)
     }
     
     // immediate 执行后立即延迟指定时间，如避免重复提交
     if (handlerObj.immediate) {
         handlerObj.special = handler
-        handlerObj.handler = util.debounce(handler, handlerObj.immediate, true)
+        handlerObj.handler = debounceFunc(handler, handlerObj.immediate, true)
     }
     
     // throttle 事件节流
     if (handlerObj.throttle) {
         handlerObj.special = handler
-        handlerObj.handler = util.throttle(handler, handlerObj.throttle)
+        handlerObj.handler = throttleFunc(handler, handlerObj.throttle)
     }
     
     // 初始化events
@@ -1160,7 +1661,7 @@ function bind(elem, type, handler) {
         handlers  = events[eventType]
         if (!handlers) {
             handlers = events[eventType] = []
-            util.addListener(elem, eventType, handle)
+            addListener(elem, eventType, handle)
         }
         // 添加到数组
         handlers.push(handlerObj)
@@ -1217,21 +1718,6 @@ function trigger(elem, type) {
     }
 }
 
-// var E = {
-//     viewCache: function() {
-//         if (window.console) {
-//             console.log(cache)
-//         }
-//     },
-//     destroy: function() {
-//         for (var num in cache) {
-//             var elData = cache[num], elem = elData.elem
-//             unbind(elem)
-//         }
-//         guid = 1
-//     }
-// }
-
 // on / off
 forEach({on: bind, off: unbind}, function(callback, name) {
     Z.fn[name] = function(type, handler) {
@@ -1270,21 +1756,6 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
         return this
     }
 })
-
-// object to queryString
-function serialize(obj) {
-    var a = []
-    forEach(obj, function(val, key) {
-        if ( Z.isArray(val) ) {
-            forEach(val, function(v, i) {
-                a.push( key + '=' + encodeURIComponent(v) )
-            })
-        } else {
-            a.push(key + '=' + encodeURIComponent(val))
-        }
-    })
-    return a.join('&')
-}
 
 // parse json string
 function parseJSON(str) {
@@ -1348,7 +1819,7 @@ function ajax(url, options) {
     
     // 对象转换成字符串键值对
     if ( Z.isObject(data) ) {
-        data = serialize(data)
+        data = Z.Object.toQueryString(data)
     }
     if (method === 'GET' && data) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + data

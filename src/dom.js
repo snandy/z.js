@@ -1,31 +1,5 @@
 
 var rroot = /^(?:body|html)$/i
-// 特性检测
-var support = Z.support = function() {
-    var div = doc.createElement('div')
-    div.className = 'a'
-    div.innerHTML = '<p style="color:red;"><a href="#" style="opacity:.4;float:left;">a</a></p>'
-    div.setAttribute('class', 't')
-    
-    var p = div.getElementsByTagName('p')[0]
-    var a = p.getElementsByTagName('a')[0]
-    
-    // http://www.cnblogs.com/snandy/archive/2011/08/27/2155300.html
-    var setAttr = div.className === 't'
-    // http://www.cnblogs.com/snandy/archive/2011/03/11/1980545.html
-    var cssText = /;/.test(p.style.cssText)
-    var opacity = /^0.4$/.test(a.style.opacity)
-    var getComputedStyle = !!(doc.defaultView && doc.defaultView.getComputedStyle)
-    
-    return {
-        setAttr : setAttr,
-        cssText : cssText,
-        opacity : opacity,
-        classList : !!div.classList,
-        cssFloat : !!a.style.cssFloat,
-        getComputedStyle : getComputedStyle
-    }
-}()
 
 // 元素class属性操作
 var domClass = function() {
@@ -167,6 +141,7 @@ function camelFn(name) {
     })
 }
 
+Z.support = support
 Z.contains = function(a, b) {
     try {
         return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
