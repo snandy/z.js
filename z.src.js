@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-11 18:16:44
+ * @snandy 2013-08-13 09:25:01
  *
  */
 ~function(window, undefined) {
@@ -71,7 +71,7 @@ var support = function() {
 }()
 // For IE9/Firefox/Safari/Chrome/Opera
 var makeArray = support.sliceOnNodeList ? function(obj) {
-    return slice.call(obj, 0)
+    return sliceArgs(obj)
 } : function(obj) {
     var res = []
     for (var i = 0, len = obj.length; i < len; i++) {
@@ -107,6 +107,9 @@ function map(obj, iterator, context) {
     return results
 }
 
+function sliceArgs(args, start) {
+    return slice.call(args, start || 0)
+}
 /**
  * @class Z.Object
  *
@@ -143,7 +146,7 @@ function map(obj, iterator, context) {
     // Return a copy of the object only containing the whitelisted properties.
     var pick = function(obj) {
         var copy = {}
-        var keys = slice.call(arguments, 1)
+        var keys = sliceArgs(arguments, 1)
         forEach(keys, function(key) {
           if (key in obj) copy[key] = obj[key]
         })
@@ -182,15 +185,15 @@ function map(obj, iterator, context) {
 Z.Function = function() {
     function bind(func, context) {
         var args, bound
-        if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, slice.call(arguments, 1))
+        if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, sliceArgs(arguments, 1))
         if (!Z.isFunction(func)) throw new TypeError
-        args = slice.call(arguments, 2)
+        args = sliceArgs(arguments, 2)
         return bound = function() {
-            if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)))
+            if (!(this instanceof bound)) return func.apply(context, args.concat(sliceArgs(arguments)))
             noop.prototype = func.prototype
             var self = new noop
             noop.prototype = null
-            var result = func.apply(self, args.concat(slice.call(arguments)))
+            var result = func.apply(self, args.concat(sliceArgs(arguments)))
             if (Object(result) === result) return result
             return self
         }
@@ -398,7 +401,7 @@ Z.String = function() {
         },
 
         format: function(str) {
-            var args = slice.call(arguments, 1)
+            var args = sliceArgs(arguments, 1)
             return str.replace(regFormat, function(m, i) {
                 return args[i]
             })
@@ -460,7 +463,7 @@ Z.Class = function() {
             if (count > 0) {
                 this.firing = true
                 while (listener = listeners[i++]) {
-                    xargs = slice.call(arguments, 0)
+                    xargs = sliceArgs(arguments)
                     if (listener.opt) {
                         xargs.push(listener.opt)
                     }
@@ -545,7 +548,7 @@ Z.Class = function() {
             if (!this._events || !(ev = this._events[type])) {
                 return true
             }
-            return ev.publish.apply(ev, slice.call(arguments, 1))
+            return ev.publish.apply(ev, sliceArgs(arguments, 1))
         }
     }
 
@@ -821,7 +824,7 @@ Z.prototype = {
     },
 
     toArray: function() {
-        return slice.call(this)
+        return sliceArgs(this)
     },
 
     pushStack: function(arr) {
@@ -895,7 +898,7 @@ Z.extend = Z.fn.extend = function(obj) {
         target = obj
         start = 1
     }
-    forEach(slice.call(arguments, start), function(source) {
+    forEach(sliceArgs(arguments, start), function(source) {
         if (source) {
             for (var prop in source) {
                 target[prop] = source[prop]
@@ -1708,7 +1711,7 @@ function trigger(elem, type) {
     var elData   = id && cache[id]
     var events   = elData && elData.events
     var handlers = events && events[type]
-    var args     = slice.call(arguments, 2)
+    var args     = sliceArgs(arguments, 2)
     var length   = arguments.length
     
     if (length===1 && elem.nodeType===1) {

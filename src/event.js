@@ -368,7 +368,7 @@ function trigger(elem, type) {
     var elData   = id && cache[id]
     var events   = elData && elData.events
     var handlers = events && events[type]
-    var args     = slice.call(arguments, 2)
+    var args     = sliceArgs(arguments, 2)
     var length   = arguments.length
     
     if (length===1 && elem.nodeType===1) {

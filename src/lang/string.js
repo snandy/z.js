@@ -70,7 +70,7 @@ Z.String = function() {
         },
 
         format: function(str) {
-            var args = slice.call(arguments, 1)
+            var args = sliceArgs(arguments, 1)
             return str.replace(regFormat, function(m, i) {
                 return args[i]
             })

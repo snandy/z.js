@@ -51,7 +51,7 @@ Z.Class = function() {
             if (count > 0) {
                 this.firing = true
                 while (listener = listeners[i++]) {
-                    xargs = slice.call(arguments, 0)
+                    xargs = sliceArgs(arguments)
                     if (listener.opt) {
                         xargs.push(listener.opt)
                     }
@@ -136,7 +136,7 @@ Z.Class = function() {
             if (!this._events || !(ev = this._events[type])) {
                 return true
             }
-            return ev.publish.apply(ev, slice.call(arguments, 1))
+            return ev.publish.apply(ev, sliceArgs(arguments, 1))
         }
     }
 

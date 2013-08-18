@@ -1,6 +1,6 @@
 // For IE9/Firefox/Safari/Chrome/Opera
 var makeArray = support.sliceOnNodeList ? function(obj) {
-    return slice.call(obj, 0)
+    return sliceArgs(obj)
 } : function(obj) {
     var res = []
     for (var i = 0, len = obj.length; i < len; i++) {
@@ -34,4 +34,8 @@ function map(obj, iterator, context) {
         results[i] = iterator.call(context, val, i, coll)
     })
     return results
+}
+
+function sliceArgs(args, start) {
+    return slice.call(args, start || 0)
 }

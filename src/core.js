@@ -35,7 +35,7 @@ Z.prototype = {
     },
 
     toArray: function() {
-        return slice.call(this)
+        return sliceArgs(this)
     },
 
     pushStack: function(arr) {
@@ -109,7 +109,7 @@ Z.extend = Z.fn.extend = function(obj) {
         target = obj
         start = 1
     }
-    forEach(slice.call(arguments, start), function(source) {
+    forEach(sliceArgs(arguments, start), function(source) {
         if (source) {
             for (var prop in source) {
                 target[prop] = source[prop]
