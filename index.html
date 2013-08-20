@@ -12,9 +12,9 @@
   <meta name=apple-mobile-web-app-capable content=yes>
   <meta name=apple-mobile-web-app-status-bar-style content=white>
   <meta name=format-detection content="telephone=no">
-
   <link rel=apple-touch-icon-precomposed href=icon.png>
   <link rel=icon type=image/png href=favicon.png>
+  <script src="javascripts/z.src.js"></script>
 </head>
 <body>
 
@@ -27,15 +27,15 @@
   </a>
 
   <ul class=toc_section>
-    <li><a href="#download">Download</a></li>
-    <li><a href="#platforms">Target Platforms</a></li>
-    <li><a href="#changelog">Change Log</a></li>
-    <li><a href="#thanks">Acknowledgements</a></li>
+    <li><a href="#download">下载</a></li>
+    <li><a href="#platforms">目标平台</a></li>
+    <li><a href="#changelog">更新日志</a></li>
+    <li><a href="#thanks">鸣谢</a></li>
   </ul>
 
   <hr>
 
-  <a class=toc_title href="#core">Core</a>
+  <a class=toc_title href="#core"> Core (核心模块集)</a>
   
   <ul class=toc_section>
   
@@ -205,7 +205,6 @@
   
 </ul>
 
-  
   <a class=toc_title href="#detect">Detect</a>
   
   <ul class=toc_section>
@@ -427,25 +426,19 @@
   <pre class=signature><code>Z(selector, [context]) ⇒ collection
 Z(&lt;Z collection&gt;) ⇒ same collection
 Z(&lt;DOM nodes&gt;) ⇒ collection
-Z(htmlString) ⇒ collection
-Z(function(Z){ ... })
+Z(function(Z){ ... }) ⇒ DOM Ready
 </code></pre>
   
-  <p>Create a Z collection object by performing a CSS selector, wrapping DOM
-nodes, or creating elements from an HTML string.</p>
+<p>Create a Z collection object by performing a CSS selector, wrapping DOM nodes.</p>
 
 <p>A Z collection is an array-like object that has chainable methods for
 manipulating the DOM nodes it references. All of the methods in this documentation
-are collection methods, except the ones directly on the dollar (<code>Z.js</code>) object,
+are collection methods, except the ones directly on the Z object,
 such as <code>Z.extend</code>.</p>
 
 <p>If a context (CSS selector, DOM node or Z.js collection object) is
 given, perform the CSS selector only within nodes of the context; this is
 functionally the same as calling <code>Z(context).find(selector)</code>.</p>
-
-<p>When an HTML string is given, use it to create DOM nodes. If an attributes map
-is given via argument, apply them to all created elements. For fast single
-element creation, use <code>&lt;div&gt;</code> or <code>&lt;div/&gt;</code> forms.</p>
 
 <p>When a function is given, attach it as a handler for the <code>DOMContentLoaded</code> event.
 If the page is already loaded, executes the function immediately.</p>
@@ -464,8 +457,6 @@ If the page is already loaded, executes the function immediately.</p>
   <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Ready to Z.js!&#39;</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre></div>
-
-
 
 
 <p class=compat>
@@ -523,16 +514,10 @@ are the same node.</p>
 </code></pre></div>
 
 
-
-
 </article>
 
 <article class=method id="Z.extend">
-  <h3>Z.extend
-  
-   
-  </h3>
-  
+  <h3>Z.extend</h3>
   
   <pre class=signature><code>Z.extend(target, [source, [source2, ...]]) ⇒ target
 Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
@@ -553,16 +538,10 @@ triggers deep (recursive) copying.</p>
 </code></pre></div>
 
 
-
-
 </article>
 
 <article class=method id="Z.fn">
-  <h3>Z.fn
-  
-   
-  </h3>
-  
+  <h3>Z.fn</h3>
   
   <p><code>Z.js.fn</code> is an object that holds all of the methods that are available on
 Z.js collections, such as <a href="#addClass"><code>addClass()</code></a>, <a href="#attr"><code>attr()</code></a>, and
@@ -582,8 +561,7 @@ Z.js collection.</p>
 </article>
 
 <article class=method id="Z.grep">
-  <h3>Z.grep
-  
+  <h3>Z.grep  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -611,10 +589,7 @@ returned true.</p>
 </article>
 
 <article class=method id="Z.isArray">
-  <h3>Z.isArray
-  
-   
-  </h3>
+  <h3>Z.isArray</h3>
   
   
   <pre class=signature><code>Z.isArray(object) ⇒ boolean
@@ -625,11 +600,7 @@ returned true.</p>
 </article>
 
 <article class=method id="Z.isFunction">
-  <h3>Z.isFunction
-  
-   
-  </h3>
-  
+  <h3>Z.isFunction</h3>
   
   <pre class=signature><code>Z.isFunction(object) ⇒ boolean
 </code></pre>
@@ -664,7 +635,6 @@ literals and objects created with <code>new Object</code>.</p>
 
 <article class=method id="Z.isWindow">
   <h3>Z.isWindow
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -679,10 +649,7 @@ check.</p>
 </article>
 
 <article class=method id="Z.map">
-  <h3>Z.map
-  
-   
-  </h3>
+  <h3>Z.map</h3>
   
   
   <pre class=signature><code>Z.map(collection, function(item, index){ ... }) ⇒ collection
@@ -709,7 +676,6 @@ iterator function, with <code>null</code> and <code>undefined</code> values filt
 
 <article class=method id="Z.trim">
   <h3>Z.trim
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -724,7 +690,6 @@ String.prototype.trim().</p>
 
 <article class=method id="Z.type">
   <h3>Z.type
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -741,11 +706,7 @@ plain JavaScript object, use <a href="#Z.isPlainObject">isPlainObject</a>.</p>
 </article>
 
 <article class=method id="add">
-  <h3>add
-  
-   
-  </h3>
-  
+  <h3>add</h3>
   
   <pre class=signature><code>add(selector, [context]) ⇒ self
 </code></pre>
@@ -757,11 +718,7 @@ elements.</p>
 </article>
 
 <article class=method id="addClass">
-  <h3>addClass
-  
-   
-  </h3>
-  
+  <h3>addClass</h3>
   
   <pre class=signature><code>addClass(name) ⇒ self
 addClass(function(index, oldClassName){ ... }) ⇒ self
@@ -773,11 +730,7 @@ names can be given in a space-separated string.</p>
 </article>
 
 <article class=method id="after">
-  <h3>after
-  
-   
-  </h3>
-  
+  <h3>after</h3>
   
   <pre class=signature><code>after(content) ⇒ self
 </code></pre>
@@ -794,10 +747,7 @@ be an HTML string, a DOM node or an array of nodes.</p>
 </article>
 
 <article class=method id="append">
-  <h3>append
-  
-   
-  </h3>
+  <h3>append</h3>
   
   
   <pre class=signature><code>append(content) ⇒ self
@@ -815,11 +765,7 @@ content can be an HTML string, a DOM node or an array of nodes.</p>
 </article>
 
 <article class=method id="appendTo">
-  <h3>appendTo
-  
-   
-  </h3>
-  
+  <h3>appendTo</h3>
   
   <pre class=signature><code>appendTo(target) ⇒ self
 </code></pre>
@@ -836,11 +782,7 @@ like <a href="#append">append</a>, but with reversed operands.</p>
 </article>
 
 <article class=method id="attr">
-  <h3>attr
-  
-   
-  </h3>
-  
+  <h3>attr</h3>
   
   <pre class=signature><code>attr(name) ⇒ string
 attr(name, value) ⇒ self
@@ -868,16 +810,10 @@ attributes can be set by passing an object with name-value pairs.</p>
 <span class="p">})</span>
 </code></pre></div>
 
-
-
-
 </article>
 
 <article class=method id="before">
-  <h3>before
-  
-   
-  </h3>
+  <h3>before</h3>
   
   
   <pre class=signature><code>before(content) ⇒ self
@@ -889,17 +825,10 @@ be an HTML string, a DOM node or an array of nodes.</p>
 <div class="highlight"><pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">).</span><span class="nx">before</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">)</span>
 </code></pre></div>
 
-
-
-
 </article>
 
 <article class=method id="children">
-  <h3>children
-  
-   
-  </h3>
-  
+  <h3>children</h3>
   
   <pre class=signature><code>children([selector]) ⇒ collection
 </code></pre>
@@ -918,7 +847,6 @@ is given, filter the results to only include ones matching the CSS selector.</p>
 
 <article class=method id="clone">
   <h3>clone
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -937,11 +865,7 @@ is given, filter the results to only include ones matching the CSS selector.</p>
 </article>
 
 <article class=method id="closest">
-  <h3>closest
-  
-   
-  </h3>
-  
+  <h3>closest</h3>
   
   <pre class=signature><code>closest(selector, [context]) ⇒ collection
 closest(collection) ⇒ collection [v1.0]
@@ -960,18 +884,10 @@ match one of the given elements instead of a selector.</p>
 <span class="nx">input</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
 </code></pre></div>
 
-
-
-
 </article>
 
 <article class=method id="concat">
-  <h3>concat
-  
-   
-  </h3>
-  
-  
+  <h3>concat</h3>
   <pre class=signature><code>concat(nodes, [node2, ...]) ⇒ self
 </code></pre>
   
@@ -987,7 +903,6 @@ array, its elements are merged into the current collection.</p>
 
 <article class=method id="contents">
   <h3>contents
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -1001,11 +916,7 @@ and comment nodes.</p>
 </article>
 
 <article class=method id="css">
-  <h3>css
-  
-   
-  </h3>
-  
+  <h3>css</h3>
   
   <pre class=signature><code>css(property) ⇒ value
 css(property, value) ⇒ self
@@ -1036,11 +947,7 @@ it for properties that require units.</p>
 </article>
 
 <article class=method id="data">
-  <h3>data
-  
-   
-  </h3>
-  
+  <h3>data</h3>
   
   <pre class=signature><code>data(name) ⇒ value
 data(name, value) ⇒ self
@@ -1059,22 +966,16 @@ data(name, value) ⇒ self
 <li>everything else is returned as string.</li>
 </ul>
 
-
 <p class=compat>
   Z.js's basic implementation of `data()` only stores strings.
   To store arbitrary objects, include the optional "data" module
   in your custom build of Z.js.
 </p>
 
-
 </article>
 
 <article class=method id="each">
-  <h3>each
-  
-   
-  </h3>
-  
+  <h3>each</h3>
   
   <pre class=signature><code>each(function(index, item){ ... }) ⇒ self
 </code></pre>
@@ -1089,16 +990,10 @@ the function). If the iterator function returns <code>false</code>, iteration st
 </code></pre></div>
 
 
-
-
 </article>
 
 <article class=method id="empty">
-  <h3>empty
-  
-   
-  </h3>
-  
+  <h3>empty</h3>
   
   <pre class=signature><code>empty() ⇒ self
 </code></pre>
@@ -1108,11 +1003,7 @@ the function). If the iterator function returns <code>false</code>, iteration st
 </article>
 
 <article class=method id="eq">
-  <h3>eq
-  
-   
-  </h3>
-  
+  <h3>eq</h3>
   
   <pre class=signature><code>eq(index) ⇒ collection
 </code></pre>
@@ -1129,10 +1020,7 @@ the function). If the iterator function returns <code>false</code>, iteration st
 </article>
 
 <article class=method id="filter">
-  <h3>filter
-  
-   
-  </h3>
+  <h3>filter</h3>
   
   
   <pre class=signature><code>filter(selector) ⇒ collection
@@ -1149,10 +1037,7 @@ the current element.</p>
 </article>
 
 <article class=method id="find">
-  <h3>find
-  
-   
-  </h3>
+  <h3>find</h3>
   
   
   <pre class=signature><code>find(selector) ⇒ collection
@@ -1176,11 +1061,7 @@ ones that are descendants of element in the current collection.</p>
 </article>
 
 <article class=method id="first">
-  <h3>first
-  
-   
-  </h3>
-  
+  <h3>first</h3>
   
   <pre class=signature><code>first() ⇒ collection
 </code></pre>
@@ -1196,10 +1077,7 @@ ones that are descendants of element in the current collection.</p>
 </article>
 
 <article class=method id="forEach">
-  <h3>forEach
-  
-   
-  </h3>
+  <h3>forEach</h3>
   
   
   <pre class=signature><code>forEach(function(item, index, array){ ... }, [context])
@@ -1217,11 +1095,7 @@ from the iterator won&rsquo;t stop the iteration.</p>
 </article>
 
 <article class=method id="get">
-  <h3>get
-  
-   
-  </h3>
-  
+  <h3>get</h3>
   
   <pre class=signature><code>get() ⇒ array
 get(index) ⇒ DOM node
@@ -1244,7 +1118,6 @@ the way that the returned node is <em>not</em> wrapped in a Z.js collection.</p>
 
 <article class=method id="has">
   <h3>has
-  
   <span class=version>v1.0+</span> 
   </h3>
   
@@ -1266,11 +1139,7 @@ descendants that match a selector, or that contain a specific DOM node.</p>
 </article>
 
 <article class=method id="hasClass">
-  <h3>hasClass
-  
-   
-  </h3>
-  
+  <h3>hasClass</h3>
   
   <pre class=signature><code>hasClass(name) ⇒ boolean
 </code></pre>
@@ -1280,11 +1149,7 @@ descendants that match a selector, or that contain a specific DOM node.</p>
 </article>
 
 <article class=method id="height">
-  <h3>height
-  
-   
-  </h3>
-  
+  <h3>height</h3>
   
   <pre class=signature><code>height() ⇒ number
 height(value) ⇒ self
@@ -1304,11 +1169,7 @@ height(function(index, oldHeight){ ... }) ⇒ self
 </article>
 
 <article class=method id="hide">
-  <h3>hide
-  
-   
-  </h3>
-  
+  <h3>hide</h3>
   
   <pre class=signature><code>hide() ⇒ self
 </code></pre>
@@ -1319,10 +1180,7 @@ height(function(index, oldHeight){ ... }) ⇒ self
 </article>
 
 <article class=method id="html">
-  <h3>html
-  
-   
-  </h3>
+  <h3>html</h3>
   
   
   <pre class=signature><code>html() ⇒ string
@@ -3375,18 +3233,7 @@ friends) improvements;</li>
     
 
     <hr>
-    <h2 id=thanks>Acknowledgements &amp; Thanks</h2>
-
-    <p>
-      A big <b>Thank-You</b> goes out to all of our
-      <a href="https://github.com/madrobby/Z.js/contributors">awesome Z.js contributors</a>.
-      May you all forever bask in glory.
-    </p>
-
-    <p>
-      The Z.js API is based on <a href="http://jquery.com/">jQuery's Core API</a>, which
-      is released under the <a href="https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt">MIT license</a>.
-    </p>
+    <h2 id=thanks>鸣谢</h2>
 
     <p>
       This documentation is based on the layout of the
@@ -3397,7 +3244,6 @@ friends) improvements;</li>
 
     <p>
       <small>
-        &copy; 2010-2013 Thomas Fuchs, <a href="http://letsfreckle.com">Freckle Online Time Tracking</a><br>
         Z.js and this documentation is released under the terms of the <a href="https://github.com/madrobby/Z.js/blob/master/MIT-LICENSE">MIT license</a>.
       </small>
     </p>
@@ -3405,110 +3251,6 @@ friends) improvements;</li>
   </section>
 
 </div>
-
-<script>
-  var reflowTimeout;
-  
-  function injectScript(src) {
-    var s = document.createElement('script')
-    s.src = src; s.async = true
-    Z('script').first().before(s)
-  }
-
-  // Reflow all elements on the page. <david@14islands.com>
-  function reflowFixedPositions() {
-    var docStyle = document.documentElement.style
-    docStyle.paddingRight = '1px'
-    setTimeout(function(){ docStyle.paddingRight = '' }, 0)
-  }
-
-  Z('.signature code').html(function(i, html){
-    return html
-      .replace(/\[([^\[]+)\]Z/mg, '<span class=version>Z1+</span>')
-      .replace(/\)([^()]+)Z/mg, ') <span class=return>Z1</span>')
-  })
-
-  Z(document).on('mouseover', 'span.version', function(){
-    var el = Z(this)
-    if (!el.attr('title'))
-      el.attr('title', "This feature is only available in Z.js " + el.text())
-  })
-
-  if (Z.os.ios || /\bMac.+\bSafari\b/.test(navigator.userAgent))
-    Z(document.body).addClass('emoji-enabled')
-    
-  // don't follow links when the sidebar is tap-enabled
-  Z('#sidebar').on('click', 'a', function(e){
-    return !Z('body').hasClass('navigating')
-  })
-
-  Z('#sidebar').on('tap', 'a', function(e){
-    location.href = this.href;
-
-    closeMenu()
-    setTimeout(function(){
-      // fixes sidebar becoming unscrollable in Safari 6
-      reflowFixedPositions()
-    }, 10)    
-    return false
-  })
-  
-  Z(window).on('scroll', function(){
-    if(reflowTimeout) clearTimeout(reflowTimeout)
-    reflowTimeout = setTimeout(reflowFixedPositions, 200)
-  })
-  
-  function closeMenu(){
-    if (Z('body').hasClass('navigating')) {
-      Z('body').removeClass('navigating')
-      setTimeout(function(){
-        Z('#sidebar').css('display','none')
-      }, 350)
-    }
-  }
-  
-  // show/hide menu on mobile
-  Z('#menu_icon').on('tap', function(){
-    if (Z('body').hasClass('navigating')) {
-      closeMenu()
-    } else {
-      Z('#sidebar').css('display','block')
-      Z('#sidebar')[0].offsetLeft // force render
-      Z('body').addClass('navigating')
-    }
-    return false
-  })
-
-  // change the title of the page so bookmarks have a better default
-  if (Z.os.ios || Z.os.android)
-    document.title = 'Z.js Docs'
-
-  // For retina screens, use a hi-res version of the tour image.
-  // We're swapping this out on-demand (not an ideal solution)
-  // to avoid rendering bugs on iOS.
-  Z('#tour > img')[0].src =
-    ('devicePixelRatio' in window && devicePixelRatio > 1) ?
-    'intro2x.jpg' : 'intro.jpg'
-
-  var tour = Z('#tour'), tourSlides = tour.children(),
-      tourSlide = 0, tourSlidesTotal = 5
-
-  function advanceTourSlide(delta){
-    tourSlide = (tourSlide + delta + tourSlidesTotal) % tourSlidesTotal
-    var offset = tourSlide * tour.width()
-    tourSlides.animate({ translateX: -offset + 'px' })
-  }
-
-  tour.on('click swipeLeft', function(){ advanceTourSlide(+1) })
-      .on('swipeRight', function(){ advanceTourSlide(-1) })
-
-  if (/^localhost|\.(dev|local)Z/.test(location.hostname) && Z.os.iphone && !/Simulator/.test(navigator.userAgent))
-    injectScript('livereload.js')
-
-  if (/\.comZ/.test(location.hostname))
-    injectScript('http://platform.twitter.com/widgets.js')
-</script>
-
 
 
 </body>
