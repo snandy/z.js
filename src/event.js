@@ -416,3 +416,25 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
         return this
     }
 })
+
+// Event delegate
+Z.fn.delegate = function(selector, type, handler) {
+    if (arguments.length === 2 && .isFunction(type)) {
+        fn = type
+        type = 'click'
+    }
+    return this.each(function(el) {
+        Z(el).on(type, function(e) {
+            var tar = e.tar
+            Z(selector, this).each( function(el) {
+                if (tar == el || Z.contains(el, tar)) handler.call(el, e)
+            })
+        })
+    })
+}
+Z.fn.undelegate = function(type, fn) {
+    return this.each(function(el) {
+        Z(el).off(type, fn)
+    })
+}
+
