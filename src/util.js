@@ -16,11 +16,11 @@ function forEach(obj, iterator, context) {
       obj.forEach(iterator, context)
     } else if ( obj.length === +obj.length ) {
         for (var i = 0; i < obj.length; i++) {
-            if (iterator.call(obj[i] || context, obj[i], i, obj) === true) return
+            if (iterator.call(context||obj[i], obj[i], i, obj) === true) return
         }
     } else {
         for (var k in obj) {
-            if (iterator.call(obj[k] || context, obj[k], k, obj) === true) return
+            if (iterator.call(context||obj[k], obj[k], k, obj) === true) return
         }
     }
 }
