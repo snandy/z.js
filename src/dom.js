@@ -369,7 +369,12 @@ Z.fn.extend({
         } else {
             return this.prop('value', val)
         }
-    }
-
+    },
+	
+	show: function() {
+		this.each(function(el) {
+			el.style.display = ''
+		})
+	}
 })
 

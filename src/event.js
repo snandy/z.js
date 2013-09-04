@@ -383,7 +383,7 @@ forEach({on: bind, off: unbind}, function(callback, name) {
     Z.fn[name] = function(type, handler) {
         return this.each(function(el) {
             callback(el, type, handler)
-        })        
+        })
     }
 })
 
@@ -419,7 +419,7 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
 
 // Event delegate
 Z.fn.delegate = function(selector, type, handler) {
-    if (arguments.length === 2 && .isFunction(type)) {
+    if (arguments.length === 2 && Z.isFunction(type)) {
         fn = type
         type = 'click'
     }

@@ -1,6 +1,6 @@
 /*!
  * Z.js.js v0.1.0
- * @snandy 2013-08-13 09:25:01
+ * @snandy 2013-09-04 22:01:03
  *
  */
 ~function(window, undefined) {
@@ -87,11 +87,11 @@ function forEach(obj, iterator, context) {
       obj.forEach(iterator, context)
     } else if ( obj.length === +obj.length ) {
         for (var i = 0; i < obj.length; i++) {
-            if (iterator.call(obj[i] || context, obj[i], i, obj) === true) return
+            if (iterator.call(context||obj[i], obj[i], i, obj) === true) return
         }
     } else {
         for (var k in obj) {
-            if (iterator.call(obj[k] || context, obj[k], k, obj) === true) return
+            if (iterator.call(context||obj[k], obj[k], k, obj) === true) return
         }
     }
 }
@@ -110,6 +110,7 @@ function map(obj, iterator, context) {
 function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
+
 /**
  * @class Z.Object
  *
@@ -1336,8 +1337,13 @@ Z.fn.extend({
         } else {
             return this.prop('value', val)
         }
-    }
-
+    },
+	
+	show: function() {
+		this.each(function(el) {
+			el.style.display = ''
+		})
+	}
 })
 
 
@@ -1726,7 +1732,7 @@ forEach({on: bind, off: unbind}, function(callback, name) {
     Z.fn[name] = function(type, handler) {
         return this.each(function(el) {
             callback(el, type, handler)
-        })        
+        })
     }
 })
 
@@ -1759,6 +1765,29 @@ forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouse
         return this
     }
 })
+
+// Event delegate
+Z.fn.delegate = function(selector, type, handler) {
+    if (arguments.length === 2 && Z.isFunction(type)) {
+        fn = type
+        type = 'click'
+    }
+    return this.each(function(el) {
+        Z(el).on(type, function(e) {
+            var tar = e.tar
+            Z(selector, this).each( function(el) {
+                if (tar == el || Z.contains(el, tar)) handler.call(el, e)
+            })
+        })
+    })
+}
+Z.fn.undelegate = function(type, fn) {
+    return this.each(function(el) {
+        Z(el).off(type, fn)
+    })
+}
+
+
 
 // parse json string
 function parseJSON(str) {
