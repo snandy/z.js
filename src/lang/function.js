@@ -75,9 +75,27 @@ Z.Function = function() {
         }
     }
 
+    /**
+     * 防止点击太快
+     */
+    function uniq(func, wait) {
+        var canExecute = true
+        wait = wait || 1000
+        return function() {
+            if (canExecute) {
+                func.apply(this, arguments)
+                canExecute = false
+            }
+            setTimeout(function() {
+                canExecute = true
+            }, wait)
+        }
+    }
+
     return {
         bind: bind,
         once: once,
+        uniq: uniq,
         delay: delay,
         debounce: debounce,
         throttle: throttle
