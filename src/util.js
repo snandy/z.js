@@ -39,3 +39,37 @@ function map(obj, iterator, context) {
 function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
+
+/**
+ * Browser Detect
+ * 注意：IE11中Browser.ie返回false，把IE11当成标准浏览器吧，别叫它IE
+ * IE11 API变化: http://www.cnblogs.com/snandy/p/3174777.html
+ */
+var Browser = function(ua) {
+    var b = {
+        sogou: /se/.test(ua),
+        opera: /opera/.test(ua),
+        chrome: /chrome/.test(ua),
+        firefox: /firefox/.test(ua),
+        maxthon: /maxthon/.test(ua),
+        tt: /TencentTraveler/.test(ua),
+        ie: /msie/.test(ua) && !/opera/.test(ua),
+        safari: /webkit/.test(ua) && !/chrome/.test(ua)
+    }
+    var mark = ''
+    for (var i in b) {
+        if (b[i]) {
+            mark = 'safari' == i ? 'version' : i
+            break
+        }
+    }
+    var reg = RegExp('(?:' + mark + ')[\\/: ]([\\d.]+)')
+    b.version = mark && reg.test(ua) ? RegExp.$1 : '0'
+
+    var iv = parseInt(b.version, 10)
+    for (var i = 6; i < 11; i++) {
+        b['ie'+i] = iv === i
+    }
+    
+    return b
+}(navigator.userAgent.toLowerCase())

@@ -122,3 +122,6 @@ Z.extend = Z.fn.extend = function(obj) {
 Z.each = forEach
 
 Z.map = map
+
+// Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
+Z.extend(Browser)

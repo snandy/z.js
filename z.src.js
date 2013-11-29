@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-10-05 22:07:05
+ * @snandy 2013-11-29 17:06:46
  *
  */
 ~function(window, undefined) {
@@ -111,6 +111,39 @@ function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
 
+/**
+ * Browser Detect
+ * 注意：IE11中Browser.ie返回false，把IE11当成标准浏览器吧，别叫它IE
+ * IE11 API变化: http://www.cnblogs.com/snandy/p/3174777.html
+ */
+var Browser = function(ua) {
+    var b = {
+        sogou: /se/.test(ua),
+        opera: /opera/.test(ua),
+        chrome: /chrome/.test(ua),
+        firefox: /firefox/.test(ua),
+        maxthon: /maxthon/.test(ua),
+        tt: /TencentTraveler/.test(ua),
+        ie: /msie/.test(ua) && !/opera/.test(ua),
+        safari: /webkit/.test(ua) && !/chrome/.test(ua)
+    }
+    var mark = ''
+    for (var i in b) {
+        if (b[i]) {
+            mark = 'safari' == i ? 'version' : i
+            break
+        }
+    }
+    var reg = RegExp('(?:' + mark + ')[\\/: ]([\\d.]+)')
+    b.version = mark && reg.test(ua) ? RegExp.$1 : '0'
+
+    var iv = parseInt(b.version, 10)
+    for (var i = 6; i < 11; i++) {
+        b['ie'+i] = iv === i
+    }
+    
+    return b
+}(navigator.userAgent.toLowerCase())
 /**
  * @class Z.Object
  *
@@ -254,9 +287,27 @@ Z.Function = function() {
         }
     }
 
+    /**
+     * 防止点击太快
+     */
+    function uniq(func, wait) {
+        var canExecute = true
+        wait = wait || 1000
+        return function() {
+            if (canExecute) {
+                func.apply(this, arguments)
+                canExecute = false
+            }
+            setTimeout(function() {
+                canExecute = true
+            }, wait)
+        }
+    }
+
     return {
         bind: bind,
         once: once,
+        uniq: uniq,
         delay: delay,
         debounce: debounce,
         throttle: throttle
@@ -912,6 +963,9 @@ Z.extend = Z.fn.extend = function(obj) {
 Z.each = forEach
 
 Z.map = map
+
+// Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
+Z.extend(Browser)
 
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
