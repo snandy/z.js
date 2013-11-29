@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-11-29 17:06:46
+ * @snandy 2013-11-29 18:09:26
  *
  */
 ~function(window, undefined) {
@@ -144,6 +144,8 @@ var Browser = function(ua) {
     
     return b
 }(navigator.userAgent.toLowerCase())
+
+
 /**
  * @class Z.Object
  *
@@ -841,6 +843,7 @@ function matches(el, selector) {
 Z.matches = matches
 
 
+
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
@@ -939,6 +942,7 @@ Z.prototype = {
     sort: types.sort,
     splice: types.splice
 }
+
 Z.fn = Z.prototype.init.prototype = Z.prototype
 
 Z.extend = Z.fn.extend = function(obj) {
@@ -1013,7 +1017,7 @@ Z.isElement = function(obj) {
 }
 
 Z.isTextNode = function(obj) {
-    return obj ? obj.nodeName === "#text" : false;
+    return obj ? obj.nodeName === "#text" : false
 }
 
 Z.isZ = function(obj) {
@@ -2135,7 +2139,7 @@ Z.jsonp = function(url, opt, success) {
 
 
 
-// Expose IO to the global object or as AMD module
+// Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {
     define('Z', [], function() { return Z } )
 } else {

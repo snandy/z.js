@@ -73,3 +73,4 @@ var Browser = function(ua) {
     
     return b
 }(navigator.userAgent.toLowerCase())
+

@@ -98,6 +98,7 @@ Z.prototype = {
     sort: types.sort,
     splice: types.splice
 }
+
 Z.fn = Z.prototype.init.prototype = Z.prototype
 
 Z.extend = Z.fn.extend = function(obj) {

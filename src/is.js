@@ -45,7 +45,7 @@ Z.isElement = function(obj) {
 }
 
 Z.isTextNode = function(obj) {
-    return obj ? obj.nodeName === "#text" : false;
+    return obj ? obj.nodeName === "#text" : false
 }
 
 Z.isZ = function(obj) {
