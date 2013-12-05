@@ -42,6 +42,8 @@ function sliceArgs(args, start) {
 
 /**
  * Browser Detect
+ * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
+ *
  * 注意：IE11中Browser.ie返回false，把IE11当成标准浏览器吧，别叫它IE
  * IE11 API变化: http://www.cnblogs.com/snandy/p/3174777.html
  */
