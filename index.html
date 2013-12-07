@@ -1847,195 +1847,35 @@ wrapInner(function(index){ ... }) ⇒ self [v1.0]
                 </article>
 
                 <hr>
-                <h2 id="detect">Detect methods</h2>
+                <h2 id="detect">浏览器判断</h2>
 
                 <article class=method id="Detect module">
-                    <h3>Detect module </h3>
-
-                    <p>
-                        The &ldquo;detect&rdquo; module is useful to fine-tune your site or app to different environments, and helps you to discern between phone and tablets; as well as different browser engines and operating system versions.
-                    </p>
-
                     <div class="highlight">
-                        <pre><code class="js"><span class="c1">// The following boolean flags are set to true if they apply,</span>
-<span class="c1">// if not they&#39;re either set to `false` or `undefined`.</span>
-<span class="c1">// We recommend accessing them with `!!` prefixed to coerce to a boolean. </span>
-
-<span class="c1">// general device type</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">tablet</span>
-
-<span class="c1">// specific OS</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">android</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">webos</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">blackberry</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">bb10</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">rimtabletos</span>
-
-<span class="c1">// specific device type</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ipad</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">touchpad</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">kindle</span>
-
-<span class="c1">// specific browser</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">chrome</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">firefox</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">silk</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">playbook</span>
-
-<span class="c1">// Additionally, version information is available as well.</span>
-<span class="c1">// Here&#39;s what&#39;s returned for an iPhone running iOS 6.1.</span>
-<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">phone</span>         <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">iphone</span>        <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">ios</span>           <span class="c1">// =&gt; true</span>
-<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">os</span><span class="p">.</span><span class="nx">version</span>       <span class="c1">// =&gt; &quot;6.1&quot;</span>
-<span class="o">!!</span><span class="nx">Z</span><span class="p">.</span><span class="nx">browser</span><span class="p">.</span><span class="nx">version</span>  <span class="c1">// =&gt; &quot;536.26&quot;</span>
+<pre><code class="js"><span class="c1">// specific browser</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">chrome</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">firefox</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">safari</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">opera</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie6</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie7</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie8</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie9</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie10</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">maxthon</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">tt</span>
 </code></pre>
 </div>
                 </article>
 
                 <hr>
-                <h2 id="event">Event handling</h2>
-
-                <article class=method id="Z.Event">
-                    <h3>Z.Event </h3>
-                    <pre class=signature><code>Z.Event(type, [properties]) ⇒ event
-</code></pre>
-                    <p>
-                        Create and initialize a DOM event of the specified type. If a properties object
-                        is given, use it to extend the new event object. The event is configured to
-                        bubble by default; this can be turned off by setting the <code>
-                            bubbles</code>
-                        property to <code>
-                            false</code>
-                        .
-                    </p>
-
-                    <p>
-                        An event initialized with this function can be triggered with <a href="#fire">fire</a>.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">Event</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">bubbles</span><span class="o">:</span> <span class="kc">false</span> <span class="p">})</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="Z.proxy">
-                    <h3>Z.proxy <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.proxy(fn, context) ⇒ function
-Z.proxy(context, property) ⇒ function
-</code></pre>
-                    <p>
-                        Get a function that ensures that the value of <code>
-                            this</code> in the original function
-                        refers to the context object. In the second form, the original function is read
-                        from the specific property of the context object.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span><span class="p">},</span>
-    <span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;hello from + &quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span> <span class="p">}</span>
-
-<span class="c1">// ensures that the handler will be executed in the context of `obj`:</span>
-<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">Z</span><span class="p">.</span><span class="nx">proxy</span><span class="p">(</span><span class="nx">handler</span><span class="p">,</span> <span class="nx">obj</span><span class="p">))</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="bind">
-                    <h3>bind <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#on">on</a> instead.
-                    </p>
-                    <pre class=signature><code>bind(type, function(e){ ... }) ⇒ self
-bind({ type: handler, type2: handler2, ... }) ⇒ self
-</code></pre>
-                    <p>
-                        Attach an event handler to elements.
-                    </p>
-
-                </article>
-
-                <article class=method id="delegate">
-                    <h3>delegate <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#on">on</a> instead.
-                    </p>
-                    <pre class=signature><code>delegate(selector, type, function(e){ ... }) ⇒ self
-delegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
-</code></pre>
-                    <p>
-                        Attach an event handler that is only triggered when the event originated from a
-                        node that matches a selector.
-                    </p>
-
-                </article>
-
-                <article class=method id="die">
-                    <h3>die <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#off">off</a> instead.
-                    </p>
-                    <pre class=signature><code>die(type, function(e){ ... }) ⇒ self
-die({ type: handler, type2: handler2, ... }) ⇒ self
-</code></pre>
-                    <p>
-                        Detach event handler added by <a href="#live">live</a>.
-                    </p>
-
-                </article>
-
-                <article class=method id="live">
-                    <h3>live <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#on">on</a> instead.
-                    </p>
-                    <pre class=signature><code>live(type, function(e){ ... }) ⇒ self
-live({ type: handler, type2: handler2, ... }) ⇒ self
-</code></pre>
-                    <p>
-                        Like <a href="#delegate">delegate</a> where the selector is taken from the current
-                        collection.
-                    </p>
-
-                </article>
-
-                <article class=method id="off">
-                    <h3>off </h3>
-                    <pre class=signature><code>off(type, [selector], function(e){ ... }) ⇒ self
-off({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
-off(type, [selector]) ⇒ self
-off() ⇒ self
-</code></pre>
-                    
-  
-
-                    <p>
-                        Detach event handlers added with <a href="#on">on</a>. To detach a specific event handler,
-                        the same function must be passed that was used for <code>
-                            on()</code>. Otherwise, just
-                        calling this method with an event type with detach all handlers of that type.
-                        When called without arguments, it detaches <em>all</em> event handlers registered on
-                        current elements.
-                    </p>
-
-                </article>
+                <h2 id="event">事件</h2>
 
                 <article class=method id="on">
                     <h3>on </h3>
-                    <pre class=signature><code>on(type, [selector], function(e){ ... }) ⇒ self
+<pre class=signature><code>on(type, [selector], function(e){ ... }) ⇒ self
 on({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
 </code></pre>
-                    
-  
-
                     <p>
                         Add event handlers to the elements in collection. Multiple event types can be
                         passed in a space-separated string, or as an object where event types are keys
@@ -2064,6 +1904,24 @@ on({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
 <span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 </code></pre>
 </div>
+                </article>
+
+                <article class=method id="off">
+                    <h3>off </h3>
+<pre class=signature><code>off(type, [selector], function(e){ ... }) ⇒ self
+off({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
+off(type, [selector]) ⇒ self
+off() ⇒ self
+</code></pre>
+                    <p>
+                        Detach event handlers added with <a href="#on">on</a>. To detach a specific event handler,
+                        the same function must be passed that was used for <code>
+                            on()</code>. Otherwise, just
+                        calling this method with an event type with detach all handlers of that type.
+                        When called without arguments, it detaches <em>all</em> event handlers registered on
+                        current elements.
+                    </p>
+
                 </article>
 
                 <article class=method id="one">
