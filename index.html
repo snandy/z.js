@@ -534,16 +534,6 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     </p>
                 </article>
 
-                <article class=method id="Z.trim">
-                    <h3>Z.trim <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.trim(string) ⇒ string</code></pre>
-                    
-                    <p>
-                        Remove whitespace from beginning and end of a string; just like
-                        String.prototype.trim().
-                    </p>
-                </article>
-
                 <article class=method id="Z.type">
                     <h3>Z.type <span class=version>v1.0+</span></h3>
                     <pre class=signature><code>Z.type(object) ⇒ string</code></pre>
@@ -567,9 +557,9 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     </p>
                 </article>
 
-                <article class=method id="addClass">
+                <article class="method" id="addClass">
                     <h3>addClass</h3>
-                    <pre class=signature><code>addClass(name) ⇒ self
+                    <pre class="signature"><code>addClass(name) ⇒ self
 addClass(function(index, oldClassName){ ... }) ⇒ self
 </code></pre>
                     <p>
@@ -578,10 +568,9 @@ addClass(function(index, oldClassName){ ... }) ⇒ self
                     </p>
                 </article>
 
-                <article class=method id="after">
+                <article class="method" id="after">
                     <h3>after</h3>
-                    <pre class=signature><code>after(content) ⇒ self
-</code></pre>
+                    <pre class=signature><code>after(content) ⇒ self</code></pre>
                     <p>
                         Add content to the DOM after each elements in the collection. The content can
                         be an HTML string, a DOM node or an array of nodes.
@@ -594,8 +583,7 @@ addClass(function(index, oldClassName){ ... }) ⇒ self
                 </article>
                 <article class=method id="append">
                     <h3>append</h3>
-                    <pre class=signature><code>append(content) ⇒ self
-</code></pre>
+                    <pre class=signature><code>append(content) ⇒ self</code></pre>
                     <p>
                         Append content to the DOM inside each individual element in the collection. The
                         content can be an HTML string, a DOM node or an array of nodes.
@@ -609,8 +597,7 @@ addClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="appendTo">
                     <h3>appendTo</h3>
-                    <pre class=signature><code>appendTo(target) ⇒ self
-</code></pre>
+                    <pre class=signature><code>appendTo(target) ⇒ self</code></pre>
                     <p>
                         Append elements from the current collection to the target element. This is
                         like <a href="#append">append</a>, but with reversed operands.
@@ -662,8 +649,7 @@ attr({ name: value, name2: value2, ... }) ⇒ self
 
                 <article class=method id="before">
                     <h3>before</h3>
-                    <pre class=signature><code>before(content) ⇒ self
-</code></pre>
+                    <pre class=signature><code>before(content) ⇒ self</code></pre>
                     <p>
                         Add content to the DOM before each element in the collection. The content can
                         be an HTML string, a DOM node or an array of nodes.
@@ -677,8 +663,7 @@ attr({ name: value, name2: value2, ... }) ⇒ self
 
                 <article class=method id="children">
                     <h3>children</h3>
-                    <pre class=signature><code>children([selector]) ⇒ collection
-</code></pre>
+                    <pre class=signature><code>children([selector]) ⇒ collection</code></pre>
                     <p>
                         Get immediate children of each element in the current collection. If selector
                         is given, filter the results to only include ones matching the CSS selector.
@@ -693,8 +678,7 @@ attr({ name: value, name2: value2, ... }) ⇒ self
 
                 <article class=method id="clone">
                     <h3>clone <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>clone() ⇒ collection
-</code></pre>
+                    <pre class=signature><code>clone() ⇒ collection</code></pre>
                     <p>
                         Duplicate all elements in the collection via deep clone.
                     </p>
@@ -734,8 +718,7 @@ closest(element) ⇒ collection [v1.0]
 
                 <article class=method id="concat">
                     <h3>concat</h3>
-                    <pre class=signature><code>concat(nodes, [node2, ...]) ⇒ self
-</code></pre>
+                    <pre class=signature><code>concat(nodes, [node2, ...]) ⇒ self</code></pre>
                     <p>
                         Modify the collection by adding elements to it. If any of the arguments is an
                         array, its elements are merged into the current collection.
@@ -792,10 +775,8 @@ css({ property: value, property2: value2, ... }) ⇒ self
 data(name, value) ⇒ self
 </code></pre>
                     <p>
-                        Read or write <code>
-                            data-*</code>
-                        DOM attributes. Behaves like <a href="#attr">attr</a>, but prepends <code>
-                            data-</code>
+                        Read or write <code>data-*</code>
+                        DOM attributes. Behaves like <a href="#attr">attr</a>, but prepends <code>data-</code>
                         to the attribute name.
                     </p>
 
@@ -804,18 +785,10 @@ data(name, value) ⇒ self
                     </p>
 
                     <ul>
-                        <li>
-                            &ldquo;true&rdquo;, &ldquo;false&rdquo;, and &ldquo;null&rdquo; are converted to corresponding types;
-                        </li>
-                        <li>
-                            number values are converted to actual numeric types;
-                        </li>
-                        <li>
-                            JSON values are parsed, if it&rsquo;s valid JSON;
-                        </li>
-                        <li>
-                            everything else is returned as string.
-                        </li>
+                        <li>&ldquo;true&rdquo;, &ldquo;false&rdquo;, and &ldquo;null&rdquo; are converted to corresponding types;</li>
+                        <li>number values are converted to actual numeric types;</li>
+                        <li>JSON values are parsed, if it&rsquo;s valid JSON;</li>
+                        <li>everything else is returned as string.</li>
                     </ul>
 
                     <p class=compat>
@@ -828,8 +801,7 @@ data(name, value) ⇒ self
 
                 <article class=method id="each">
                     <h3>each</h3>
-                    <pre class=signature><code>each(function(index, item){ ... }) ⇒ self
-</code></pre>
+                    <pre class=signature><code>each(function(index, item){ ... }) ⇒ self</code></pre>
                     <p>
                         Iterate through every element of the collection. Inside the iterator function, <code>
                             this</code>
@@ -859,8 +831,7 @@ data(name, value) ⇒ self
 
                 <article class=method id="eq">
                     <h3>eq</h3>
-                    <pre class=signature><code>eq(index) ⇒ collection
-</code></pre>
+                    <pre class=signature><code>eq(index) ⇒ collection</code></pre>
                     <p>
                         Get the item at position specified by index from the current collection.
                     </p>
@@ -913,8 +884,7 @@ find(element) ⇒ collection [v1.0]
 
                 <article class=method id="first">
                     <h3>first</h3>
-                    <pre class=signature><code>first() ⇒ collection
-</code></pre>
+                    <pre class=signature><code>first() ⇒ collection</code></pre>
                     <p>Get the first element of the current collection.</p>
 
                     <div class="highlight">
@@ -925,8 +895,7 @@ find(element) ⇒ collection [v1.0]
 
                 <article class=method id="forEach">
                     <h3>forEach</h3>
-                    <pre class=signature><code>forEach(function(item, index, array){ ... }, [context])
-</code></pre>
+                    <pre class=signature><code>forEach(function(item, index, array){ ... }, [context])</code></pre>
                     <p>
                         Iterate through every element of the collection. Similar to <a href="#each">each</a>, but
                         the arguments for the iterator functions are different, and returning <code>
@@ -976,8 +945,7 @@ has(node) ⇒ collection
 
                 <article class=method id="hasClass">
                     <h3>hasClass</h3>
-                    <pre class=signature><code>hasClass(name) ⇒ boolean
-</code></pre>
+                    <pre class=signature><code>hasClass(name) ⇒ boolean</code></pre>
                     <p>
                         Check if any elements in the collection have the specified class.
                     </p>
@@ -1004,8 +972,7 @@ height(function(index, oldHeight){ ... }) ⇒ self
 
                 <article class=method id="hide">
                     <h3>hide</h3>
-                    <pre class=signature><code>hide() ⇒ self
-</code></pre>
+                    <pre class=signature><code>hide() ⇒ self</code></pre>
                     <p>
                         Hide elements in this collection by setting their <code>
                             display</code>
@@ -1041,8 +1008,7 @@ html(function(index, oldHtml){ ... }) ⇒ self
 
                 <article class=method id="index">
                     <h3>index </h3>
-                    <pre class=signature><code>index([element]) ⇒ number
-</code></pre>
+                    <pre class=signature><code>index([element]) ⇒ number</code></pre>
                     <p>
                         Get the position of an element. When no element is given, returns position of
                         the current element among its siblings. When an element is given, returns its
@@ -1059,8 +1025,7 @@ html(function(index, oldHtml){ ... }) ⇒ self
 
                 <article class=method id="indexOf">
                     <h3>indexOf </h3>
-                    <pre class=signature><code>indexOf(element, [fromIndex]) ⇒ number
-</code></pre>
+                    <pre class=signature><code>indexOf(element, [fromIndex]) ⇒ number</code></pre>
                     <p>
                         Get the position of an element in the current collection. If fromIndex number is
                         given, search only from that position onwards. Returns the 0-based position when
@@ -1078,8 +1043,7 @@ html(function(index, oldHtml){ ... }) ⇒ self
 
                 <article class=method id="insertAfter">
                     <h3>insertAfter </h3>
-                    <pre class=signature><code>insertAfter(target) ⇒ self
-</code></pre>
+                    <pre class=signature><code>insertAfter(target) ⇒ self</code></pre>
                     <p>
                         Insert elements from the current collection after the target element in the
                         DOM. This is like <a href="#after">after</a>, but with reversed operands.
@@ -1231,8 +1195,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="offsetParent">
                     <h3>offsetParent <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>offsetParent() ⇒ collection
-</code></pre>
+                    <pre class=signature><code>offsetParent() ⇒ collection</code></pre>
                     <p>
                         Find the first ancestor element that is <em>positioned</em>, meaning its CSS <code>
                             position</code>
@@ -1243,8 +1206,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="parent">
                     <h3>parent </h3>
-                    <pre class=signature><code>parent([selector]) ⇒ collection
-</code></pre>
+                    <pre class=signature><code>parent([selector]) ⇒ collection</code></pre>
                     <p>
                         Get immediate parents of each element in the collection. If CSS selector is
                         given, filter results to include only ones matching the selector.
@@ -1254,8 +1216,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="parents">
                     <h3>parents </h3>
-                    <pre class=signature><code>parents([selector]) ⇒ collection
-</code></pre>
+                    <pre class=signature><code>parents([selector]) ⇒ collection</code></pre>
                     <p>
                         Get all ancestors of each element in the collection. If CSS selector is given,
                         filter results to include only ones matching the selector.
@@ -1301,8 +1262,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="position">
                     <h3>position <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>position() ⇒ object
-</code></pre>
+                    <pre class=signature><code>position() ⇒ object</code></pre>
                     <p>
                         Get the position of the first element in the collection, relative to the <a href="#offsetParent">offsetParent</a>. This information is useful when absolutely
                         positioning an element to appear aligned with another.
@@ -1331,8 +1291,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="prepend">
                     <h3>prepend </h3>
-                    <pre class=signature><code>prepend(content) ⇒ self
-</code></pre>
+                    <pre class=signature><code>prepend(content) ⇒ self</code></pre>
                     <p>
                         Prepend content to the DOM inside each element in the collection. The content
                         can be an HTML string, a DOM node or an array of nodes.
@@ -1346,8 +1305,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="prependTo">
                     <h3>prependTo </h3>
-                    <pre class=signature><code>prependTo(target) ⇒ self
-</code></pre>
+                    <pre class=signature><code>prependTo(target) ⇒ self</code></pre>
                     <p>
                         Prepend elements of the current collection inside each of the target elements. This is
                         like <a href="#prepend">prepend</a>, only with reversed operands.
@@ -1391,8 +1349,7 @@ prop(name, function(index, oldValue){ ... }) ⇒ self
 
                 <article class=method id="push">
                     <h3>push </h3>
-                    <pre class=signature><code>push(element, [element2, ...]) ⇒ self
-</code></pre>
+                    <pre class=signature><code>push(element, [element2, ...]) ⇒ self</code></pre>
                     <p>
                         Add elements to the end of the current collection.
                     </p>
@@ -1405,8 +1362,7 @@ prop(name, function(index, oldValue){ ... }) ⇒ self
 
                 <article class=method id="ready">
                     <h3>ready </h3>
-                    <pre class=signature><code>ready(function(Z){ ... }) ⇒ self
-</code></pre>
+                    <pre class=signature><code>ready(function(Z){ ... }) ⇒ self</code></pre>
                     <p>
                         Attach an event handler for the &ldquo;DOMContentLoaded&rdquo; event that fires when the DOM
                         on the page is ready. It&rsquo;s recommended to use the <a href="#Z()">Z()</a> function instead
@@ -1431,8 +1387,7 @@ prop(name, function(index, oldValue){ ... }) ⇒ self
 
                 <article class=method id="remove">
                     <h3>remove </h3>
-                    <pre class=signature><code>remove() ⇒ self
-</code></pre>
+                    <pre class=signature><code>remove() ⇒ self</code></pre>
                     <p>
                         Remove elements in the current collection from their parent nodes, effectively
                         detaching them from the DOM.
@@ -1442,8 +1397,7 @@ prop(name, function(index, oldValue){ ... }) ⇒ self
 
                 <article class=method id="removeAttr">
                     <h3>removeAttr</h3>
-                    <pre class=signature><code>removeAttr(name) ⇒ self
-</code></pre>
+                    <pre class=signature><code>removeAttr(name) ⇒ self</code></pre>
                     <p>
                         Remove the specified attribute from all elements in the collection.
                     </p>
@@ -1464,8 +1418,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="replaceWith">
                     <h3>replaceWith</h3>
-                    <pre class=signature><code>replaceWith(content) ⇒ self
-</code></pre>
+                    <pre class=signature><code>replaceWith(content) ⇒ self</code></pre>
                     <p>
                         Replace each element in the collection&mdash;both its contents and the element
                         itself&mdash;with the new content. Content can be of any type described in
@@ -1476,8 +1429,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="scrollTop">
                     <h3>scrollTop <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>scrollTop() ⇒ number
-</code></pre>
+                    <pre class=signature><code>scrollTop() ⇒ number</code></pre>
                     <p>
                         Gets the value of how many pixels were scrolled so far on window or scrollable
                         element on the page.
@@ -1487,8 +1439,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="show">
                     <h3>show</h3>
-                    <pre class=signature><code>show() ⇒ self
-</code></pre>
+                    <pre class=signature><code>show() ⇒ self</code></pre>
                     <p>
                         Restore the default value for the &ldquo;display&rdquo; property of each element in the
                         array, effectively showing them if they were hidden with <a href="#hide">hide</a>.
@@ -1498,8 +1449,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="siblings">
                     <h3>siblings</h3>
-                    <pre class=signature><code>siblings([selector]) ⇒ collection
-</code></pre>
+                    <pre class=signature><code>siblings([selector]) ⇒ collection</code></pre>
                     <p>
                         Get all sibling nodes of each element in the collection. If CSS selector is
                         specified, filter the results to contain only elements that match the selector.
@@ -1509,8 +1459,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="size">
                     <h3>size</h3>
-                    <pre class=signature><code>size() ⇒ number
-</code></pre>
+                    <pre class=signature><code>size() ⇒ number</code></pre>
                     <p>
                         Get the number of elements in this collection.
                     </p>
@@ -1519,8 +1468,7 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
 
                 <article class=method id="slice">
                     <h3>slice </h3>
-                    <pre class=signature><code>slice(start, [end]) ⇒ array
-</code></pre>
+                    <pre class=signature><code>slice(start, [end]) ⇒ array</code></pre>
                     <p>
                         Extract the subset of this array, starting at <code>
                             start</code>
@@ -1551,8 +1499,7 @@ text(content) ⇒ self
 
                 <article class=method id="toggle">
                     <h3>toggle </h3>
-                    <pre class=signature><code>toggle([setting]) ⇒ self
-</code></pre>
+                    <pre class=signature><code>toggle([setting]) ⇒ self</code></pre>
                     <p>
                         Toggle between showing and hiding each of the elements, based on whether the
                         first element is visible or not. If <code>
@@ -1586,8 +1533,7 @@ toggleClass(function(index, oldClassNames){ ... }, [setting]) ⇒ self
 
                 <article class=method id="unwrap">
                     <h3>unwrap </h3>
-                    <pre class=signature><code>unwrap() ⇒ self
-</code></pre>
+                    <pre class=signature><code>unwrap() ⇒ self</code></pre>
                     <p>
                         Remove immediate parent nodes of each element in the collection and put their
                         children in their place. Basically, this method removes one level of ancestry
@@ -1680,8 +1626,7 @@ wrap(function(index){ ... }) ⇒ self [v1.0]
 
                 <article class=method id="wrapAll">
                     <h3>wrapAll </h3>
-                    <pre class=signature><code>wrapAll(structure) ⇒ self
-</code></pre>
+                    <pre class=signature><code>wrapAll(structure) ⇒ self</code></pre>
                     <p>
                         Wrap all elements in a single structure. Structure can be a single element or
                         several nested elements, and can be passed in as a HTML string or DOM node.
@@ -1799,9 +1744,6 @@ off() ⇒ self
                     <pre class=signature><code>one(type, function(e){ ... }) ⇒ self
 one({ type: handler, type2: handler2, ... }) ⇒ self
 </code></pre>
-                    
-  
-
                     <p>
                         Adds an event handler that removes itself the first time it runs, ensuring that
                         the handler only fires once.
@@ -1811,11 +1753,8 @@ one({ type: handler, type2: handler2, ... }) ⇒ self
 
                 <article class=method id="trigger">
                     <h3>trigger </h3>
-                    <pre class=signature><code>trigger(event, [data])
-</code></pre>
+                    <pre class=signature><code>trigger(event, [data])</code></pre>
                     
-  
-
                     <p>
                         Trigger the specified event on elements of the collection. Event can either be a
                         string type, or a full event object obtained with <a href="#Z.Event">Z.Event</a>. If a data
@@ -1839,16 +1778,11 @@ one({ type: handler, type2: handler2, ... }) ⇒ self
 
                 <article class=method id="triggerHandler">
                     <h3>triggerHandler </h3>
-                    <pre class=signature><code>triggerHandler(event, [data]) ⇒ self
-</code></pre>
-                    
-  
-
+                    <pre class=signature><code>triggerHandler(event, [data]) ⇒ self</code></pre>
                     <p>
                         Like <a href="#trigger">trigger</a>, but triggers only event handlers on current
                         elements and doesn&rsquo;t bubble.
                     </p>
-
                 </article>
 
                 <article class=method id="unbind">
@@ -1857,34 +1791,23 @@ one({ type: handler, type2: handler2, ... }) ⇒ self
                     <p class=warning>
                         Deprecated, use <a href="#off">off</a> instead.
                     </p>
-                    <pre class=signature><code>unbind(type, function(e){ ... }) ⇒ self
+<pre class=signature><code>unbind(type, function(e){ ... }) ⇒ self
 unbind({ type: handler, type2: handler2, ... }) ⇒ self
 </code></pre>
-                    
-  
-
                     <p>
                         Detach event handler added with <a href="#bind">bind</a>.
                     </p>
-
                 </article>
 
                 <article class=method id="undelegate">
                     <h3>undelegate <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#off">off</a> instead.
-                    </p>
+                    <p class=warning>Deprecated, use <a href="#off">off</a> instead.</p>
                     <pre class=signature><code>undelegate(selector, type, function(e){ ... }) ⇒ self
 undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
 </code></pre>
-                    
-  
-
                     <p>
                         Detach event handler added with <a href="#delegate">delegate</a>.
                     </p>
-
                 </article>
 
                 <hr>
@@ -1892,18 +1815,12 @@ undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
 
                 <article class=method id="Z.ajax">
                     <h3>Z.ajax </h3>
-                    <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest
-</code></pre>
-                    
-  
-
+                    <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest</code></pre>
                     <p>
                         Perform an Ajax request. It can be to a local resource, or cross-domain via <a href="https://developer.mozilla.org/en/http_access_control">HTTP access control</a> support in browsers or <a href="http://json-p.org">JSONP</a>.
                     </p>
 
-                    <p>
-                        Options:
-                    </p>
+                    <p>Options:</p>
 
                     <ul>
                         <li>
@@ -2166,82 +2083,18 @@ undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
 </div>
                 </article>
 
-                <article class=method id="Z.ajaxJSONP">
-                    <h3>Z.ajaxJSONP <span class=emoji title=deprecated>🐶🔫</span></h3>
-
+                <article class=method id="Z.jsonp">
+                    <h3>Z.jsonp <span class=emoji title=deprecated>🐶🔫</span></h3>
                     <p class=warning>
                         Deprecated, use <a href="#Z.ajax">Z.ajax</a> instead.
                     </p>
-                    <pre class=signature><code>Z.ajaxJSONP(options) ⇒ mock XMLHttpRequest
-</code></pre>
-                    
-  
-
+                    <pre class=signature><code>Z.jsonp(options) ⇒ mock XMLHttpRequest</code></pre>
                     <p>
                         Perform a JSONP request to fetch data from another domain.
                     </p>
-
                     <p>
                         This method has no advantages over <a href="#Z.ajax">Z.ajax</a> and should not be used.
                     </p>
-
-                </article>
-
-                <article class=method id="Z.ajaxSettings">
-                    <h3>Z.ajaxSettings </h3>
-
-                    <p>
-                        Object containing the default settings for Ajax requests. Most settings are
-                        described in <a href="#Z.ajax">Z.ajax</a>. The ones that are useful when set globally are:
-                    </p>
-
-                    <ul>
-                        <li>
-                            <code>
-                                timeout</code>
-                            (default: <code>
-                                0</code>
-                            ): set to a non-zero value to specify a default timeout
-                            for Ajax requests in milliseconds
-                        </li>
-                        <li>
-                            <code>
-                                global</code>
-                            (default: true): set to false to prevent firing Ajax events
-                        </li>
-                        <li>
-                            <code>
-                                xhr</code>
-                            (default: XMLHttpRequest factory): set to a function that returns
-                            instances of XMLHttpRequest (or a compatible object)
-                        </li>
-                        <li>
-                            <code>
-                                accepts</code>
-                            : MIME types to request from the server for specific <code>
-                                dataType</code>
-                            values:
-
-                            <ul>
-                                <li>
-                                    script: &ldquo;text/javascript, application/javascript&rdquo;
-                                </li>
-                                <li>
-                                    json:   &ldquo;application/json&rdquo;
-                                </li>
-                                <li>
-                                    xml:    &ldquo;application/xml, text/xml&rdquo;
-                                </li>
-                                <li>
-                                    html:   &ldquo;text/html&rdquo;
-                                </li>
-                                <li>
-                                    text:   &ldquo;text/plain&rdquo;
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-
                 </article>
 
                 <article class=method id="Z.get">
@@ -2249,9 +2102,6 @@ undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
                     <pre class=signature><code>Z.get(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
 Z.get(url, [data], [function(data, status, xhr){ ... }], [dataType]) ⇒ XMLHttpRequest [v1.0]
 </code></pre>
-                    
-  
-
                     <p>
                         Perform an Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
                         method.
@@ -2271,8 +2121,6 @@ Z.get(url, [data], [function(data, status, xhr){ ... }], [dataType]) ⇒ XMLHttp
 Z.getJSON(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest [v1.0]
 </code></pre>
                     
-  
-
                     <p>
                         Get JSON data via Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
                         method.
