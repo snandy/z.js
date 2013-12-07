@@ -13,237 +13,170 @@
         <meta name=format-detection content="telephone=no">
         <link rel=apple-touch-icon-precomposed href=icon.png>
         <link rel=icon type=image/png href=favicon.png>
-        <script src="javascripts/z.src.js"></script>
+        <script src="z.src.js"></script>
     </head>
     <body>
         <div id="menu_icon">≣</div>
         <aside id="sidebar" class="interface">
-            <a class="toc_title" href="#"> Z.js <span class="version">(0.1.0)</span> </a>
-            <ul class=toc_section>
+            <a class="toc_title" href="#"> Z.js <span class="version">(0.1.0)</span></a>
+            <ul class="toc_section">
                 <li><a href="#download">下载</a></li>
-                <li><a href="#platforms">目标平台</a></li>
+                <li><a href="#browser">目标平台</a></li>
                 <li><a href="#changelog">更新日志</a></li>
                 <li><a href="#thanks">鸣谢</a></li>
             </ul>
 
             <hr>
 
-            <a class=toc_title href="#core"> Core (核心模块集)</a>
-
-            <ul class=toc_section>
+            <a class="toc_title" href="#core">Core</a>
+            <ul class="toc_section">
                 <li><a href="#Z()">Z()</a></li>
                 <li><a href="#Z.contains">Z.contains</a></li>
                 <li><a href="#Z.each">Z.each</a></li>
                 <li><a href="#Z.extend">Z.extend</a></li>
                 <li><a href="#Z.fn">Z.fn</a></li>
                 <li><a href="#Z.grep">Z.grep</a></li>
-                <li><a href="#Z.inArray">Z.inArray</a></li>
                 <li><a href="#Z.map">Z.map</a></li>
                 <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
                 <li><a href="#Z.trim">Z.trim</a></li>
                 <li><a href="#Z.type">Z.type</a></li>
                 <li><a href="#add">add</a></li>
                 <li><a href="#addClass">addClass</a></li>
-                <li>
-                    <a href="#after">after</a>
-                </li>
-                <li>
-                    <a href="#append">append</a>
-                </li>
-                <li>
-                    <a href="#appendTo">appendTo</a>
-                </li>
-                <li>
-                    <a href="#attr">attr</a>
-                </li>
-                <li>
-                    <a href="#before">before</a>
-                </li>
-                <li>
-                    <a href="#children">children</a>
-                </li>
-                <li>
-                    <a href="#clone">clone</a>
-                </li>
-                <li>
-                    <a href="#closest">closest</a>
-                </li>
-                <li>
-                    <a href="#concat">concat</a>
-                </li>
-                <li>
-                    <a href="#contents">contents</a>
-                </li>
-                <li>
-                    <a href="#css">css</a>
-                </li>
-                <li>
-                    <a href="#data">data</a>
-                </li>
-                <li>
-                    <a href="#each">each</a>
-                </li>
-                <li>
-                    <a href="#empty">empty</a>
-                </li>
-                <li>
-                    <a href="#eq">eq</a>
-                </li>
-                <li>
-                    <a href="#filter">filter</a>
-                </li>
-                <li>
-                    <a href="#find">find</a>
-                </li>
-                <li>
-                    <a href="#first">first</a>
-                </li>
-                <li>
-                    <a href="#forEach">forEach</a>
-                </li>
-                <li>
-                    <a href="#get">get</a>
-                </li>
-                <li>
-                    <a href="#has">has</a>
-                </li>
-                <li>
-                    <a href="#hasClass">hasClass</a>
-                </li>
-                <li>
-                    <a href="#height">height</a>
-                </li>
-                <li>
-                    <a href="#hide">hide</a>
-                </li>
-                <li>
-                    <a href="#html">html</a>
-                </li>
-                <li>
-                    <a href="#index">index</a>
-                </li>
-                <li>
-                    <a href="#indexOf">indexOf</a>
-                </li>
-                <li>
-                    <a href="#insertAfter">insertAfter</a>
-                </li>
-                <li>
-                    <a href="#insertBefore">insertBefore</a>
-                </li>
-                <li>
-                    <a href="#is">is</a>
-                </li>
-                <li>
-                    <a href="#last">last</a>
-                </li>
-                <li>
-                    <a href="#map">map</a>
-                </li>
-                <li>
-                    <a href="#next">next</a>
-                </li>
-                <li>
-                    <a href="#not">not</a>
-                </li>
-                <li>
-                    <a href="#offset">offset</a>
-                </li>
-                <li>
-                    <a href="#offsetParent">offsetParent</a>
-                </li>
-                <li>
-                    <a href="#parent">parent</a>
-                </li>
-                <li>
-                    <a href="#parents">parents</a>
-                </li>
-                <li>
-                    <a href="#pluck">pluck</a>
-                </li>
-                <li>
-                    <a href="#position">position</a>
-                </li>
+                <li><a href="#after">after</a></li>
+                <li><a href="#append">append</a></li>
+                <li><a href="#appendTo">appendTo</a></li>
+                <li><a href="#attr">attr</a></li>
+                <li><a href="#before">before</a></li>
+                <li><a href="#children">children</a></li>
+                <li><a href="#clone">clone</a></li>
+                <li><a href="#closest">closest</a></li>
+                <li><a href="#concat">concat</a></li>
+                <li><a href="#css">css</a></li>
+                <li><a href="#data">data</a></li>
+                <li><a href="#each">each</a></li>
+                <li><a href="#empty">empty</a></li>
+                <li><a href="#eq">eq</a></li>
+                <li><a href="#filter">filter</a></li>
+                <li><a href="#find">find</a></li>
+                <li><a href="#first">first</a></li>
+                <li><a href="#get">get</a></li>
+                <li><a href="#has">has</a></li>
+                <li><a href="#hasClass">hasClass</a></li>
+                <li><a href="#height">height</a></li>
+                <li><a href="#hide">hide</a></li>
+                <li><a href="#html">html</a></li>
+                <li><a href="#index">index</a></li>
+                <li><a href="#indexOf">indexOf</a></li>
+                <li><a href="#insertAfter">insertAfter</a></li>
+                <li><a href="#insertBefore">insertBefore</a></li>
+                <li><a href="#is">is</a></li>
+                <li><a href="#last">last</a></li>
+                <li><a href="#map">map</a></li>
+                <li><a href="#next">next</a></li>
+                <li><a href="#offset">offset</a></li>
+                <li><a href="#offsetParent">offsetParent</a></li>
+                <li><a href="#parent">parent</a></li>
+                <li><a href="#position">position</a></li>
+                <li><a href="#prepend">prepend</a></li>
+                <li><a href="#prependTo">prependTo</a></li>
+                <li><a href="#prev">prev</a></li>
+                <li><a href="#prop">prop</a></li>
+                <li><a href="#push">push</a></li>
+                <li><a href="#ready">ready</a></li>
+                <li><a href="#reduce">reduce</a></li>
+                <li><a href="#remove">remove</a></li>
+                <li><a href="#removeAttr">removeAttr</a></li>
+                <li><a href="#removeClass">removeClass</a></li>
+                <li><a href="#replaceWith">replaceWith</a></li>
+                <li><a href="#scrollTop">scrollTop</a></li>
+                <li><a href="#show">show</a></li>
+                <li><a href="#siblings">siblings</a></li>
+                <li><a href="#size">size</a></li>
+                <li><a href="#slice">slice</a></li>
+                <li><a href="#text">text</a></li>
+                <li><a href="#toggle">toggle</a></li>
+                <li><a href="#toggleClass">toggleClass</a></li>
+                <li><a href="#val">val</a></li>
+                <li><a href="#width">width</a></li>
+            </ul>
 
-                <li>
-                    <a href="#prepend">prepend</a>
-                </li>
-                <li>
-                    <a href="#prependTo">prependTo</a>
-                </li>
-                <li>
-                    <a href="#prev">prev</a>
-                </li>
-                <li>
-                    <a href="#prop">prop</a>
-                </li>
-                <li>
-                    <a href="#push">push</a>
-                </li>
-                <li>
-                    <a href="#ready">ready</a>
-                </li>
-                <li>
-                    <a href="#reduce">reduce</a>
-                </li>
-                <li>
-                    <a href="#remove">remove</a>
-                </li>
-                <li>
-                    <a href="#removeAttr">removeAttr</a>
-                </li>
-                <li>
-                    <a href="#removeClass">removeClass</a>
-                </li>
-                <li>
-                    <a href="#replaceWith">replaceWith</a>
-                </li>
-                <li>
-                    <a href="#scrollTop">scrollTop</a>
-                </li>
-                <li>
-                    <a href="#show">show</a>
-                </li>
-                <li>
-                    <a href="#siblings">siblings</a>
-                </li>
-                <li>
-                    <a href="#size">size</a>
-                </li>
-                <li>
-                    <a href="#slice">slice</a>
-                </li>
-                <li>
-                    <a href="#text">text</a>
-                </li>
-                <li>
-                    <a href="#toggle">toggle</a>
-                </li>
-                <li>
-                    <a href="#toggleClass">toggleClass</a>
-                </li>
-                <li>
-                    <a href="#unwrap">unwrap</a>
-                </li>
-                <li>
-                    <a href="#val">val</a>
-                </li>
-                <li>
-                    <a href="#width">width</a>
-                </li>
-                <li>
-                    <a href="#wrap">wrap</a>
-                </li>
-                <li>
-                    <a href="#wrapAll">wrapAll</a>
-                </li>
-                <li>
-                    <a href="#wrapInner">wrapInner</a>
+            <a class="toc_title" href="#event">Event</a>
+            <ul class="toc_section">
+                <li><a href="#bind">on</a></li>
+                <li><a href="#off">off</a></li>                
+                <li><a href="#delegate">delegate</a></li>
+                <li><a href="#delegate">undelegate</a></li>                
+                <li><a href="#fire">fire</a></li>
+                <li><a href="#one">one</a></li>
+                <li><a href="#delay">delay</a></li>            
+                <li><a href="#throttle">throttle</a></li>
+                <li><a href="#debounce">debounce</a></li>
+                <li><a href="#immediate">immediate</a></li>
+            </ul>
+
+            <a class="toc_title" href="#ajax">Ajax</a>
+            <ul class="toc_section">
+                <li><a href="#Z.ajax">Z.ajax</a></li>
+                <li><a href="#Z.jsonp">Z.jsonp</a></li>
+                <li><a href="#Z.text">Z.text</a></li>
+                <li><a href="#Z.json">Z.json</a></li>
+                <li><a href="#Z.xml">Z.xml</a></li>
+                <li><a href="#Z.get">Z.get</a></li>
+                <li><a href="#Z.post">Z.post</a></li>
+                <li><a href="#Z.sync">Z.sync</a></li>
+                <li><a href="#Z.sync">Z.async</a></li>
+            </ul>
+
+            <a class="toc_title" href="#form">Form</a>
+            <ul class="toc_section">
+                <li><a href="#serialize">serialize</a></li>
+                <li><a href="#serializeArray">serializeArray</a></li>
+                <li><a href="#submit">submit</a>
                 </li>
             </ul>
 
-            <a class=toc_title href="#isXXX">isXXX</a>
+            <a class="toc_title" href="#Objects">Objects</a>
+            <ul class="toc_section">
+                <li><a href="#Z.Object.keys">Z.Object.keys</a></li>
+                <li><a href="#Z.Object.values">Z.Object.values</a></li>
+                <li><a href="#Z.Object.pairs">Z.Object.pairs</a></li>
+                <li><a href="#Z.Object.invert">Z.Object.invert</a></li>
+                <li><a href="#Z.Object.pick">Z.Object.pick</a></li>
+                <li><a href="#Z.Object.toQueryString">Z.Object.toQueryString</a></li>
+            </ul>
 
+            <a class="toc_title" href="#Arrays">Arrays</a>
+            <ul class="toc_section">
+                <li><a href="#Z.Array.forEach">Z.Array.forEach</a></li>
+                <li><a href="#Z.Array.map">Z.Array.map</a></li>
+                <li><a href="#Z.Array.every">Z.Array.every</a></li>
+                <li><a href="#Z.Array.some">Z.Array.some</a></li>
+                <li><a href="#Z.Array.contains">Z.Array.contains</a></li>
+                <li><a href="#Z.Array.filter">Z.Array.filter</a></li>
+                <li><a href="#Z.Array.unique">Z.Array.unique</a></li>
+            </ul>
+
+            <a class="toc_title" href="#Functions">Functions</a>
+            <ul class="toc_section">
+                <li><a href="#Z.Function.bind">Z.Function.bind</a></li>
+                <li><a href="#Z.Function.once">Z.Function.once</a></li>
+                <li><a href="#Z.Function.uniq">Z.Function.uniq</a></li>
+                <li><a href="#Z.Function.delay">Z.Function.delay</a></li>
+                <li><a href="#Z.Function.debounce">Z.Function.debounce</a></li>
+                <li><a href="#Z.Function.throttle">Z.Function.throttle</a></li>
+            </ul>
+
+            <a class="toc_title" href="#Strings">Strings</a>
+            <ul class="toc_section">
+                <li><a href="#Z.String.escape">Z.String.escape</a></li>
+                <li><a href="#Z.String.unescape">Z.String.unescape</a></li>
+                <li><a href="#Z.String.urlAppend">Z.String.urlAppend</a></li>
+                <li><a href="#Z.String.trim">Z.String.trim</a></li>
+                <li><a href="#Z.String.ellipsis">Z.String.ellipsis</a></li>
+                <li><a href="#Z.String.format">Z.String.format</a></li>
+            </ul>
+
+            <a class="toc_title" href="#isXXX">isXXX</a>
             <ul class=toc_section>
                 <li><a href="#Z.isArray">Z.isArray</a></li>
                 <li><a href="#Z.Function">Z.Function</a></li>
@@ -262,9 +195,8 @@
                 <li><a href="#Z.isZ">Z.isZ</a></li>
             </ul>
 
-            <a class=toc_title href="#detect">Browser Detection</a>
-
-            <ul class=toc_section>
+            <a class="toc_title" href="#detect">Browser Detection</a>
+            <ul class="toc_section">
                 <li><a href="#Z.chrome">Z.chrome</a></li>
                 <li><a href="#Z.firefox">Z.firefox</a></li>
                 <li><a href="#Z.safari">Z.safari</a></li>
@@ -279,44 +211,6 @@
                 <li><a href="#Z.tt">Z.tt</a></li>
             </ul>
 
-            <a class=toc_title href="#event">Event</a>
-
-            <ul class=toc_section>
-                <li><a href="#bind">on</a></li>
-                <li><a href="#off">off</a></li>                
-                <li><a href="#delegate">delegate</a></li>
-                <li><a href="#delegate">undelegate</a></li>                
-                <li><a href="#fire">fire</a></li>
-                <li><a href="#one">one</a></li>
-                <li><a href="#delay">delay</a></li>            
-                <li><a href="#throttle">throttle</a></li>
-                <li><a href="#debounce">debounce</a></li>
-                <li><a href="#immediate">immediate</a></li>
-            </ul>
-
-            <a class=toc_title href="#ajax">Ajax</a>
-
-            <ul class=toc_section>
-                <li><a href="#Z.ajax">Z.ajax</a></li>
-                <li><a href="#Z.jsonp">Z.jsonp</a></li>
-                <li><a href="#Z.text">Z.text</a></li>
-                <li><a href="#Z.json">Z.json</a></li>
-                <li><a href="#Z.xml">Z.xml</a></li>
-                <li><a href="#Z.get">Z.get</a></li>
-                <li><a href="#Z.post">Z.post</a></li>
-                <li><a href="#Z.sync">Z.sync</a></li>
-                <li><a href="#Z.sync">Z.async</a></li>
-            </ul>
-
-            <a class=toc_title href="#form">Form</a>
-
-            <ul class=toc_section>
-                <li><a href="#serialize">serialize</a></li>
-                <li><a href="#serializeArray">serializeArray</a></li>
-                <li><a href="#submit">submit</a>
-                </li>
-            </ul>
-
         </aside>
 
         <div class="container">
@@ -325,12 +219,12 @@
                 <p>A super-tiny JavaScript Library (756 bytes | 447 gzipped)</p>
             </header>
 
-            <h3 id=download>下载 Z.js</h3>
+            <h3 id="download">下载 Z.js</h3>
             <p>默认的构建版本包含以下模块<br>
                 <em>Core, Selector, DOM, Event, Ajax/JSONP, OOP, isXXX</em>.
             </p>
 
-            <ul class=downloads>
+            <ul class="downloads">
                 <li>
                     <a href="z.src.js" class="download">Z.src.js v0.1.0 (for development)</a>
                     – <i>54.6k uncompressed, lots of comments</i>
@@ -351,7 +245,7 @@
 </code></pre>
 </div>
 
-            <h4>支持的浏览器</h4>
+            <h3 id="browser">支持的浏览器</h3>
             <ul>
                 <li>Internet Explorer 6+ (Win)</li>
                 <li>Safari 4+ (Mac, Win)</li>
@@ -360,7 +254,7 @@
                 <li>Opera 10+ (Win, Mac, Linux)</li>
             </ul>
 
-            <h3>Manually building Z.js</h3>
+            <h3>自定义 Z.js</h3>
             <p>
                 <code>Z.js</code>
                 and <code>Z.js.min.js</code> provided above can be
@@ -397,7 +291,7 @@
 </code></pre>
 </div>
 
-            <section id=documentation>
+            <section id="documentation">
 
                 <hr>
                 <h2 id="core">Core methods</h2>
