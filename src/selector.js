@@ -68,8 +68,8 @@ var query = function() {
         
     function query(selector, context) {
         var s = selector, arr = []
-        var context = context === undefined ? doc : typeof context === 'string' ?
-                byId(context.substr(1, context.length)) : context
+        var context = context === undefined ? doc : 
+                typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         

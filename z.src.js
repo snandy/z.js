@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-11-29 18:09:26
+ * @snandy 2013-12-12 15:05:08
  *
  */
 ~function(window, undefined) {
@@ -113,6 +113,8 @@ function sliceArgs(args, start) {
 
 /**
  * Browser Detect
+ * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
+ *
  * 注意：IE11中Browser.ie返回false，把IE11当成标准浏览器吧，别叫它IE
  * IE11 API变化: http://www.cnblogs.com/snandy/p/3174777.html
  */
@@ -393,7 +395,6 @@ Z.Function = function() {
 Z.String = function() {
 
     var ZO = Z.Object
-
     var regFormat = /\{(\d+)\}/g
     var regTrim   = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g
     var entityMap = {
@@ -762,8 +763,8 @@ var query = function() {
         
     function query(selector, context) {
         var s = selector, arr = []
-        var context = context === undefined ? doc : typeof context === 'string' ?
-                byId(context.substr(1, context.length)) : context
+        var context = context === undefined ? doc : 
+                typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         
