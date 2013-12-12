@@ -26,7 +26,6 @@
             </ul>
 
             <hr>
-
             <a class="toc_title" href="#core">Core</a>
             <ul class="toc_section">
                 <li><a href="#Z()">Z()</a></li>
@@ -299,14 +298,12 @@ Z(function(Z){ ... }) ⇒ DOM Ready
                     </p>
 
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; all DIV elements on the page</span>
-<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">)</span> <span class="c1">//=&gt; element with ID &quot;foo&quot;</span>
-
-<span class="c1">// create element:</span>
-<span class="nx">Z</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;Hello&lt;/p&gt;&quot;</span><span class="p">)</span> <span class="c1">//=&gt; the new P element</span>
-<span class="c1">// create element with attributes:</span>
-<span class="nx">Z</span><span class="p">(</span><span class="s2">&quot;&lt;p /&gt;&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">text</span><span class="o">:</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;greeting&quot;</span><span class="p">,</span> <span class="nx">css</span><span class="o">:</span><span class="p">{</span><span class="nx">color</span><span class="o">:</span><span class="s1">&#39;darkblue&#39;</span><span class="p">}</span> <span class="p">})</span>
-<span class="c1">//=&gt; &lt;p id=greeting style=&quot;color:darkblue&quot;&gt;Hello&lt;/p&gt;</span>
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#foo&#39;</span><span class="p">)</span> <span class="c1">//=&gt; 获取id为foo的元素</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.bar&#39;</span><span class="p">)</span> <span class="c1">//=&gt; 获取className为bar的元素集合</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; 获取页面里所有的DIV元素</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;[name]&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; 获取页面里具有name属性的元素集合</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;[data-tag=nav]&#39;</span><span class="p">)</span>  <span class="c1">//=&gt; 获取页面里data-tag属性值为nav的元素集合</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;.bar&#39;, &#39;#foo&#39;</span><span class="p">)</span>    <span class="c1">//=&gt; 获取id为foo的元素里所有className为bar的元素集合</span>
 
 <span class="c1">// execute callback when the page is ready:</span>
 <span class="nx">Z.js</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">Z</span><span class="p">){</span>
@@ -315,34 +312,32 @@ Z(function(Z){ ... }) ⇒ DOM Ready
 </code></pre>
 </div>
 
+                    <p class="compat">
+                    根据2/8原则和控制代码量，这里仅实现id, className, tagName, attribute选择器。
+                    </p>
                 </article>
 
                 <article class=method id="Z.contains">
-                    <h3>Z.contains <span class=version>v1.0+</span></h3>
+                    <h3>Z.contains</h3>
                     <pre class=signature><code>Z.contains(parent, node) ⇒ boolean</code></pre>
                     <p>
-                        Check if the parent node contains the given DOM node. Returns false if both
-                        are the same node.
+                        判断元素parent里是否包含给定的元素node，包含返回true，否则返回false
                     </p>
                 </article>
 
                 <article class=method id="Z.each">
                     <h3>Z.each</h3>
-                    <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection
-</code></pre>
-                    
+                    <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection</code></pre>
                     <p>
-                        Iterate over array elements or object key-value pairs. Returning <code>false</code>
-                        from the iterator function stops the iteration.
+                        遍历一个数组或JS对象，迭代函数内返回<code>false</code>将停止迭代。
                     </p>
-
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">){</span>
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;item %d is: %s&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
 <span class="p">})</span>
 
 <span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="s1">&#39;micro&#39;</span> <span class="p">}</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s: %s&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre>
@@ -356,14 +351,7 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
 </code></pre>
                     
                     <p>
-                        Extend target object with properties from each of the source objects,
-                        overriding the properties on target.
-                    </p>
-
-                    <p>
-                        By default, copying is shallow. An optional <code>true</code>
-                        for the first argument
-                        triggers deep (recursive) copying.
+                        扩展一个对象，会覆盖目标对象的已有属性值。默认是浅复制，第一个参数为 <code>true</code> 时为深复制。
                     </p>
 
                     <div class="highlight">

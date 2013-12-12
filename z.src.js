@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-11-29 18:09:26
+ * @snandy 2013-12-12 20:10:32
  *
  */
 ~function(window, undefined) {
@@ -113,6 +113,8 @@ function sliceArgs(args, start) {
 
 /**
  * Browser Detect
+ * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
+ *
  * 注意：IE11中Browser.ie返回false，把IE11当成标准浏览器吧，别叫它IE
  * IE11 API变化: http://www.cnblogs.com/snandy/p/3174777.html
  */
@@ -393,7 +395,6 @@ Z.Function = function() {
 Z.String = function() {
 
     var ZO = Z.Object
-
     var regFormat = /\{(\d+)\}/g
     var regTrim   = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g
     var entityMap = {
@@ -762,8 +763,8 @@ var query = function() {
         
     function query(selector, context) {
         var s = selector, arr = []
-        var context = context === undefined ? doc : typeof context === 'string' ?
-                byId(context.substr(1, context.length)) : context
+        var context = context === undefined ? doc : 
+                typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         
@@ -945,22 +946,59 @@ Z.prototype = {
 
 Z.fn = Z.prototype.init.prototype = Z.prototype
 
-Z.extend = Z.fn.extend = function(obj) {
-    var target, start
-    if (arguments.length === 1) {
-        target = this
-        start = 0
-    } else {
-        target = obj
-        start = 1
+Z.extend = Z.fn.extend = function() {
+    var src, copyIsArray, copy, name, options, clone
+    var i = 1
+    var deep = false
+    var length = arguments.length
+    var target = arguments[0] || {}
+
+    // 深复制
+    if (target === true) {
+        deep = target
+        target = arguments[1] || {}
+        i = 2
     }
-    forEach(sliceArgs(arguments, start), function(source) {
-        if (source) {
-            for (var prop in source) {
-                target[prop] = source[prop]
+
+    // Handle case when target is a string or something (possible in deep copy)
+    if ( typeof target !== "object" && !Z.isFunction(target) ) {
+        target = {}
+    }
+
+    // 拷贝到Z对象自身
+    if ( length === i ) {
+        target = this
+        --i
+    }
+
+    for ( options = arguments[i]; i < length; i++ ) {
+        // Only deal with non-null/undefined values
+        if ( options != null ) {
+            for (name in options) {
+                src = target[name]
+                copy = options[name]
+
+                // Prevent never-ending loop
+                if (target === copy) continue
+
+                // 递归 objects or arrays
+                if ( deep && copy && ( Z.isPlainObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
+                    if (copyIsArray) {
+                        copyIsArray = false
+                        clone = src && Z.isArray(src) ? src : []
+                    } else {
+                        clone = src && Z.isPlainObject(src) ? src : {}
+                    }
+
+                    target[name] = Z.extend(deep, clone, copy)
+
+                } else if (copy !== undefined) {
+                    target[ name ] = copy
+                }
             }
         }
-    })
+    }
+
     return target
 }
 
@@ -996,8 +1034,8 @@ Z.isEmpty = function(obj) {
 }
 
 Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body) return false
-    return 'isPrototypeOf' in obj && Z.isObject(obj)
+    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
+    return 'isPrototypeOf' in obj
 }
 
 Z.isArrayLike = function(obj) {
