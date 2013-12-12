@@ -254,27 +254,13 @@
 
             <h3>自定义 Z.js</h3>
             <p>
-                <code>Z.js</code>
-                and <code>Z.js.min.js</code> provided above can be
-                used as-is. However, for best efficiency and customizability, run the build
-                system that comes with Z.js's source code.
-                It allows you to select modules, run tests,
-                use <a href="https://github.com/mishoo/UglifyJS">UglifyJS</a> to
-                minify your custom build, and gives you an estimate on the compression
-                that is achievable when <code>Z.js.min.js</code>
-                is served gzipped.
-            </p>
-
-            <p>
-                Refer to <a href="https://github.com/madrobby/Z.js#readme">the README</a>
-                for instructions on how to build Z.js, including running the tests and
-                contributing patches.
+                <code>Z.js</code>采用 <a target="_blank" href="http://gruntjs.com/">GruntJS</a> 构建，
+                您可以通过修改GruntFile来定制 <code>Z.js</code>。使用 <a target="_blank" href="https://github.com/mishoo/UglifyJS">UglifyJS</a> 
+                压缩 <code>Z.min.js</code>。
             </p>
 
             <h3>创建插件</h3>
-            <p>把你的API挂在
-                <a href="#Z.fn"><code>Z.fn</code></a>:
-            </p>
+            <p>把你的API挂在 <a href="#Z.fn"><code>Z.fn</code></a>:</p>
 
             <div class="highlight">
                 <pre><code class="js"><span class="p">;(</span><span class="kd">function</span><span class="p">(</span><span class="nx">Z</span><span class="p">){</span>
@@ -293,7 +279,6 @@
 
                 <hr>
                 <h2 id="core">Core methods</h2>
-
                 <article class=method id="Z()">
                     <h3>Z()</h3>
                     <pre class=signature><code>Z(selector, [context]) ⇒ collection
@@ -301,28 +286,16 @@ Z(&lt;Z collection&gt;) ⇒ same collection
 Z(&lt;DOM nodes&gt;) ⇒ collection
 Z(function(Z){ ... }) ⇒ DOM Ready
 </code></pre>
-                    <p>Create a Z collection object by performing a CSS selector, wrapping DOM nodes.</p>
-
+                    <p>通过CSS选择器创建一个 <code>Z</code> 集合对象, 会将DOM元素包装起来.</p>
                     <p>
-                        A Z collection is an array-like object that has chainable methods for
-                        manipulating the DOM nodes it references. All of the methods in this documentation
-                        are collection methods, except the ones directly on the Z object,
-                        such as <code>Z.extend</code>
-                        .
+                        一个 <code>Z</code> 对象是一个类数组(array-like)对象，它包含了一些可链式(chainable methods)操作DOM元素的方法。
                     </p>
-
                     <p>
-                        If a context (CSS selector, DOM node or Z.js collection object) is
-                        given, perform the CSS selector only within nodes of the context; this is
-                        functionally the same as calling <code>
-                            Z(context).find(selector)</code>.
+                        如果指定了 context (CSS selector, DOM node), 那么将在 context 内部进行查找.
+                        这等价于<code>Z(context).find(selector)</code>.
                     </p>
-
                     <p>
-                        When a function is given, attach it as a handler for the <code>
-                            DOMContentLoaded</code>
-                        event.
-                        If the page is already loaded, executes the function immediately.
+                        如果 selector 是函数类型，则相当于 <code>DOMContentLoaded</code> 事件.
                     </p>
 
                     <div class="highlight">
@@ -341,32 +314,12 @@ Z(function(Z){ ... }) ⇒ DOM Ready
 <span class="p">})</span>
 </code></pre>
 </div>
-                    <p class=compat>
-                        <a href="http://api.jquery.com/category/selectors/jquery-selector-extensions/">jQuery
-                        CSS extensions</a> are not supported.
-                        However, the optional "selector" module provides
-                        limited support for a few of the most used pseudo-selectors, and can be
-                        dropped in for compatibility with existing code or plugins.
-                    </p>
-
-                    <p class=compat>
-                        Z.js will only set the <code>
-                            Z</code> global to itself if it is not yet defined.
-                        This allows you to use Z.js with legacy code that uses, for example,
-                        Prototype.js. Just load Prototype first, and Z.js will not touch
-                        Prototype's <code>
-                            Z</code>
-                        function. Z.js will always set the <code>
-                            Z.js</code> global
-                        to itself.
-                    </p>
 
                 </article>
 
                 <article class=method id="Z.contains">
                     <h3>Z.contains <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.contains(parent, node) ⇒ boolean
-</code></pre>
+                    <pre class=signature><code>Z.contains(parent, node) ⇒ boolean</code></pre>
                     <p>
                         Check if the parent node contains the given DOM node. Returns false if both
                         are the same node.
