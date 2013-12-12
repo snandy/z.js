@@ -24,8 +24,8 @@ Z.isEmpty = function(obj) {
 }
 
 Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body) return false
-    return 'isPrototypeOf' in obj && Z.isObject(obj)
+    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
+    return 'isPrototypeOf' in obj
 }
 
 Z.isArrayLike = function(obj) {

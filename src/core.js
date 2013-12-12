@@ -101,22 +101,59 @@ Z.prototype = {
 
 Z.fn = Z.prototype.init.prototype = Z.prototype
 
-Z.extend = Z.fn.extend = function(obj) {
-    var target, start
-    if (arguments.length === 1) {
-        target = this
-        start = 0
-    } else {
-        target = obj
-        start = 1
+Z.extend = Z.fn.extend = function() {
+    var src, copyIsArray, copy, name, options, clone
+    var i = 1
+    var deep = false
+    var length = arguments.length
+    var target = arguments[0] || {}
+
+    // 深复制
+    if (target === true) {
+        deep = target
+        target = arguments[1] || {}
+        i = 2
     }
-    forEach(sliceArgs(arguments, start), function(source) {
-        if (source) {
-            for (var prop in source) {
-                target[prop] = source[prop]
+
+    // Handle case when target is a string or something (possible in deep copy)
+    if ( typeof target !== "object" && !Z.isFunction(target) ) {
+        target = {}
+    }
+
+    // 拷贝到Z对象自身
+    if ( length === i ) {
+        target = this
+        --i
+    }
+
+    for ( options = arguments[i]; i < length; i++ ) {
+        // Only deal with non-null/undefined values
+        if ( options != null ) {
+            for (name in options) {
+                src = target[name]
+                copy = options[name]
+
+                // Prevent never-ending loop
+                if (target === copy) continue
+
+                // 递归 objects or arrays
+                if ( deep && copy && ( Z.isPlainObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
+                    if (copyIsArray) {
+                        copyIsArray = false
+                        clone = src && Z.isArray(src) ? src : []
+                    } else {
+                        clone = src && Z.isPlainObject(src) ? src : {}
+                    }
+
+                    target[name] = Z.extend(deep, clone, copy)
+
+                } else if (copy !== undefined) {
+                    target[ name ] = copy
+                }
             }
         }
-    })
+    }
+
     return target
 }
 
