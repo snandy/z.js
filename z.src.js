@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-13 16:41:18
+ * @snandy 2013-12-13 16:43:30
  *
  */
 ~function(window, undefined) {
@@ -1034,8 +1034,8 @@ Z.isEmpty = function(obj) {
 }
 
 // Z.isPlainObject = function(obj) {
-//     if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
-//     return 'isPrototypeOf' in obj
+//     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+//     return false
 // }
 
 Z.isArrayLike = function(obj) {
