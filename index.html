@@ -352,55 +352,20 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     <h3>Z.map</h3>
                     <pre class=signature><code>Z.map(collection, function(item, index){ ... }) ⇒ collection</code></pre>
                     <p>
-                        Iterate through elements of collection and return all results of running the
-                        iterator function, with <code>null</code>
-                        and <code>undefined</code>
-                        values filtered out.
+                        迭代一个集合，过滤<code>null</code>
+                        和 <code>undefined</code> 后返回一个新集合。
                     </p>
 
                 </article>
 
                 <article class=method id="Z.parseJSON">
-                    <h3>Z.parseJSON <span class=version>v1.0+</span></h3>
+                    <h3>Z.parseJSON</h3>
                     <pre class=signature><code>Z.parseJSON(string) ⇒ object</code></pre>
                     <p>
-                        Alias for the native <code>JSON.parse</code>method.
+                    将字符串解析成JSON格式。
                     </p>
                 </article>
 
-                <article class=method id="Z.type">
-                    <h3>Z.type <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.type(object) ⇒ string</code></pre>
-                    <p>
-                        Get string type of an object. Possible types are:
-                        null undefined boolean number string function array date regexp object error.
-                    </p>
-                    <p>
-                        For other objects it will simply report &ldquo;object&rdquo;. To find out if an object is a
-                        plain JavaScript object, use <a href="#Z.isPlainObject">isPlainObject</a>.
-                    </p>
-                </article>
-
-                <article class=method id="add">
-                    <h3>add</h3>
-                    <pre class=signature><code>add(selector, [context]) ⇒ self</code></pre>
-                    <p>
-                        Modify the current collection by adding the results of performing the CSS
-                        selector on the whole document, or, if context is given, just inside context
-                        elements.
-                    </p>
-                </article>
-
-                <article class="method" id="addClass">
-                    <h3>addClass</h3>
-                    <pre class="signature"><code>addClass(name) ⇒ self
-addClass(function(index, oldClassName){ ... }) ⇒ self
-</code></pre>
-                    <p>
-                        Add class name to each of the elements in the collection. Multiple class
-                        names can be given in a space-separated string.
-                    </p>
-                </article>
 
                 <article class="method" id="after">
                     <h3>after</h3>
