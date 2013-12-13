@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-13 16:43:30
+ * @snandy 2013-12-13 19:42:11
  *
  */
 ~function(window, undefined) {
@@ -1281,6 +1281,12 @@ Z.fn.extend({
     },
 
     attr: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.attr(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             var el = this[0]
             switch (name) {
@@ -1293,15 +1299,19 @@ Z.fn.extend({
             }
         } else {
             this.each( function(el) {
-                switch (name) {
-                    case 'class':
-                        el.className = val
-                        break
-                    case 'style':
-                        el.style.cssText = val
-                        break
-                    default:
-                        el.setAttribute(name, val)
+                if (val === null) {
+                    el.removeAttribute(name)
+                } else {
+                    switch (name) {
+                        case 'class':
+                            el.className = val
+                            break
+                        case 'style':
+                            el.style.cssText = val
+                            break
+                        default:
+                            el.setAttribute(name, val)
+                    }
                 }
             })
             return this
@@ -1309,12 +1319,18 @@ Z.fn.extend({
     },
 
     prop: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.prop(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             return this[0][name]
         } else {
             this.each( function(el) {
                 el[name] = val
-            });
+            })
             return this
         }
     },

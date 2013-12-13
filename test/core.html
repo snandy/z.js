@@ -28,51 +28,15 @@
 		</p>
 		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
 	<script>
-function extend(obj) {
-    var target, start
-    var isDeep = false
-    var argsLength = arguments.length
+        var arr = [1,2,3,4,5]
+        Z(arr).each(function(it) {
 
-    if ( obj === true ) {
-        isDeep = true
-    }
-
-    if (isDeep) {
-        if (argsLength === 2) {
-            target = this
-            start = 1
-        } else {
-            target = arguments[1]
-            start = 2
-        }
-    } else {
-        if (argsLength === 1) {
-            target = this
-            start = 0
-        } else {
-            target = obj
-            start = 1
-        }
-    }
-
-    forEach(sliceArgs(arguments, start), function(source) {
-        if (source) {
-            for (var prop in source) {
-                if (isDeep) {
-                    target[prop] = Z.extend(source[prop])
-                } else {
-                    target[prop] = source[prop]    
-                }
+            if (it === 3) {
+                return true
+            } else {
+                console.log(it)
             }
-        }
-    })
-    return target
-}
-
-var p = {name: 'backus'}
-var obj = {name:1, p:p}
-
-
+        })
 	</script>
 	</body>
 </html>
