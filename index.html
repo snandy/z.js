@@ -2,16 +2,9 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
         <title>A super-tiny JavaScript Library (756 bytes | 447 gzipped) </title>
-        <meta name=description content="The aerogel-weight jQuery-compatible JavaScript library">
         <link rel=stylesheet href=stylesheets/style.css>
-        <meta name=apple-mobile-web-app-capable content=yes>
-        <meta name=apple-mobile-web-app-status-bar-style content=white>
         <meta name=format-detection content="telephone=no">
-        <link rel=apple-touch-icon-precomposed href=icon.png>
         <link rel=icon type=image/png href=favicon.png>
         <script src="z.src.js"></script>
     </head>
@@ -36,7 +29,6 @@
                 <li><a href="#Z.grep">Z.grep</a></li>
                 <li><a href="#Z.map">Z.map</a></li>
                 <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
-                <li><a href="#Z.type">Z.type</a></li>
                 <li><a href="#add">add</a></li>
                 <li><a href="#addClass">addClass</a></li>
                 <li><a href="#after">after</a></li>
@@ -224,11 +216,11 @@
             <ul class="downloads">
                 <li>
                     <a href="z.src.js" class="download">Z.src.js v0.1.0 (for development)</a>
-                    – <i>54.6k uncompressed, lots of comments</i>
+                    – <i>62.6k uncompressed, lots of comments</i>
                 </li>
                 <li>
                     <a href="z.min.js" class="download">Z.min.js v0.1.0 (for production)</a>
-                    – <i>9.7k when gzipped</i>
+                    – <i>12.7k when gzipped</i>
                 </li>
             </ul>
 
@@ -313,7 +305,7 @@ Z(function(Z){ ... }) ⇒ DOM Ready
 </div>
 
                     <p class="compat">
-                    根据2/8原则和控制代码量，这里仅实现id, className, tagName, attribute选择器。
+                    依据2/8原则，也为了使 <code>z.js</code> 尽量轻量，这里仅实现了最常用的id, className, tagName, attribute选择器。
                     </p>
                 </article>
 
