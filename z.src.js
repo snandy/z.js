@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-12 20:10:32
+ * @snandy 2013-12-13 16:41:18
  *
  */
 ~function(window, undefined) {
@@ -982,12 +982,12 @@ Z.extend = Z.fn.extend = function() {
                 if (target === copy) continue
 
                 // 递归 objects or arrays
-                if ( deep && copy && ( Z.isPlainObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
+                if ( deep && copy && ( Z.isObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
                     if (copyIsArray) {
                         copyIsArray = false
                         clone = src && Z.isArray(src) ? src : []
                     } else {
-                        clone = src && Z.isPlainObject(src) ? src : {}
+                        clone = src && Z.isObject(src) ? src : {}
                     }
 
                     target[name] = Z.extend(deep, clone, copy)
@@ -1033,10 +1033,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
-    return 'isPrototypeOf' in obj
-}
+// Z.isPlainObject = function(obj) {
+//     if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
+//     return 'isPrototypeOf' in obj
+// }
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)

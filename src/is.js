@@ -23,10 +23,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
-    return 'isPrototypeOf' in obj
-}
+// Z.isPlainObject = function(obj) {
+//     if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
+//     return 'isPrototypeOf' in obj
+// }
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
