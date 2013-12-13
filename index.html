@@ -482,8 +482,8 @@ attr({ name: value, name2: value2, ... }) ⇒ self
                 <article class=method id="closest">
                     <h3>closest</h3>
                     <pre class=signature><code>closest(selector, [context]) ⇒ collection
-closest(collection) ⇒ collection [v1.0]
-closest(element) ⇒ collection [v1.0]
+closest(collection) ⇒ collection
+closest(element) ⇒ collection
 </code></pre>
                     <p>
                         Traverse upwards from the current element to find the first element that
@@ -590,14 +590,9 @@ data(name, value) ⇒ self
 
                 <article class=method id="each">
                     <h3>each</h3>
-                    <pre class=signature><code>each(function(index, item){ ... }) ⇒ self</code></pre>
+                    <pre class=signature><code>each(function(item, index){ ... }) ⇒ self</code></pre>
                     <p>
-                        Iterate through every element of the collection. Inside the iterator function, <code>
-                            this</code>
-                        keyword refers to the current item (also passed as the second argument to
-                        the function). If the iterator function returns <code>
-                            false</code>
-                        , iteration stops.
+                        迭代集合里的每一个element，<code>this</code> 指代当前的element，如果迭代函数内部返回true则立即停止迭代。
                     </p>
 
                     <div class="highlight">
@@ -1122,6 +1117,7 @@ prev(selector) ⇒ collection [v1.0]
                     <h3>prop</h3>
                     <pre class=signature><code>prop(name) ⇒ value
 prop(name, value) ⇒ self
+prop({ name: value, name2: value2, ... }) ⇒ self
 </code></pre>
                     <p>
                         读取或设置 DOM properties，比如 <code>checked</code> 和 <code>selected</code>。属性见 <a href="#attr">attr</a>

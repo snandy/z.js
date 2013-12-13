@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-12 20:10:32
+ * @snandy 2013-12-13 18:05:41
  *
  */
 ~function(window, undefined) {
@@ -982,12 +982,12 @@ Z.extend = Z.fn.extend = function() {
                 if (target === copy) continue
 
                 // 递归 objects or arrays
-                if ( deep && copy && ( Z.isPlainObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
+                if ( deep && copy && ( Z.isObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
                     if (copyIsArray) {
                         copyIsArray = false
                         clone = src && Z.isArray(src) ? src : []
                     } else {
-                        clone = src && Z.isPlainObject(src) ? src : {}
+                        clone = src && Z.isObject(src) ? src : {}
                     }
 
                     target[name] = Z.extend(deep, clone, copy)
@@ -1033,10 +1033,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
-    return 'isPrototypeOf' in obj
-}
+// Z.isPlainObject = function(obj) {
+//     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+//     return false
+// }
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
@@ -1281,6 +1281,12 @@ Z.fn.extend({
     },
 
     attr: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.attr(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             var el = this[0]
             switch (name) {
@@ -1293,15 +1299,19 @@ Z.fn.extend({
             }
         } else {
             this.each( function(el) {
-                switch (name) {
-                    case 'class':
-                        el.className = val
-                        break
-                    case 'style':
-                        el.style.cssText = val
-                        break
-                    default:
-                        el.setAttribute(name, val)
+                if (val === null) {
+                    el.removeAttribute(name)
+                } else {
+                    switch (name) {
+                        case 'class':
+                            el.className = val
+                            break
+                        case 'style':
+                            el.style.cssText = val
+                            break
+                        default:
+                            el.setAttribute(name, val)
+                    }
                 }
             })
             return this
@@ -1309,12 +1319,18 @@ Z.fn.extend({
     },
 
     prop: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.prop(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             return this[0][name]
         } else {
             this.each( function(el) {
                 el[name] = val
-            });
+            })
             return this
         }
     },
