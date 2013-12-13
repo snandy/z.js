@@ -25,8 +25,6 @@
                 <li><a href="#Z.contains">Z.contains</a></li>
                 <li><a href="#Z.each">Z.each</a></li>
                 <li><a href="#Z.extend">Z.extend</a></li>
-                <li><a href="#Z.fn">Z.fn</a></li>
-                <li><a href="#Z.grep">Z.grep</a></li>
                 <li><a href="#Z.map">Z.map</a></li>
                 <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
                 <li><a href="#addClass">addClass</a></li>
@@ -162,13 +160,12 @@
             <a class="toc_title" href="#isXXX">isXXX</a>
             <ul class=toc_section>
                 <li><a href="#Z.isArray">Z.isArray</a></li>
-                <li><a href="#Z.Function">Z.Function</a></li>
-                <li><a href="#Z.Object">Z.Object</a></li>
-                <li><a href="#Z.String">Z.String</a></li>
-                <li><a href="#Z.Number">Z.Number</a></li>
-                <li><a href="#Z.Boolean">Z.Boolean</a></li>
+                <li><a href="#Z.isFunction">Z.isFunction</a></li>
+                <li><a href="#Z.isObject">Z.isObject</a></li>
+                <li><a href="#Z.isString">Z.isString</a></li>
+                <li><a href="#Z.isNumber">Z.isNumber</a></li>
+                <li><a href="#Z.isBoolean">Z.isBoolean</a></li>
                 <li><a href="#Z.isPrimitive">Z.isPrimitive</a></li>
-                <li><a href="#Z.isPlainObject">Z.isPlainObject</a></li>
                 <li><a href="#Z.isEmptyObject">Z.isEmptyObject</a></li>
                 <li><a href="#Z.isArrayLike">Z.isArrayLike</a></li>
                 <li><a href="#Z.isWindow">Z.isWindow</a></li>
@@ -339,7 +336,6 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     <p>
                         扩展一个对象，会覆盖目标对象的已有属性值。默认是浅复制，第一个参数为 <code>true</code> 时为深复制。
                     </p>
-
                     <div class="highlight">
                         <pre><code class="js"><span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="s1">&#39;patridge&#39;</span> <span class="p">},</span>
     <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">two</span><span class="o">:</span> <span class="s1">&#39;turtle doves&#39;</span> <span class="p">}</span>
@@ -351,95 +347,6 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
 </div>
                 </article>
 
-                <article class=method id="Z.fn">
-                    <h3>Z.fn</h3>
-
-                    <p>
-                        <code>Z.js.fn</code>
-                        is an object that holds all of the methods that are available on
-                        Z.js collections, such as <a href="#addClass"><code>
-                            addClass()</code></a>, <a href="#attr"><code>
-                            attr()</code></a>, and
-                        other.  Adding a function to this object makes that method available on every
-                        Z.js collection.
-                    </p>
-
-                    <p>
-                        Here&rsquo;s an example implementation of Z.js&rsquo;s <a href="#empty"><code>
-                            empty()</code></a> method:
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">empty</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="p">})</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="Z.grep">
-                    <h3>Z.grep <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.grep(items, function(item){ ... }) ⇒ array
-</code></pre>
-                    <p>
-                        Get a new array containing only the items for which the callback function
-                        returned true.
-                    </p>
-                </article>
-
-                <article class=method id="Z.inArray">
-                    <h3>Z.inArray <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.inArray(element, array, [fromIndex]) ⇒ number
-</code></pre>
-                    <p>
-                        Get the position of element inside an array, or <code>-1</code>
-                        if not found.
-                    </p>
-                </article>
-
-                <article class=method id="Z.isArray">
-                    <h3>Z.isArray</h3>
-                    <pre class=signature><code>Z.isArray(object) ⇒ boolean</code></pre>
-                    <p>True if the object is an array.</p>
-                </article>
-
-                <article class=method id="Z.isFunction">
-                    <h3>Z.isFunction</h3>
-                    <pre class=signature><code>Z.isFunction(object) ⇒ boolean</code></pre>
-                    <p>True if the object is a function.</p>
-                </article>
-
-                <article class=method id="Z.isPlainObject">
-                    <h3>Z.isPlainObject <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.isPlainObject(object) ⇒ boolean</code></pre>
-                    
-                    <p>
-                        True if the object is a &ldquo;plain&rdquo; JavaScript object, which is only true for object
-                        literals and objects created with <code>
-                            new Object</code>
-                        .
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">({})</span>         <span class="c1">// =&gt; true</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Object</span><span class="p">)</span> <span class="c1">// =&gt; true</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">)</span>   <span class="c1">// =&gt; false</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">isPlainObject</span><span class="p">(</span><span class="nb">window</span><span class="p">)</span>     <span class="c1">// =&gt; false</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="Z.isWindow">
-                    <h3>Z.isWindow <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>Z.isWindow(object) ⇒ boolean</code></pre>
-                    <p>
-                        True if the object is a window object. This is useful for iframes where each one
-                        has its own window, and where these objects fail the regular <code>
-                            obj === window</code>
-                        check.
-                    </p>
-
-                </article>
 
                 <article class=method id="Z.map">
                     <h3>Z.map</h3>
@@ -1589,28 +1496,6 @@ wrapInner(function(index){ ... }) ⇒ self [v1.0]
                 </article>
 
                 <hr>
-                <h2 id="detect">浏览器判断</h2>
-
-                <article class=method id="Detect module">
-                    <div class="highlight">
-<pre><code class="js"><span class="c1">// specific browser</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">chrome</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">firefox</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">safari</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">opera</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie6</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie7</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie8</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie9</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ie10</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">maxthon</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">tt</span>
-</code></pre>
-</div>
-                </article>
-
-                <hr>
                 <h2 id="event">事件</h2>
 
                 <article class=method id="on">
@@ -2179,11 +2064,8 @@ Z.param(array) ⇒ string
 
                 <article class=method id="serializeArray">
                     <h3>serializeArray </h3>
-                    <pre class=signature><code>serializeArray() ⇒ array
-</code></pre>
+                    <pre class=signature><code>serializeArray() ⇒ array</code></pre>
                     
-  
-
                     <p>
                         Serialize form into an array of objects with <code>
                             name</code>
@@ -2207,8 +2089,6 @@ Z.param(array) ⇒ string
 submit(function(e){ ... }) ⇒ self
 </code></pre>
                     
-  
-
                     <p>
                         Trigger or attach a handler for the submit event. When no function given,
                         trigger the &ldquo;submit&rdquo; event on the current form and have it perform its submit
@@ -2222,6 +2102,217 @@ submit(function(e){ ... }) ⇒ self
                         event on current elements.
                     </p>
 
+                </article>
+
+                <hr>
+                <h2 id="isXXX">类型判断</h2>
+                <article class=method id="Z.isArray">
+                    <h3>Z.isArray</h3>
+                    <pre class=signature><code>Z.isArray(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为数组类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isArray</span><span class="p">([1,2])</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span>{}<span class="p">)</span>    <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isFunction">
+                    <h3>Z.isFunction</h3>
+                    <pre class=signature><code>Z.isFunction(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为函数类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">([].push)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span>{}<span class="p">)</span>      <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>                
+
+                <article class=method id="Z.isObject">
+                    <h3>Z.isObject</h3>
+                    <pre class=signature><code>Z.isObject(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为对象类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isObject</span><span class="p">({})</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span>[]<span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isString">
+                    <h3>Z.isString</h3>
+                    <pre class=signature><code>Z.isString(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为字符串类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isString</span><span class="p">('hello')</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span>10<span class="p">)</span>      <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isNumber">
+                    <h3>Z.isNumber</h3>
+                    <pre class=signature><code>Z.isNumber(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为字符串类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(10)</span>      <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span>'hello'<span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isBoolean">
+                    <h3>Z.isBoolean</h3>
+                    <pre class=signature><code>Z.isBoolean(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为布尔类型
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isBoolean</span><span class="p">(false)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isBoolean</span><span class="p">(</span>{}<span class="p">)</span>    <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isPrimitive">
+                    <h3>Z.isPrimitive</h3>
+                    <pre class=signature><code>Z.isPrimitive(object) ⇒ boolean</code></pre>
+                    <p>
+                        判断是否为基本类型，基本类型包括String、Number、Boolean、undefined、null。
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(false)</span>     <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>10<span class="p">)</span>        <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>'hello'<span class="p">)</span>   <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>undefined<span class="p">)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>null<span class="p">)</span>      <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>{}<span class="p">)</span>        <span class="c1">// =&gt; false</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>[]<span class="p">)</span>        <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.isEmptyObject">
+                    <h3>Z.isEmptyObject</h3>
+                    <pre class=signature><code>Z.isEmptyObject(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为一个空的对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isEmptyObject</span><span class="p">({})</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isEmptyObject</span><span class="p">(</span>{name: 'Backus'}<span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>                    
+                </article>
+
+                <article class=method id="Z.isArrayLike">
+                    <h3>Z.isArrayLike</h3>
+                    <pre class=signature><code>Z.isArrayLike(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为一个类数组（ArrayLike）
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isArrayLike</span><span class="p">(NodeList)</span>    <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isArrayLike</span><span class="p">(</span>Collection<span class="p">)</span> <span class="c1">// =&gt; true</span>                        
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isArrayLike</span><span class="p">(</span>{'1': 'one', '2': 'two', length: 2}<span class="p">)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isArrayLike</span><span class="p">(</span>{}<span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>                    
+                </article>
+
+                <article class=method id="Z.isWindow">
+                    <h3>Z.isWindow</h3>
+                    <pre class=signature><code>Z.isWindow(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为window对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isWindow</span><span class="p">(window)</span>   <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isWindow</span><span class="p">(</span>document<span class="p">)</span> <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.isDocument">
+                    <h3>Z.isDocument</h3>
+                    <pre class=signature><code>Z.isDocument(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为document对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isDocument</span><span class="p">(document)</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isDocument</span><span class="p">(</span>window<span class="p">)</span>   <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.isElement">
+                    <h3>Z.isElement</h3>
+                    <pre class=signature><code>Z.isElement(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为HTMLElement对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isElement</span><span class="p">(Z('div')[0])</span> <span class="c1">// =&gt; true</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">isElement</span><span class="p">(</span>window<span class="p">)</span>      <span class="c1">// =&gt; false</span>
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.isTextNode">
+                    <h3>Z.isTextNode</h3>
+                    <pre class=signature><code>Z.isTextNode(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为HTMLTextNode对象，即文本对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isTextNode</span><span class="p">(Z('div').text())</span> <span class="c1">// =&gt; true</span>
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.isTextNode">
+                    <h3>Z.isTextNode</h3>
+                    <pre class=signature><code>Z.isTextNode(object) ⇒ boolean</code></pre>
+                    <p>
+                    判断是否为 <code>Z</code> 对象
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isTextNode</span><span class="p">(Z('div'))</span> <span class="c1">// =&gt; true</span>
+</code></pre>
+</div>                        
+                </article>
+
+                <hr>
+                <h2 id="detect">浏览器判断</h2>
+
+                <article class=method id="Detect module">
+                    <div class="highlight">
+<pre><code class="js"><span class="c1">// specific browser</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">chrome</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">firefox</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">safari</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">opera</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie6</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie7</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie8</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie9</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">ie10</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">maxthon</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">tt</span>
+</code></pre>
+</div>
                 </article>
 
 
