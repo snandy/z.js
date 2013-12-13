@@ -412,23 +412,13 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     <h3>attr</h3>
                     <pre class=signature><code>attr(name) ⇒ string
 attr(name, value) ⇒ self
-attr(name, function(index, oldValue){ ... }) ⇒ self
 attr({ name: value, name2: value2, ... }) ⇒ self
 </code></pre>
                     <p>
-                        Read or set DOM attributes. When no value is given, reads specified attribute
-                        from the first element in the collection. When value is given, sets the
-                        attribute to that value on each element in the collection. When value is null,
-                        the attribute is removed (like with <a href="#removeAttr">removeAttr</a>). Multiple
-                        attributes can be set by passing an object with name-value pairs.
+                        读取或设置元素的属性(attributes)，value未设置时为getter，否则为setter。多个属性可以通过对象方式设置。
                     </p>
-
                     <p>
-                        To read DOM properties such as <code>
-                            checked</code>
-                        or <code>
-                            selected</code>
-                        , use <a href="#prop">prop</a>.
+                        获取 DOM properties 如 <code>checked</code> 或 <code>selected</code> 使用 <a href="#prop">prop</a>。
                     </p>
 
                     <div class="highlight">
@@ -1129,19 +1119,12 @@ prev(selector) ⇒ collection [v1.0]
                 </article>
 
                 <article class=method id="prop">
-                    <h3>prop <span class=version>v1.0+</span></h3>
+                    <h3>prop</h3>
                     <pre class=signature><code>prop(name) ⇒ value
 prop(name, value) ⇒ self
-prop(name, function(index, oldValue){ ... }) ⇒ self
 </code></pre>
                     <p>
-                        Read or set properties of DOM elements. This should be preferred over <a href="#attr">attr</a> in
-                        case of reading values of properties that change with user interaction over
-                        time, such as <code>
-                            checked</code>
-                        and <code>
-                            selected</code>
-                        .
+                        读取或设置 DOM properties，比如 <code>checked</code> 和 <code>selected</code>。属性见 <a href="#attr">attr</a>
                     </p>
 
                 </article>
@@ -1200,7 +1183,6 @@ prop(name, function(index, oldValue){ ... }) ⇒ self
                     <p>
                         Remove the specified attribute from all elements in the collection.
                     </p>
-
                 </article>
 
                 <article class=method id="removeClass">
