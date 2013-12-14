@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 		var lang = ['object.js', 'function.js', 'array.js', 'string.js', 'class.js'].map(function(fileName) {
 			return 'src/lang/' + fileName
 		})
-		var core = ['selector.js', 'core.js', 'is.js', 'dom.js', 'event.js', 'io.js'].map(function(fileName) {
+		var core = ['selector.js', 'core.js', 'is.js', 'dom.js', 'event.js', 'io.js', 'cache.js'].map(function(fileName) {
 			return 'src/' + fileName
 		})
 		var outro = ['src/outro.js']

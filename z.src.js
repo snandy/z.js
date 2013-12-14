@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-13 19:42:11
+ * @snandy 2013-12-14 22:26:13
  *
  */
 ~function(window, undefined) {
@@ -109,6 +109,13 @@ function map(obj, iterator, context) {
 
 function sliceArgs(args, start) {
     return slice.call(args, start || 0)
+}
+
+function generateUUID(id) {
+    var seed = 0
+    return function() {
+        return seed++
+    }
 }
 
 /**
@@ -843,8 +850,6 @@ function matches(el, selector) {
 
 Z.matches = matches
 
-
-
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
@@ -1008,6 +1013,31 @@ Z.map = map
 
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.cache.remove(this, key)
+        });        
+    }
+})
+
 
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
@@ -1476,7 +1506,7 @@ var delayFunc = ZFunc.delay
 var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
-// Utility functions -----------------------------------------------------------------------------
+// Utility functions ---------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
@@ -2192,6 +2222,59 @@ Z.jsonp = function(url, opt, success) {
 }
 
 
+Z.cache = function() {
+    var seed = 0
+    var cache = {}
+    var id = '_uuid_'
+
+    // @private
+    function uuid(el) {
+        return el[id] || (el[id] = ++seed)
+    }
+
+    return {
+        set: function(el, key, val) {
+            if (!el) {
+                throw new Error('setting failed, invalid element')
+            }
+
+            var id = uuid(el)
+            var c = cache[id] || (cache[id] = {})
+            if (key) c[key] = val
+
+            return c
+        },
+        get: function(el, key, create) {
+            if (!el) {
+                throw new Error('getting failed, invalid element')
+            }
+
+            var id = uuid(el)
+            var elCache = cache[id] || (create && (cache[id] = {}))
+
+            if (!elCache) return null
+            return key !== undefined ? elCache[key] || null : elCache
+        },
+        has: function(el, key) {
+            return this.get(el, key) !== null
+        },
+        remove: function(el, key) {
+            var id = typeof el === 'object' ? uuid(el) : el
+            var elCache = cache[id]
+
+            if (!elCache) return false
+
+            if (key !== undefined) {
+                delete elCache[key]
+            } else {
+                delete cache[id]
+            }
+
+            return true
+        }
+    }
+
+}()
 
 // Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {

@@ -1,5 +1,3 @@
-
-
 Z.prototype = {
     constructor: Z,
     init: function(selector, context) {
@@ -163,3 +161,27 @@ Z.map = map
 
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.cache.remove(this, key)
+        });        
+    }
+})

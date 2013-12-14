@@ -15,7 +15,7 @@ var delayFunc = ZFunc.delay
 var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
-// Utility functions -----------------------------------------------------------------------------
+// Utility functions ---------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
