@@ -66,17 +66,24 @@ var query = function() {
         return result
     }
         
-    function query(selector, context) {
+    return function(selector, context) {
         var s = selector, arr = []
         var context = context === undefined ? doc : 
                 typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         
-        // id 还是用docuemnt.getElementById最快
+        // id和tagName 直接使用 getElementById 和 getElementsByTagName
+
+        // id
         if ( rId.test(s) ) {
             arr[0] = byId( s.substr(1, s.length) )
             return arr
+        }
+
+        // Tag name
+        if ( rTag.test(s) ) {
+            return makeArray(context.getElementsByTagName(s))
         }
 
         // 优先使用querySelector，现代浏览器都实现它了
@@ -116,11 +123,6 @@ var query = function() {
             }
         }
 
-        // Tag name
-        if ( rTag.test(s) ) {
-            return makeArray(context.getElementsByTagName(s))
-        }
-
         // Attribute
         if ( rAttr.test(s) ) {
             var result = rAttr.exec(s)
@@ -129,7 +131,6 @@ var query = function() {
         }
     }
 
-    return query
 }()
 
 var tempParent = document.createElement('div')
