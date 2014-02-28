@@ -59,14 +59,20 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     var events = elData.events
     var handlers = events[type]
     
+    var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
         if (e.namespace) {
-            if (e.namespace===handlerObj.namespace) {
-                callback(elem, type, e, handlerObj)
+            if (e.namespace === handlerObj.namespace) {
+                ret = callback(elem, type, e, handlerObj)
             }
         } else {
-            callback(elem, type, e, handlerObj)
+            ret = callback(elem, type, e, handlerObj)
+        }
+
+        if (ret === false) {
+            e.preventDefault()
+            e.stopPropagation()
         }
     }
 }
@@ -98,7 +104,7 @@ function callback(elem, type, e, handlerObj) {
     
     if (stopBubble) e.stopPropagation()
     
-    handler.apply(context, args)
+    return handler.apply(context, args)
 }
 // handlerObj class
 function Handler(config) {
@@ -299,7 +305,7 @@ function bind(elem, type, handler) {
     // 初始化handle
     if (!handle) {
         elData.handle = handle = function(e) {
-            excuteHandler(elData.elem, e)
+            return excuteHandler(elData.elem, e)
         }
     }
     
