@@ -1,6 +1,10 @@
 /*!
  * Z.js v0.1.0
+<<<<<<< HEAD
  * @snandy 2014-03-09 14:01:18
+=======
+ * @snandy 2014-02-28 15:53:01
+>>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
  *
  */
 ~function(window, undefined) {
@@ -111,8 +115,16 @@ function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
 
+<<<<<<< HEAD
 function now() {
     return (new Date).getTime()
+=======
+function generateUUID(id) {
+    var seed = 0
+    return function() {
+        return seed++
+    }
+>>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
 }
 
 /**
@@ -765,17 +777,24 @@ var query = function() {
         return result
     }
         
-    function query(selector, context) {
+    return function(selector, context) {
         var s = selector, arr = []
         var context = context === undefined ? doc : 
                 typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         
-        // id 还是用docuemnt.getElementById最快
+        // id和tagName 直接使用 getElementById 和 getElementsByTagName
+
+        // id
         if ( rId.test(s) ) {
             arr[0] = byId( s.substr(1, s.length) )
             return arr
+        }
+
+        // Tag name
+        if ( rTag.test(s) ) {
+            return makeArray(context.getElementsByTagName(s))
         }
 
         // 优先使用querySelector，现代浏览器都实现它了
@@ -815,11 +834,6 @@ var query = function() {
             }
         }
 
-        // Tag name
-        if ( rTag.test(s) ) {
-            return makeArray(context.getElementsByTagName(s))
-        }
-
         // Attribute
         if ( rAttr.test(s) ) {
             var result = rAttr.exec(s)
@@ -828,7 +842,6 @@ var query = function() {
         }
     }
 
-    return query
 }()
 
 var tempParent = document.createElement('div')
@@ -846,8 +859,6 @@ function matches(el, selector) {
 }
 
 Z.matches = matches
-
-
 
 Z.prototype = {
     constructor: Z,
@@ -986,12 +997,12 @@ Z.extend = Z.fn.extend = function() {
                 if (target === copy) continue
 
                 // 递归 objects or arrays
-                if ( deep && copy && ( Z.isPlainObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
+                if ( deep && copy && ( Z.isObject(copy) || (copyIsArray = Z.isArray(copy)) ) ) {
                     if (copyIsArray) {
                         copyIsArray = false
                         clone = src && Z.isArray(src) ? src : []
                     } else {
-                        clone = src && Z.isPlainObject(src) ? src : {}
+                        clone = src && Z.isObject(src) ? src : {}
                     }
 
                     target[name] = Z.extend(deep, clone, copy)
@@ -1012,6 +1023,31 @@ Z.map = map
 
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.cache.remove(this, key)
+        });        
+    }
+})
+
 
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
@@ -1037,10 +1073,17 @@ Z.isEmpty = function(obj) {
     return true
 }
 
+<<<<<<< HEAD
 Z.isPlainObject = function(obj) {
     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
     return false
 }
+=======
+// Z.isPlainObject = function(obj) {
+//     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+//     return false
+// }
+>>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
@@ -1285,6 +1328,12 @@ Z.fn.extend({
     },
 
     attr: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.attr(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             var el = this[0]
             switch (name) {
@@ -1297,15 +1346,19 @@ Z.fn.extend({
             }
         } else {
             this.each( function(el) {
-                switch (name) {
-                    case 'class':
-                        el.className = val
-                        break
-                    case 'style':
-                        el.style.cssText = val
-                        break
-                    default:
-                        el.setAttribute(name, val)
+                if (val === null) {
+                    el.removeAttribute(name)
+                } else {
+                    switch (name) {
+                        case 'class':
+                            el.className = val
+                            break
+                        case 'style':
+                            el.style.cssText = val
+                            break
+                        default:
+                            el.setAttribute(name, val)
+                    }
                 }
             })
             return this
@@ -1313,12 +1366,18 @@ Z.fn.extend({
     },
 
     prop: function(name, val) {
+        if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
+            for (var ar in name) {
+                this.prop(ar, name[ar])
+            }
+            return this
+        }
         if (val === undefined) {
             return this[0][name]
         } else {
             this.each( function(el) {
                 el[name] = val
-            });
+            })
             return this
         }
     },
@@ -1464,7 +1523,7 @@ var delayFunc = ZFunc.delay
 var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
-// Utility functions -----------------------------------------------------------------------------
+// Utility functions ---------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
@@ -1505,14 +1564,20 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     var events = elData.events
     var handlers = events[type]
     
+    var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
         if (e.namespace) {
-            if (e.namespace===handlerObj.namespace) {
-                callback(elem, type, e, handlerObj)
+            if (e.namespace === handlerObj.namespace) {
+                ret = callback(elem, type, e, handlerObj)
             }
         } else {
-            callback(elem, type, e, handlerObj)
+            ret = callback(elem, type, e, handlerObj)
+        }
+
+        if (ret === false) {
+            e.preventDefault()
+            e.stopPropagation()
         }
     }
 }
@@ -1544,7 +1609,7 @@ function callback(elem, type, e, handlerObj) {
     
     if (stopBubble) e.stopPropagation()
     
-    handler.apply(context, args)
+    return handler.apply(context, args)
 }
 // handlerObj class
 function Handler(config) {
@@ -1745,7 +1810,7 @@ function bind(elem, type, handler) {
     // 初始化handle
     if (!handle) {
         elData.handle = handle = function(e) {
-            excuteHandler(elData.elem, e)
+            return excuteHandler(elData.elem, e)
         }
     }
     
@@ -2177,6 +2242,59 @@ Z.jsonp = function(url, opt, success) {
 }
 
 
+Z.cache = function() {
+    var seed = 0
+    var cache = {}
+    var id = '_uuid_'
+
+    // @private
+    function uuid(el) {
+        return el[id] || (el[id] = ++seed)
+    }
+
+    return {
+        set: function(el, key, val) {
+            if (!el) {
+                throw new Error('setting failed, invalid element')
+            }
+
+            var id = uuid(el)
+            var c = cache[id] || (cache[id] = {})
+            if (key) c[key] = val
+
+            return c
+        },
+        get: function(el, key, create) {
+            if (!el) {
+                throw new Error('getting failed, invalid element')
+            }
+
+            var id = uuid(el)
+            var elCache = cache[id] || (create && (cache[id] = {}))
+
+            if (!elCache) return null
+            return key !== undefined ? elCache[key] || null : elCache
+        },
+        has: function(el, key) {
+            return this.get(el, key) !== null
+        },
+        remove: function(el, key) {
+            var id = typeof el === 'object' ? uuid(el) : el
+            var elCache = cache[id]
+
+            if (!elCache) return false
+
+            if (key !== undefined) {
+                delete elCache[key]
+            } else {
+                delete cache[id]
+            }
+
+            return true
+        }
+    }
+
+}()
 
 // Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {
