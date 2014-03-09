@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-12 20:10:32
+ * @snandy 2014-03-09 13:51:09
  *
  */
 ~function(window, undefined) {
@@ -109,6 +109,10 @@ function map(obj, iterator, context) {
 
 function sliceArgs(args, start) {
     return slice.call(args, start || 0)
+}
+
+function now() {
+    return (new Date).getTime()
 }
 
 /**
@@ -1034,8 +1038,8 @@ Z.isEmpty = function(obj) {
 }
 
 Z.isPlainObject = function(obj) {
-    if (!obj || obj === window || obj === doc || obj === doc.body || !Z.isObject(obj)) return false
-    return 'isPrototypeOf' in obj
+    if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+    return false
 }
 
 Z.isArrayLike = function(obj) {
@@ -1490,9 +1494,6 @@ function returnFalse() {
 }
 function returnTrue() {
     return true
-}
-function now() {
-    return (new Date).getTime()
 }
 function excuteHandler(elem, e, args /*only for trigger*/) {
     if (!elem || !e) return
