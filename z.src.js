@@ -1,10 +1,6 @@
 /*!
  * Z.js v0.1.0
-<<<<<<< HEAD
- * @snandy 2014-03-09 14:01:18
-=======
- * @snandy 2014-02-28 15:53:01
->>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
+ * @snandy 2014-03-09 14:05:59
  *
  */
 ~function(window, undefined) {
@@ -115,16 +111,15 @@ function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
 
-<<<<<<< HEAD
 function now() {
     return (new Date).getTime()
-=======
+}
+
 function generateUUID(id) {
     var seed = 0
     return function() {
         return seed++
     }
->>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
 }
 
 /**
@@ -1073,17 +1068,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-<<<<<<< HEAD
-Z.isPlainObject = function(obj) {
-    if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
-    return false
-}
-=======
 // Z.isPlainObject = function(obj) {
 //     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
 //     return false
 // }
->>>>>>> dafccb7b17c0cbf87dfd8f5a0388ff054be36d2d
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
