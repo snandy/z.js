@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-09 13:51:09
+ * @snandy 2014-03-09 14:01:18
  *
  */
 ~function(window, undefined) {
@@ -2149,7 +2149,7 @@ function jsonp(url, options) {
     }
     if (timestamp) {
         url += '&ts='
-        url += (new Date).getTime()
+        url += now()
     }
     
     window[callbackName] = function(json) {
