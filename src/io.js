@@ -262,7 +262,7 @@ function jsonp(url, options) {
     }
     if (timestamp) {
         url += '&ts='
-        url += now()
+        url += (new Date).getTime()
     }
     
     window[callbackName] = function(json) {

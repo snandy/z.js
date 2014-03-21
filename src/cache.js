@@ -10,9 +10,7 @@ Z.cache = function() {
 
     return {
         set: function(el, key, val) {
-            if (!el) {
-                throw new Error('setting failed, invalid element')
-            }
+            if (!el) throw new Error('setting failed, invalid element')
 
             var id = uuid(el)
             var c = cache[id] || (cache[id] = {})
@@ -21,9 +19,7 @@ Z.cache = function() {
             return c
         },
         get: function(el, key, create) {
-            if (!el) {
-                throw new Error('getting failed, invalid element')
-            }
+            if (!el) throw new Error('getting failed, invalid element')
 
             var id = uuid(el)
             var elCache = cache[id] || (create && (cache[id] = {}))

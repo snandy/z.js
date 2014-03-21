@@ -46,6 +46,9 @@ function returnFalse() {
 function returnTrue() {
     return true
 }
+function now() {
+    return (new Date).getTime()
+}
 function excuteHandler(elem, e, args /*only for trigger*/) {
     if (!elem || !e) return
     

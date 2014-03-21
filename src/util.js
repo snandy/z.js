@@ -40,10 +40,6 @@ function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
 
-function now() {
-    return (new Date).getTime()
-}
-
 function generateUUID(id) {
     var seed = 0
     return function() {
