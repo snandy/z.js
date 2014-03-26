@@ -58,7 +58,6 @@
                 <li><a href="#removeClass">removeClass</a></li>
                 <li><a href="#scrollTop">scrollTop</a></li>
                 <li><a href="#show">show</a></li>
-                <li><a href="#siblings">siblings</a></li>
                 <li><a href="#slice">slice</a></li>
                 <li><a href="#text">text</a></li>
                 <li><a href="#toggle">toggle</a></li>
@@ -69,10 +68,10 @@
 
             <a class="toc_title" href="#event">Event</a>
             <ul class="toc_section">
-                <li><a href="#bind">on</a></li>
+                <li><a href="#on">on</a></li>
                 <li><a href="#off">off</a></li>                
                 <li><a href="#delegate">delegate</a></li>
-                <li><a href="#delegate">undelegate</a></li>                
+                <li><a href="#undelegate">undelegate</a></li>                
                 <li><a href="#fire">fire</a></li>
                 <li><a href="#one">one</a></li>
                 <li><a href="#delay">delay</a></li>            
@@ -282,7 +281,7 @@ Z(function(Z){ ... }) ⇒ DOM Ready
 </div>
 
                     <p class="compat">
-                    依据2/8原则，也为了使 <code>z.js</code> 足够轻量，这里仅实现了最常用的id, className, tagName, attribute选择器。
+                    依据2/8原则，也为了使 <code>z.js</code> 足够轻量，IE8以下仅实现了最常用的id, className, tagName, attribute选择器。
                     </p>
                 </article>
 
@@ -538,22 +537,6 @@ data(name, value) ⇒ self
 </div>
                 </article>
 
-                <article class=method id="filter">
-                    <h3>filter</h3>
-                    <pre class=signature><code>filter(selector) ⇒ collection
-filter(function(index){ ... }) ⇒ collection [v1.0]
-</code></pre>
-                    <p>
-                        Filter the collection to contain only items that match the CSS selector.
-                        If a function is given, return only elements for which the function
-                        returns a truthy value. Inside the function, the <code>
-                            this</code>
-                        keyword refers to
-                        the current element.
-                    </p>
-                    <p>For the opposite, see <a href="#not">not</a>.</p>
-                </article>
-
                 <article class=method id="find">
                     <h3>find</h3>
                     <pre class=signature><code>find(selector) ⇒ collection
@@ -617,23 +600,6 @@ get(index) ⇒ DOM node
                         <pre><code class="js"><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
 <span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span>   <span class="c1">//=&gt; get all headings as an array</span>
 <span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">//=&gt; get first heading node</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="has">
-                    <h3>has <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>has(selector) ⇒ collection
-has(node) ⇒ collection
-</code></pre>
-                    <p>
-                        Filter the current collection to include only elements that have any number of
-                        descendants that match a selector, or that contain a specific DOM node.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol &gt; li&#39;</span><span class="p">).</span><span class="nx">has</span><span class="p">(</span><span class="s1">&#39;a[href]&#39;</span><span class="p">)</span>
-<span class="c1">//=&gt; get only LI elements that contain links</span>
 </code></pre>
 </div>
                 </article>
@@ -736,53 +702,6 @@ html(function(index, oldHtml){ ... }) ⇒ self
 
                 </article>
 
-                <article class=method id="insertAfter">
-                    <h3>insertAfter </h3>
-                    <pre class=signature><code>insertAfter(target) ⇒ self</code></pre>
-                    <p>
-                        Insert elements from the current collection after the target element in the
-                        DOM. This is like <a href="#after">after</a>, but with reversed operands.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;Emphasis mine.&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="s1">&#39;blockquote&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="insertBefore">
-                    <h3>insertBefore </h3>
-                    <pre class=signature><code>insertBefore(target) ⇒ self
-</code></pre>
-                    <p>
-                        Insert elements from the current collection before each of the target elements
-                        in the DOM. This is like <a href="#before">before</a>, but with reversed operands.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">).</span><span class="nx">insertBefore</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="is">
-                    <h3>is </h3>
-                    <pre class=signature><code>is(selector) ⇒ boolean</code></pre>
-                    <p>
-                        Check if the first element of the current collection matches the CSS selector.
-                        For basic support of jQuery&rsquo;s non-standard pseudo-selectors such as <code>
-                            :visible</code>
-                        ,
-                        include the optional &ldquo;selector&rdquo; module.
-                    </p>
-
-                    <p class=compat>
-                        <a href="http://api.jquery.com/category/selectors/jquery-selector-extensions/">jQuery
-                        CSS extensions</a> are not supported. The optional "selector" module only
-                        provides limited support for few of the most used ones.
-                    </p>
-                </article>
-
                 <article class=method id="last">
                     <h3>last </h3>
                     <pre class=signature><code>last() ⇒ collection
@@ -824,41 +743,6 @@ html(function(index, oldHtml){ ... }) ⇒ self
 </div>
                 </article>
 
-                <article class=method id="next">
-                    <h3>next </h3>
-                    <pre class=signature><code>next() ⇒ collection
-next(selector) ⇒ collection [v1.0]
-</code></pre>
-                    <p>
-                        Get the next sibling&mdash;optinally filtered by selector&mdash;of each element in the
-                        collection.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;dl dt&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">()</span>   <span class="c1">//=&gt; the DD elements</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="not">
-                    <h3>not </h3>
-                    <pre class=signature><code>not(selector) ⇒ collection
-not(collection) ⇒ collection
-not(function(index){ ... }) ⇒ collection
-</code></pre>
-                    <p>
-                        Filter the current collection to get a new collection of elements that don&rsquo;t
-                        match the CSS selector. If another collection is given instead of selector,
-                        return only elements not present in it. If a function is given, return only
-                        elements for which the function returns a falsy value. Inside the function,
-                        the <code>
-                            this</code>
-                        keyword refers to the current element.
-                    </p>
-                    <p>
-                        For the opposite, see <a href="#filter">filter</a>.
-                    </p>
-                </article>
 
                 <article class=method id="offset">
                     <h3>offset </h3>
@@ -899,62 +783,6 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 
                 </article>
 
-                <article class=method id="parent">
-                    <h3>parent </h3>
-                    <pre class=signature><code>parent([selector]) ⇒ collection</code></pre>
-                    <p>
-                        Get immediate parents of each element in the collection. If CSS selector is
-                        given, filter results to include only ones matching the selector.
-                    </p>
-
-                </article>
-
-                <article class=method id="parents">
-                    <h3>parents </h3>
-                    <pre class=signature><code>parents([selector]) ⇒ collection</code></pre>
-                    <p>
-                        Get all ancestors of each element in the collection. If CSS selector is given,
-                        filter results to include only ones matching the selector.
-                    </p>
-
-                    <p>
-                        To get only immediate parents, use <a href="#parent">parent</a>. To only get the first
-                        ancestor that matches the selector, use <a href="#closest">closest</a>.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h1&#39;</span><span class="p">).</span><span class="nx">parents</span><span class="p">()</span>   <span class="c1">//=&gt; [&lt;div#container&gt;, &lt;body&gt;, &lt;html&gt;]</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="pluck">
-                    <h3>pluck </h3>
-                    <pre class=signature><code>pluck(property) ⇒ array
-</code></pre>
-                    <p>
-                        Get values from a named property of each element in the collection, with <code>
-                            null</code>
-                        and <code>
-                            undefined</code>
-                        values filtered out.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;body &gt; *&#39;</span><span class="p">).</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nodeName&#39;</span><span class="p">)</span> <span class="c1">// =&gt; [&quot;DIV&quot;, &quot;SCRIPT&quot;]</span>
-
-<span class="c1">// implementation of Z.js&#39;s `next` method</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">fn</span><span class="p">.</span><span class="nx">next</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> 
-  <span class="k">return</span> <span class="nx">Z</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="s1">&#39;nextElementSibling&#39;</span><span class="p">))</span> 
-<span class="p">}</span>
-</code></pre>
-</div>
-                    <p class=compat>
-                        This is a Z.js-provided method that is not part of the jQuery API.
-                    </p>
-
-                </article>
-
                 <article class=method id="position">
                     <h3>position <span class=version>v1.0+</span></h3>
                     <pre class=signature><code>position() ⇒ object</code></pre>
@@ -982,46 +810,6 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
 <span class="p">})</span>
 </code></pre>
 </div>
-                </article>
-
-                <article class=method id="prepend">
-                    <h3>prepend </h3>
-                    <pre class=signature><code>prepend(content) ⇒ self</code></pre>
-                    <p>
-                        Prepend content to the DOM inside each element in the collection. The content
-                        can be an HTML string, a DOM node or an array of nodes.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">prepend</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="prependTo">
-                    <h3>prependTo </h3>
-                    <pre class=signature><code>prependTo(target) ⇒ self</code></pre>
-                    <p>
-                        Prepend elements of the current collection inside each of the target elements. This is
-                        like <a href="#prepend">prepend</a>, only with reversed operands.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;first list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">prependTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="prev">
-                    <h3>prev </h3>
-                    <pre class=signature><code>prev() ⇒ collection
-prev(selector) ⇒ collection [v1.0]
-</code></pre>
-                    <p>
-                        Get the previous sibling&mdash;optionally filtered by selector&mdash;of each element in
-                        the collection.
-                    </p>
-
                 </article>
 
                 <article class=method id="prop">
@@ -1124,15 +912,6 @@ removeClass(function(index, oldClassName){ ... }) ⇒ self
                     <p>
                         Restore the default value for the &ldquo;display&rdquo; property of each element in the
                         array, effectively showing them if they were hidden with <a href="#hide">hide</a>.
-                    </p>
-                </article>
-
-                <article class=method id="siblings">
-                    <h3>siblings</h3>
-                    <pre class=signature><code>siblings([selector]) ⇒ collection</code></pre>
-                    <p>
-                        Get all sibling nodes of each element in the collection. If CSS selector is
-                        specified, filter the results to contain only elements that match the selector.
                     </p>
                 </article>
 
@@ -1330,134 +1109,151 @@ wrapInner(function(index){ ... }) ⇒ self [v1.0]
 
                 <hr>
                 <h2 id="event">事件</h2>
-
-                <article class=method id="on">
-                    <h3>on </h3>
-<pre class=signature><code>on(type, [selector], function(e){ ... }) ⇒ self
-on({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
+                <article class="method" id="on">
+                    <h3>on</h3>
+<pre class=signature><code>on(type, function(e){ ... }) ⇒ self
+on({type: handler, type2: handler2, ... }) ⇒ self
+on(type.name, function(e){ ... }) ⇒ self
 </code></pre>
                     <p>
-                        Add event handlers to the elements in collection. Multiple event types can be
-                        passed in a space-separated string, or as an object where event types are keys
-                        and handlers are values. If a CSS selector is given, the handler function will
-                        only be called when an event originates from an element that matches the selector.
+                        给DOM元素绑定事件，可以每次绑定一个事件，也可以批量绑定多个事件，或使用空格间隔添加多个事件。另可以添加具有命名空间的事件。
                     </p>
-
                     <p>
-                        Event handlers are executed in the context of the element to which the handler
-                        is attached, or the matching element in case a selector is provided. When an
-                        event handler returns <code>
-                            false</code>
-                        , <code>
-                            preventDefault()</code>
-                        is called for the current
-                        event, preventing the default browser action such as following links.
+                        事件handler执行的时候，事件对象会作为它的第一个参数传入，上下文(this)为DOM元素。
                     </p>
 
                     <div class="highlight">
                         <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">)</span>
-<span class="c1">// observe all clicks inside #content:</span>
 <span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
-<span class="c1">// observe clicks inside navigation links in #content</span>
-<span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;nav a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
-<span class="c1">// all clicks inside links in the document</span>
-<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">{click:</span><span class="p"></span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>, <span class="s1">dblclick:</span><span class="p"></span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mouseover mouseout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;click.name1&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 </code></pre>
 </div>
                 </article>
 
                 <article class=method id="off">
                     <h3>off </h3>
-<pre class=signature><code>off(type, [selector], function(e){ ... }) ⇒ self
-off({ type: handler, type2: handler2, ... }, [selector]) ⇒ self
-off(type, [selector]) ⇒ self
+<pre class=signature><code>off(type, handler) ⇒ self
+off({type: handler, type2: handler2, ...}) ⇒ self
+off(type) ⇒ self
 off() ⇒ self
 </code></pre>
                     <p>
-                        Detach event handlers added with <a href="#on">on</a>. To detach a specific event handler,
-                        the same function must be passed that was used for <code>
-                            on()</code>. Otherwise, just
-                        calling this method with an event type with detach all handlers of that type.
-                        When called without arguments, it detaches <em>all</em> event handlers registered on
-                        current elements.
+                        删除绑定的DOM事件，可以只删除特定的handler，可以批量删除多个事件handler，可以伤处指定事件的所有handler，或者删除元素上的全部hanlder（所有事件类型）
                     </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;, </span><span class="kd">handler</span><span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">{click: </span><span class="kd">handler1</span>, <span class="s1">dblclick: </span> <span class="kd">handle2</span><span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">off</span><span class="p">(</span><span class="s1"></span><span class="p">)</span>
+</code></pre>
+</div>
+                </article>
 
+                <article class=method id="delegate">
+                    <h3>delegate</h3>
+<pre class=signature><code>delegate(selector, type, handler) ⇒ self
+</code></pre>
+                    <p>
+                        事件委托，可为子元素绑定事件。常常用在子元素是动态添加或所有子元素行为一致时。
+                    </p>
+                    <div class="highlight">
+            <pre><code class="js"><span class="nx">$('#nav')</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="s1">'li', 'click',</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span><span class="p">)</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="undelegate">
+                    <h3>undelegate</h3>
+<pre class=signature><code>undelegate(type, handler) ⇒ self
+undelegate(type) ⇒ self
+</code></pre>
+                    <p>
+                        解除事件委托。
+                    </p>
+                    <div class="highlight">
+            <pre><code class="js"><span class="nx">$('#nav')</span><span class="p">.</span><span class="nx">undelegate</span><span class="p">(</span><span class="s1">click',</span> <span class="kd">handler</span><span class="p">)</span>
+<span class="nx">$('#nav')</span><span class="p">.</span><span class="nx">undelegate</span><span class="p">(</span><span class="s1">click'</span><span class="p">)</span>                
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="fire">
+                    <h3>fire</h3>
+                    <pre class=signature><code>fire(type) ⇒ self
+fire(type.name) ⇒ self
+</code></pre>
+                    <p>主动派发事件，可派发特定命名空间的事件</p>
+            <pre><code class="js"><span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">click'</span><span class="p">)</span>
+<span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span><span class="s1">click.name1'</span><span class="p">)</span>                
+</code></pre>                    
                 </article>
 
                 <article class=method id="one">
-                    <h3>one </h3>
+                    <h3>one</h3>
                     <pre class=signature><code>one(type, function(e){ ... }) ⇒ self
 one({ type: handler, type2: handler2, ... }) ⇒ self
 </code></pre>
                     <p>
-                        Adds an event handler that removes itself the first time it runs, ensuring that
-                        the handler only fires once.
+                        给DOM元素添加仅执行一次的事件
                     </p>
-
-                </article>
-
-                <article class=method id="trigger">
-                    <h3>trigger </h3>
-                    <pre class=signature><code>trigger(event, [data])</code></pre>
-                    
-                    <p>
-                        Trigger the specified event on elements of the collection. Event can either be a
-                        string type, or a full event object obtained with <a href="#Z.Event">Z.Event</a>. If a data
-                        array is given, it is passed as additional arguments to event handlers.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="c1">// add a handler for a custom event</span>
-<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;change on %o with data %s, %s&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">)</span>
-<span class="p">})</span>
-<span class="c1">// trigger the custom event</span>
-<span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">trigger</span><span class="p">(</span><span class="s1">&#39;mylib:change&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">])</span>
+            <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#content&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">one</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">one</span><span class="p">(</span><span class="s1">{click:</span><span class="p"></span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>, <span class="s1">dblclick:</span><span class="p"></span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">one</span><span class="p">(</span><span class="s1">&#39;mouseover mouseout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">one</span><span class="p">(</span><span class="s1">&#39;click.name1&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">})</span>
 </code></pre>
-</div>
-                    <p class=compat>
-                        Z.js only supports triggering events on DOM elements.
-                    </p>
-
                 </article>
 
-                <article class=method id="triggerHandler">
-                    <h3>triggerHandler </h3>
-                    <pre class=signature><code>triggerHandler(event, [data]) ⇒ self</code></pre>
-                    <p>
-                        Like <a href="#trigger">trigger</a>, but triggers only event handlers on current
-                        elements and doesn&rsquo;t bubble.
-                    </p>
-                </article>
-
-                <article class=method id="unbind">
-                    <h3>unbind <span class=emoji title=deprecated>🐶🔫</span></h3>
-
-                    <p class=warning>
-                        Deprecated, use <a href="#off">off</a> instead.
-                    </p>
-<pre class=signature><code>unbind(type, function(e){ ... }) ⇒ self
-unbind({ type: handler, type2: handler2, ... }) ⇒ self
+                <article class=method id="delay">
+                    <h3>delay</h3>
+                    <pre class=signature><code>delay(type, handler, wait) ⇒ self
 </code></pre>
                     <p>
-                        Detach event handler added with <a href="#bind">bind</a>.
+                        给DOM元素绑定一个延迟执行的事件，wait为毫秒。
                     </p>
+            <pre><code class="js"><span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">delay</span><span class="p">(</span><span class="s1">click'</span>, <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>, <span class="s1">1000</span><span class="p">)</span>
+</code></pre>
                 </article>
 
-                <article class=method id="undelegate">
-                    <h3>undelegate <span class=emoji title=deprecated>🐶🔫</span></h3>
-                    <p class=warning>Deprecated, use <a href="#off">off</a> instead.</p>
-                    <pre class=signature><code>undelegate(selector, type, function(e){ ... }) ⇒ self
-undelegate(selector, { type: handler, type2: handler2, ... }) ⇒ self
+                <article class=method id="throttle">
+                    <h3>throttle</h3>
+                    <pre class=signature><code>throttle(type, handler, wait) ⇒ self
 </code></pre>
                     <p>
-                        Detach event handler added with <a href="#delegate">delegate</a>.
+                        给DOM元素绑定一个事件节流的handler，wait为毫秒。多用在调用频率较高的scroll等事件。
                     </p>
+            <pre><code class="js"><span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">throttle</span><span class="p">(</span><span class="s1">click'</span>, <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>, <span class="s1">100</span><span class="p">)</span>
+</code></pre>
+                </article>
+
+                <article class=method id="debounce">
+                    <h3>debounce</h3>
+                    <pre class=signature><code>debounce(type, handler, wait) ⇒ self
+</code></pre>
+                    <p>
+                        给DOM元素绑定一个防止弹跳的handler，wait为毫秒。
+                    </p>
+            <pre><code class="js"><span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">debounce</span><span class="p">(</span><span class="s1">click'</span>, <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>, <span class="s1">100</span><span class="p">)</span>
+</code></pre>
+                </article>
+
+
+                <article class=method id="immediate">
+                    <h3>immediate</h3>
+                    <pre class=signature><code>immediate(type, handler, wait) ⇒ self
+</code></pre>
+                    <p>
+                        类似debounce，不同在于其会立即窒息。
+                    </p>
+            <pre><code class="js"><span class="nx">$('#myDiv')</span><span class="p">.</span><span class="nx">immediate</span><span class="p">(</span><span class="s1">click'</span>, <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="p">...</span> <span class="p">}</span>, <span class="s1">100</span><span class="p">)</span>
+</code></pre>
                 </article>
 
                 <hr>
                 <h2 id="ajax">Ajax requests</h2>
-
                 <article class=method id="Z.ajax">
                     <h3>Z.ajax </h3>
                     <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest</code></pre>
