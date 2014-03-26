@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-21 15:36:20
+ * @snandy 2014-03-26 11:19:57
  *
  */
 ~function(window, undefined) {
@@ -116,6 +116,10 @@ function generateUUID(id) {
     return function() {
         return seed++
     }
+}
+
+function now() {
+    return (new Date).getTime()
 }
 
 /**
@@ -1010,6 +1014,8 @@ Z.each = forEach
 
 Z.map = map
 
+Z.now = now
+
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
 
@@ -1535,9 +1541,6 @@ function returnFalse() {
 }
 function returnTrue() {
     return true
-}
-function now() {
-    return (new Date).getTime()
 }
 function excuteHandler(elem, e, args /*only for trigger*/) {
     if (!elem || !e) return
@@ -2199,7 +2202,7 @@ function jsonp(url, options) {
     }
     if (timestamp) {
         url += '&ts='
-        url += (new Date).getTime()
+        url += now()
     }
     
     window[callbackName] = function(json) {

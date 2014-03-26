@@ -47,6 +47,10 @@ function generateUUID(id) {
     }
 }
 
+function now() {
+    return (new Date).getTime()
+}
+
 /**
  * Browser Detect
  * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
