@@ -28,13 +28,7 @@
                 <li><a href="#Z.map">Z.map</a></li>
                 <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
                 <li><a href="#addClass">addClass</a></li>
-                <li><a href="#after">after</a></li>
-                <li><a href="#append">append</a></li>
-                <li><a href="#appendTo">appendTo</a></li>
                 <li><a href="#attr">attr</a></li>
-                <li><a href="#before">before</a></li>
-                <li><a href="#children">children</a></li>
-                <li><a href="#clone">clone</a></li>
                 <li><a href="#closest">closest</a></li>
                 <li><a href="#concat">concat</a></li>
                 <li><a href="#css">css</a></li>
@@ -42,7 +36,6 @@
                 <li><a href="#each">each</a></li>
                 <li><a href="#empty">empty</a></li>
                 <li><a href="#eq">eq</a></li>
-                <li><a href="#filter">filter</a></li>
                 <li><a href="#find">find</a></li>
                 <li><a href="#first">first</a></li>
                 <li><a href="#get">get</a></li>
@@ -50,18 +43,12 @@
                 <li><a href="#height">height</a></li>
                 <li><a href="#hide">hide</a></li>
                 <li><a href="#html">html</a></li>
-                <li><a href="#insertAfter">insertAfter</a></li>
-                <li><a href="#insertBefore">insertBefore</a></li>
                 <li><a href="#last">last</a></li>
                 <li><a href="#map">map</a></li>
-                <li><a href="#next">next</a></li>
                 <li><a href="#offset">offset</a></li>
                 <li><a href="#offsetParent">offsetParent</a></li>
                 <li><a href="#parent">parent</a></li>
                 <li><a href="#position">position</a></li>
-                <li><a href="#prepend">prepend</a></li>
-                <li><a href="#prependTo">prependTo</a></li>
-                <li><a href="#prev">prev</a></li>
                 <li><a href="#prop">prop</a></li>
                 <li><a href="#push">push</a></li>
                 <li><a href="#ready">ready</a></li>
@@ -69,7 +56,6 @@
                 <li><a href="#remove">remove</a></li>
                 <li><a href="#removeAttr">removeAttr</a></li>
                 <li><a href="#removeClass">removeClass</a></li>
-                <li><a href="#replaceWith">replaceWith</a></li>
                 <li><a href="#scrollTop">scrollTop</a></li>
                 <li><a href="#show">show</a></li>
                 <li><a href="#siblings">siblings</a></li>
@@ -366,46 +352,14 @@ Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
                     </p>
                 </article>
 
-
-                <article class="method" id="after">
-                    <h3>after</h3>
-                    <pre class=signature><code>after(content) ⇒ self</code></pre>
-                    <p>
-                        Add content to the DOM after each elements in the collection. The content can
-                        be an HTML string, a DOM node or an array of nodes.
-                    </p>
-
+                <article class=method id="addClass">
+                    <h3>addClass</h3>
+                    <pre class=signature><code>addClass(string) ⇒ self</code></pre>
+                    <p>给匹配的元素添加class。</p>
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form label&#39;</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;A note below the label&lt;/p&gt;&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-                <article class=method id="append">
-                    <h3>append</h3>
-                    <pre class=signature><code>append(content) ⇒ self</code></pre>
-                    <p>
-                        Append content to the DOM inside each individual element in the collection. The
-                        content can be an HTML string, a DOM node or an array of nodes.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="appendTo">
-                    <h3>appendTo</h3>
-                    <pre class=signature><code>appendTo(target) ⇒ self</code></pre>
-                    <p>
-                        Append elements from the current collection to the target element. This is
-                        like <a href="#append">append</a>, but with reversed operands.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;&lt;li&gt;new list item&lt;/li&gt;&#39;</span><span class="p">).</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;ul&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#tab&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;hide&#39;</span><span class="p">)</span>
+                        </code></pre>
+                    </div>
                 </article>
 
                 <article class=method id="attr">
@@ -434,49 +388,6 @@ attr({ name: value, name2: value2, ... }) ⇒ self
 <span class="p">})</span>
 </code></pre>
 </div>
-                </article>
-
-                <article class=method id="before">
-                    <h3>before</h3>
-                    <pre class=signature><code>before(content) ⇒ self</code></pre>
-                    <p>
-                        Add content to the DOM before each element in the collection. The content can
-                        be an HTML string, a DOM node or an array of nodes.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;table&#39;</span><span class="p">).</span><span class="nx">before</span><span class="p">(</span><span class="s1">&#39;&lt;p&gt;See the following table:&lt;/p&gt;&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="children">
-                    <h3>children</h3>
-                    <pre class=signature><code>children([selector]) ⇒ collection</code></pre>
-                    <p>
-                        Get immediate children of each element in the current collection. If selector
-                        is given, filter the results to only include ones matching the CSS selector.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;ol&#39;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;*:nth-child(2n)&#39;</span><span class="p">)</span>
-<span class="c1">//=&gt; every other list item from every ordered list</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="clone">
-                    <h3>clone <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>clone() ⇒ collection</code></pre>
-                    <p>
-                        Duplicate all elements in the collection via deep clone.
-                    </p>
-
-                    <p class=compat>
-                        This method doesn't have an option for copying data and event handlers over to
-                        the new elements, as it has in jQuery.
-                    </p>
-
                 </article>
 
                 <article class=method id="closest">
@@ -2005,26 +1916,68 @@ Z.param(array) ⇒ string
 </div>
                 </article>
 
-                <article class=method id="submit">
-                    <h3>submit </h3>
-                    <pre class=signature><code>submit() ⇒ self
-submit(function(e){ ... }) ⇒ self
-</code></pre>
-                    
+                <hr>
+                <h2 id="Strings">字符串</h2>
+                <article class="method" id="escape">
+                    <h3>escape</h3>
+<pre class="signature">Z.String.escape(string) ⇒ string</pre>
                     <p>
-                        Trigger or attach a handler for the submit event. When no function given,
-                        trigger the &ldquo;submit&rdquo; event on the current form and have it perform its submit
-                        action unless <code>
-                            preventDefault()</code>
-                        was called for the event.
+                        把特殊字符还原成HTML，<tt>&amp;</tt>, <tt>&lt;</tt>, <tt>&gt;</tt>, <tt>'</tt>, <tt>/</tt>会被替换。
                     </p>
-
-                    <p>
-                        When a function is given, this simply attaches it as a handler for the &ldquo;submit&rdquo;
-                        event on current elements.
-                    </p>
-
+<pre>Z.String.escape('John, Larry &amp; Backus');
+=&gt; 'John, Larry &amp;amp; Backus'</pre>
                 </article>
+
+                <article class="method" id="unescape">
+                    <h3>unescape</h3>
+<pre class="signature">Z.String.unescape(string) ⇒ string</pre>
+                    <p>
+                        把HTML转义，<tt>&amp;amp;</tt>, <tt>&amp;lt;</tt>, <tt>&amp;gt;</tt>, <tt>&amp;quot;</tt>, <tt>&amp;#x27;</tt>, <tt>&amp;#x2F;</tt>会被替换。                        
+                    </p>
+<pre>Z.String.unescape('John, Larry &amp;amp; Backus');
+=&gt; 'John, Larry &amp; Backus'</pre>
+                </article>
+
+                <article class="method" id="urlAppend">
+                    <h3>urlAppend</h3>
+<pre class="signature">Z.String.urlAppend(url, str) ⇒ string</pre>
+                    <p>
+                        给URL后添加一个参数                      
+                    </p>
+<pre>Z.String.urlAppend('http://some.abc.com', 't=20140312');
+=&gt; 'http://some.abc.com?t=20140312'</pre>
+                </article>
+
+                <article class="method" id="trim">
+                    <h3>trim</h3>
+<pre class="signature">Z.String.trim(string) ⇒ string</pre>
+                    <p>
+                        去掉字符串两边的空白字符串                    
+                    </p>
+<pre>Z.String.trim(' Hi ');
+=&gt; 'Hi'</pre>
+                </article>
+
+                <article class="method" id="ellipsis">
+                    <h3>ellipsis</h3>
+<pre class="signature">Z.String.ellipsis(str, len, word) ⇒ string</pre>
+                    <p>
+                        省略多余的字符，以'...'代替            
+                    </p>
+<pre>Z.String.ellipsis('Hello, John Backus.', 15);
+=&gt; 'Hello, John...'</pre>
+                </article>
+
+                <article class="method" id="format">
+                    <h3>format</h3>
+<pre class="signature">Z.String.format(str, x1, x2, ...) ⇒ string</pre>
+                    <p>
+                        简易模板替换 
+                    </p>
+<pre>Z.String.format('Hello, {0}, {1}!', 'Jack', 'how are you');
+=&gt; 'Hello, Jack, how are you!'</pre>
+                </article>
+
 
                 <hr>
                 <h2 id="isXXX">类型判断</h2>
@@ -2100,10 +2053,10 @@ submit(function(e){ ... }) ⇒ self
                         判断是否为布尔类型
                     </p>
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isBoolean</span><span class="p">(false)</span> <span class="c1">// =&gt; true</span>
+                    <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isBoolean</span><span class="p">(false)</span> <span class="c1">// =&gt; true</span>
 <span class="nx">Z</span><span class="p">.</span><span class="nx">isBoolean</span><span class="p">(</span>{}<span class="p">)</span>    <span class="c1">// =&gt; false</span>
 </code></pre>
-</div>
+                    </div>
                 </article>
 
                 <article class=method id="Z.isPrimitive">
@@ -2121,7 +2074,7 @@ submit(function(e){ ... }) ⇒ self
 <span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>{}<span class="p">)</span>        <span class="c1">// =&gt; false</span>
 <span class="nx">Z</span><span class="p">.</span><span class="nx">isPrimitive</span><span class="p">(</span>[]<span class="p">)</span>        <span class="c1">// =&gt; false</span>
 </code></pre>
-</div>
+                    </div>
                 </article>
 
                 <article class=method id="Z.isEmptyObject">
@@ -2210,14 +2163,13 @@ submit(function(e){ ... }) ⇒ self
                     判断是否为 <code>Z</code> 对象
                     </p>
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isTextNode</span><span class="p">(Z('div'))</span> <span class="c1">// =&gt; true</span>
+                    <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">isTextNode</span><span class="p">(Z('div'))</span> <span class="c1">// =&gt; true</span>
 </code></pre>
 </div>                        
                 </article>
 
                 <hr>
                 <h2 id="detect">浏览器判断</h2>
-
                 <article class=method id="Detect module">
                     <div class="highlight">
 <pre><code class="js"><span class="c1">// specific browser</span>
@@ -2234,12 +2186,12 @@ submit(function(e){ ... }) ⇒ self
 <span class="nx">Z</span><span class="p">.</span><span class="nx">maxthon</span>
 <span class="nx">Z</span><span class="p">.</span><span class="nx">tt</span>
 </code></pre>
-</div>
+                    </div>
                 </article>
 
 
                 <hr>
-                <h2 id=thanks>鸣谢</h2>
+                <h2 id="thanks">鸣谢</h2>
                 <p>
                     This documentation is based on the layout of the
                     <a href="https://github.com/documentcloud/backbone/">Backbone.js</a>
