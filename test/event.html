@@ -11,15 +11,15 @@
 		<script type="text/javascript" src="../z.src.js"></script>
 		<script type="text/javascript">
 			// DOM ready
-			Z.ready(function() {
-				console.log(Z('p').get(0))
-			})
-			Z.ready(function() {
-				console.log(Z('p').get(1))
-			})
-			Z.ready(function() {
-				console.log(arguments[0])
-			})
+			// Z.ready(function() {
+			// 	console.log(Z('p').get(0))
+			// })
+			// Z.ready(function() {
+			// 	console.log(Z('p').get(1))
+			// })
+			// Z.ready(function() {
+			// 	console.log(arguments[0])
+			// })
 		</script>
 	</head>
 	<body style="height: 1000px">
@@ -39,7 +39,13 @@
 		<p id="p2">
 			<span class="cls">span.cls</span>
 		</p>
-		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
+
+        <ul>
+            <li>11</li>
+            <li>22</li>
+            <li>33</li>
+        </ul>
+		<p data-attr="ppp" data~pp="ss">attr</p>
 	<script>
 		function fn1(e) {
 			console.log(e)
@@ -48,12 +54,31 @@
 			alert(this)
 		}
 
-		// Z('p').on('click', fn1)
+		// Z('#p2').on('mouseover mouseout', fn1)
+        // Z('#p2').on({
+        //     mouseover: function() {
+        //         console.log(1)
+        //         console.log(this)
+        //     },  
+        //     mouseout: function() {
+        //         console.log(2)
+        //     },
+        //     click: fn2
+        // }).on('click', fn1)
 		// Z('div').click(fn2)
 		// Z('p').mouseover(fn1)
-		Z('#sub').delay('click', fn1, 2000)
-		Z('p')
-			.one('click', fn2)
+		// Z('#sub').delay('click', fn1, 2000)
+		// Z('p')
+		// 	.one('click', fn2)
+
+        // Z('ul').delegate('li', 'click', function() {
+        //     console.log(this.innerHTML)
+        // })
+
+        // Z('#p2').on('click.name1', fn1)
+        // Z('#p2').on('click.name2', fn2)
+
+        Z('#p2').delay('click', fn2, 2000)        
 	</script>
 	</body>
 </html>

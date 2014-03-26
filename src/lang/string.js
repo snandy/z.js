@@ -40,34 +40,30 @@ Z.String = function() {
     }
 
     return {
-        htmlEscape: escape,
-        htmlUnescape: unescape,
-
+        escape: escape,
+        unescape: unescape,
         urlAppend : function(url, str) {
             if (Z.isString(str) && str.length) {
                 return url + (url.indexOf('?') === -1 ? '?' : '&') + str    
             }
             return url
         },
-
         trim: function(str) {
             return str.replace(regTrim, '')
         },
-
         ellipsis: function(val, len, word) {
             if (val && val.length > len) {
                 if (word) {
                     var vs = val.substr(0, len - 2)
                     var i = Math.max(vs.lastIndexOf(' '), vs.lastIndexOf('.'), vs.lastIndexOf('!'), vs.lastIndexOf('?'))
-                    if (i !== -1 && i >= (len - 15)) {
+                    if ( i !== -1 && i >= (len-15) ) {
                         return vs.substr(0, i) + '...'
                     }
                 }
-                return val.substr(0, len - 3) + '...'
+                return val.substr(0, len-3) + '...'
             }
             return val
         },
-
         format: function(str) {
             var args = sliceArgs(arguments, 1)
             return str.replace(regFormat, function(m, i) {

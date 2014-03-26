@@ -130,13 +130,13 @@ function remove(elem, type, guid) {
     
     // 从缓存中删除指定类型事件相关数据
     delete events[type]
-    delete elData.elem
-    delete elData.handle
     
     // DOM中事件取消注册
     removeListener(elem, type, handle)
     // events是空对象时，从cache中删除
     if ( Z.isEmptyObject(events) ) {
+        delete elData.elem
+        delete elData.handle        
         delete elData.events
         delete cache[guid]
     }
@@ -337,29 +337,25 @@ function bind(elem, type, handler) {
 // Remove event handler
 function unbind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
-    
     var id       = elem[guidStr]
     var elData   = id && cache[id]
     var events   = elData && elData.events
     var handlers = events && events[type]
-    var length   = arguments.length
     
-    switch (length) {
-        case 1:
-            for (var type in events) remove(elem, type, id)
-            break
-        case 2:
-            remove(elem, type, id)
-            break
-        case 3:
-            each(handlers, function(handlerObj, i) {
-                if (handlerObj.handler === handler || handlerObj.special === handler) {
-                    handlers.splice(i, 1)
-                    return true
-                }
-            })
-            if (handlers.length === 0) remove(elem, type, id)
-            break
+    if (handler) { // 传3个参数
+        each(handlers, function(handlerObj, i) {
+            if (handlerObj.handler === handler || handlerObj.special === handler) {
+                handlers.splice(i, 1)
+                return true
+            }
+        })
+        if (handlers.length === 0) remove(elem, type, id)
+    
+    } else if (type) { // 传两个参数
+        remove(elem, type, id)
+    
+    } else { // 传一个参数
+        for (var type in events) remove(elem, type, id)
     }
 }
 
@@ -382,10 +378,10 @@ function trigger(elem, type) {
 }
 
 // on / off
-forEach({on: bind, off: unbind}, function(callback, name) {
+forEach({on: bind, off: unbind}, function(fn, name) {
     Z.fn[name] = function(type, handler) {
         return this.each(function(el) {
-            callback(el, type, handler)
+            fn(el, type, handler)
         })
     }
 })
@@ -428,7 +424,7 @@ Z.fn.delegate = function(selector, type, handler) {
     }
     return this.each(function(el) {
         Z(el).on(type, function(e) {
-            var tar = e.tar
+            var tar = e.target
             Z(selector, this).each( function(el) {
                 if (tar == el || Z.contains(el, tar)) handler.call(el, e)
             })
