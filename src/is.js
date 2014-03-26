@@ -51,3 +51,13 @@ Z.isTextNode = function(obj) {
 Z.isZ = function(obj) {
     return obj.constructor === Z
 }
+
+Z.isURL = function(str) {
+    var regUrl = /^(?:ht|f)tp(?:s)?\:\/\/(?:[\w\-\.]+)\.\w+/i
+    return regUrl.test(str)
+}
+
+Z.isEmail = function(str) {
+    var regEmail = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+    return regEmail.test(str)
+}

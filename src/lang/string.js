@@ -10,8 +10,6 @@ Z.String = function() {
     var ZO = Z.Object
     var regFormat = /\{(\d+)\}/g
     var regNum = /^\d+$/
-    var regUrl = /^(?:ht|f)tp(?:s)?\:\/\/(?:[\w\-\.]+)\.\w+/i
-    var regEmail = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
     var regScript = /<script[^>]*>([\s\S]*?)<\/script>/gi
     var regTrim   = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g
     var entityMap = {
@@ -48,22 +46,16 @@ Z.String = function() {
         unescape: unescape,
         trim: function(str) {
             return str.replace(regTrim, '')
-        },        
-        isURL: function(str) {
-            return regUrl.test(str)
         },
-        isEmail: function(str) {
-            return regEmail.test(str)
-        },
-        isNumber: function(str) {
+        isNumberStr: function(str) {
             return regNum.test(str)
         },
         toInt: function(str, base) {
-            if (this.isNumber(str)) return parseInt(str, base||10)
+            if (this.isNumberStr(str)) return parseInt(str, base||10)
             throw new Error('not a number')
         },
         toFloat: function(str) {
-            if (this.isNumber(str)) return parseFloat(str)
+            if (this.isNumberStr(str)) return parseFloat(str)
             throw new Error('not a number')
         },
         urlAppend : function(url, str) {
@@ -72,7 +64,7 @@ Z.String = function() {
             }
             return url
         },
-        stripScripts: function(str) {
+        stripScript: function(str) {
             return str.replace(regScript, function() {
                 return ''
             })
