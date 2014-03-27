@@ -198,17 +198,18 @@ function Class(name, superClass, factory) {
     factory.call(proto, supr)
     
     Z.extend(proto, Event)
-
-    if (Class.amd) return Constructor
     var obj = namespace(name, Class.globalNamespace)
     obj.namespace[obj.className] = Constructor
+
+    return Constructor
 }
 
-Class.statics = function(clazz, obj) {
+Z.statics = function(clazz, obj) {
     Z.extend(clazz, obj)
+    return clazz
 }
 
-Class.methods = function(clazz, obj, override) {
+Z.methods = function(clazz, obj, override) {
     var proto = clazz.prototype
     for (var m in obj) {
         if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
@@ -220,6 +221,25 @@ Class.methods = function(clazz, obj, override) {
             }
         }
     }
+    return clazz
+}
+
+Z.agument = function(clazz) {
+    var override = false, protos = slice.call(arguments, 1)
+    if ( U.isBoolean(clazz) ) {
+        override = true
+        clazz = arguments[1]
+        protos = slice.call(arguments, 2)
+    }
+
+    forEach(protos, function(proto) {
+        if ( Z.isFunction(proto) ) {
+            proto = proto.prototype
+        }
+        Class.methods(clazz, proto, override)
+    })
+
+    return clazz
 }
 
 return Class

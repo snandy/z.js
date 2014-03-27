@@ -40,27 +40,13 @@
         })
         return copy
     }
-    var toQueryString = function(obj) {
-        var a = []
-        forEach(obj, function(val, key) {
-            if ( Z.isArray(val) ) {
-                forEach(val, function(v, i) {
-                    a.push( key + '=' + encodeURIComponent(v) )
-                })
-            } else {
-                a.push(key + '=' + encodeURIComponent(val))
-            }
-        })
-        return a.join('&')
-    }
 
     return {
         keys: keys,
         values: values,
         pairs: pairs,
         invert: invert,
-        pick: pick,
-        toQueryString: toQueryString
+        pick: pick
     }
 
  }()

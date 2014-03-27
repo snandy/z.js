@@ -25,14 +25,10 @@ function noop() {}
  */
 var createXHR = window.XMLHttpRequest ?
     function() {
-        try{
-            return new XMLHttpRequest()
-        } catch(e){}
+        return new XMLHttpRequest()
     } :
     function() {
-        try{
-            return new window.ActiveXObject('Microsoft.XMLHTTP')
-        } catch(e){}
+        return new window.ActiveXObject('Microsoft.XMLHTTP')
     }
     
 function ajax(url, options) {
@@ -61,7 +57,7 @@ function ajax(url, options) {
     
     // 对象转换成字符串键值对
     if ( Z.isObject(data) ) {
-        data = Z.Object.toQueryString(data)
+        data = Z.param(data)
     }
     if (method === 'GET' && data) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + data
@@ -115,10 +111,10 @@ function onStateChange(xhr, type, success, failure, scope) {
         }
         // text, 返回空字符时执行success
         // json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
-        result !== undefined && success.call(scope, result)
+        result !== undefined && success.call(scope, result, s, xhr)
         
     } else {
-        failure(xhr, xhr.status)
+        failure(xhr, s)
     }
     xhr = null
 }
@@ -130,10 +126,10 @@ var ajaxOptions = {
     async: ['sync', 'async']
 }
 
-// Low-level Interface: Z.ajax
+// Low-level interface: Z.ajax
 Z.ajax = ajax
 
-// Shorthand Methods: Z.get, Z.post, Z.text, Z.json, Z.xml
+// Shorthand methods: Z.get, Z.post, Z.text, Z.json, Z.xml
 forEach(ajaxOptions, function(val, key) {
     forEach(val, function(item, index) {
         Z[item] = function(key, item) {
@@ -207,7 +203,7 @@ function jsonp(url, options) {
     var callbackName = options.jsonpCallback || generateRandomName()
     
     if ( Z.isObject(data) ) {
-        data = serialize(data)
+        data = Z.param(data)
     }
     var script = doc.createElement('script')
     
@@ -289,3 +285,30 @@ Z.jsonp = function(url, opt, success) {
     return jsonp(url, opt)
 }
 
+function serialize(params, obj, traditional, scope) {
+    var array = Z.isArray(obj)
+    var hash = Z.isPlainObject(obj)
+    forEach(obj, function(val, key) {
+        if (scope) {
+            key = traditional ? scope :
+                scope + '[' + (hash || Z.isObject(val) || Z.isArray(val) ? key : '') + ']'    
+        }
+        
+        if (!scope && array) { // handle data in serializeArray() format
+            params.add(val.name, val.value)
+        } else if (Z.isArray(val) || ( !traditional && Z.isObject(val) )) { // recurse into nested objects
+            serialize(params, val, traditional, key)
+        } else {
+            params.add(key, val)
+        }
+    })
+}
+
+Z.param = function(obj, traditional) {
+    var params = []
+    params.add = function(k, v) { 
+        this.push(escape(k) + '=' + escape(v))
+    }
+    serialize(params, obj, traditional)
+    return params.join('&').replace(/%20/g, '+')
+}

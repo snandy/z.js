@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-26 19:23:28
+ * @snandy 2014-03-27 17:56:41
  *
  */
 ~function(window, undefined) {
@@ -201,27 +201,13 @@ var Browser = function(ua) {
         })
         return copy
     }
-    var toQueryString = function(obj) {
-        var a = []
-        forEach(obj, function(val, key) {
-            if ( Z.isArray(val) ) {
-                forEach(val, function(v, i) {
-                    a.push( key + '=' + encodeURIComponent(v) )
-                })
-            } else {
-                a.push(key + '=' + encodeURIComponent(val))
-            }
-        })
-        return a.join('&')
-    }
 
     return {
         keys: keys,
         values: values,
         pairs: pairs,
         invert: invert,
-        pick: pick,
-        toQueryString: toQueryString
+        pick: pick
     }
 
  }()
@@ -690,17 +676,18 @@ function Class(name, superClass, factory) {
     factory.call(proto, supr)
     
     Z.extend(proto, Event)
-
-    if (Class.amd) return Constructor
     var obj = namespace(name, Class.globalNamespace)
     obj.namespace[obj.className] = Constructor
+
+    return Constructor
 }
 
-Class.statics = function(clazz, obj) {
+Z.statics = function(clazz, obj) {
     Z.extend(clazz, obj)
+    return clazz
 }
 
-Class.methods = function(clazz, obj, override) {
+Z.methods = function(clazz, obj, override) {
     var proto = clazz.prototype
     for (var m in obj) {
         if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
@@ -712,6 +699,25 @@ Class.methods = function(clazz, obj, override) {
             }
         }
     }
+    return clazz
+}
+
+Z.agument = function(clazz) {
+    var override = false, protos = slice.call(arguments, 1)
+    if ( U.isBoolean(clazz) ) {
+        override = true
+        clazz = arguments[1]
+        protos = slice.call(arguments, 2)
+    }
+
+    forEach(protos, function(proto) {
+        if ( Z.isFunction(proto) ) {
+            proto = proto.prototype
+        }
+        Class.methods(clazz, proto, override)
+    })
+
+    return clazz
 }
 
 return Class
@@ -1082,10 +1088,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-// Z.isPlainObject = function(obj) {
-//     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
-//     return false
-// }
+Z.isPlainObject = function(obj) {
+    if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+    return false
+}
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
@@ -1984,14 +1990,10 @@ function noop() {}
  */
 var createXHR = window.XMLHttpRequest ?
     function() {
-        try{
-            return new XMLHttpRequest()
-        } catch(e){}
+        return new XMLHttpRequest()
     } :
     function() {
-        try{
-            return new window.ActiveXObject('Microsoft.XMLHTTP')
-        } catch(e){}
+        return new window.ActiveXObject('Microsoft.XMLHTTP')
     }
     
 function ajax(url, options) {
@@ -2020,7 +2022,7 @@ function ajax(url, options) {
     
     // 对象转换成字符串键值对
     if ( Z.isObject(data) ) {
-        data = Z.Object.toQueryString(data)
+        data = Z.param(data)
     }
     if (method === 'GET' && data) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + data
@@ -2074,10 +2076,10 @@ function onStateChange(xhr, type, success, failure, scope) {
         }
         // text, 返回空字符时执行success
         // json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
-        result !== undefined && success.call(scope, result)
+        result !== undefined && success.call(scope, result, s, xhr)
         
     } else {
-        failure(xhr, xhr.status)
+        failure(xhr, s)
     }
     xhr = null
 }
@@ -2089,10 +2091,10 @@ var ajaxOptions = {
     async: ['sync', 'async']
 }
 
-// Low-level Interface: Z.ajax
+// Low-level interface: Z.ajax
 Z.ajax = ajax
 
-// Shorthand Methods: Z.get, Z.post, Z.text, Z.json, Z.xml
+// Shorthand methods: Z.get, Z.post, Z.text, Z.json, Z.xml
 forEach(ajaxOptions, function(val, key) {
     forEach(val, function(item, index) {
         Z[item] = function(key, item) {
@@ -2166,7 +2168,7 @@ function jsonp(url, options) {
     var callbackName = options.jsonpCallback || generateRandomName()
     
     if ( Z.isObject(data) ) {
-        data = serialize(data)
+        data = Z.param(data)
     }
     var script = doc.createElement('script')
     
@@ -2248,7 +2250,33 @@ Z.jsonp = function(url, opt, success) {
     return jsonp(url, opt)
 }
 
+function serialize(params, obj, traditional, scope) {
+    var array = Z.isArray(obj)
+    var hash = Z.isPlainObject(obj)
+    forEach(obj, function(val, key) {
+        if (scope) {
+            key = traditional ? scope :
+                scope + '[' + (hash || Z.isObject(val) || Z.isArray(val) ? key : '') + ']'    
+        }
+        
+        if (!scope && array) { // handle data in serializeArray() format
+            params.add(val.name, val.value)
+        } else if (Z.isArray(val) || ( !traditional && Z.isObject(val) )) { // recurse into nested objects
+            serialize(params, val, traditional, key)
+        } else {
+            params.add(key, val)
+        }
+    })
+}
 
+Z.param = function(obj, traditional) {
+    var params = []
+    params.add = function(k, v) { 
+        this.push(escape(k) + '=' + escape(v))
+    }
+    serialize(params, obj, traditional)
+    return params.join('&').replace(/%20/g, '+')
+}
 Z.cache = function() {
     var seed = 0
     var cache = {}
