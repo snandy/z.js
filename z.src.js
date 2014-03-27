@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2013-12-13 18:05:41
+ * @snandy 2014-03-27 17:56:41
  *
  */
 ~function(window, undefined) {
@@ -111,6 +111,17 @@ function sliceArgs(args, start) {
     return slice.call(args, start || 0)
 }
 
+function generateUUID(id) {
+    var seed = 0
+    return function() {
+        return seed++
+    }
+}
+
+function now() {
+    return (new Date).getTime()
+}
+
 /**
  * Browser Detect
  * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
@@ -190,27 +201,13 @@ var Browser = function(ua) {
         })
         return copy
     }
-    var toQueryString = function(obj) {
-        var a = []
-        forEach(obj, function(val, key) {
-            if ( Z.isArray(val) ) {
-                forEach(val, function(v, i) {
-                    a.push( key + '=' + encodeURIComponent(v) )
-                })
-            } else {
-                a.push(key + '=' + encodeURIComponent(val))
-            }
-        })
-        return a.join('&')
-    }
 
     return {
         keys: keys,
         values: values,
         pairs: pairs,
         invert: invert,
-        pick: pick,
-        toQueryString: toQueryString
+        pick: pick
     }
 
  }()
@@ -396,6 +393,8 @@ Z.String = function() {
 
     var ZO = Z.Object
     var regFormat = /\{(\d+)\}/g
+    var regNum = /^\d+$/
+    var regScript = /<script[^>]*>([\s\S]*?)<\/script>/gi
     var regTrim   = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g
     var entityMap = {
         escape: {
@@ -427,34 +426,46 @@ Z.String = function() {
     }
 
     return {
-        htmlEscape: escape,
-        htmlUnescape: unescape,
-
-        urlAppend : function(url, str) {
-            if (Z.isString(str) && str.length) {
-                return url + (url.indexOf('?') === -1 ? '?' : '&') + str    
-            }
-            return url
-        },
-
+        escape: escape,
+        unescape: unescape,
         trim: function(str) {
             return str.replace(regTrim, '')
         },
-
+        isNumberStr: function(str) {
+            return regNum.test(str)
+        },
+        toInt: function(str, base) {
+            if (this.isNumberStr(str)) return parseInt(str, base||10)
+            throw new Error('not a number')
+        },
+        toFloat: function(str) {
+            if (this.isNumberStr(str)) return parseFloat(str)
+            throw new Error('not a number')
+        },
+        urlAppend : function(url, str) {
+            if (Z.isString(str) && str.length) {
+                return url + (url.indexOf('?') === -1 ? '?' : '&') + str
+            }
+            return url
+        },
+        stripScript: function(str) {
+            return str.replace(regScript, function() {
+                return ''
+            })
+        },
         ellipsis: function(val, len, word) {
             if (val && val.length > len) {
                 if (word) {
                     var vs = val.substr(0, len - 2)
                     var i = Math.max(vs.lastIndexOf(' '), vs.lastIndexOf('.'), vs.lastIndexOf('!'), vs.lastIndexOf('?'))
-                    if (i !== -1 && i >= (len - 15)) {
+                    if ( i !== -1 && i >= (len-15) ) {
                         return vs.substr(0, i) + '...'
                     }
                 }
-                return val.substr(0, len - 3) + '...'
+                return val.substr(0, len-3) + '...'
             }
             return val
         },
-
         format: function(str) {
             var args = sliceArgs(arguments, 1)
             return str.replace(regFormat, function(m, i) {
@@ -473,225 +484,243 @@ Z.String = function() {
  */
 Z.Class = function() {
 
-    function Observer(type, context) {
-        this.type = type
-        this.scope = context || window
+function Observer(type, context) {
+    this.type = type
+    this.scope = context || window
+    this.listeners = []
+}
+Observer.prototype = {
+    subscribe: function(fn, scope, options) {
+        var listeners = this.listeners
+        if (!fn || this._find(fn, scope) !== -1) return false
+
+        var listener = {
+            fn: fn,
+            scope: scope || this.scope,
+            opt: options
+        }
+
+        if (this.firing) {
+            // if we are currently firing this event, don't disturb the listener loop
+            listeners = this.listeners = listeners.slice(0)
+        }
+        listeners.push(listener)
+
+        return true
+    },
+    unsubscribe: function(fn, scope) {
+        if (!fn) {
+            return this.clear()
+        }
+
+        var index = this._find(fn, scope)
+        if (index !== -1) {
+            this._delete(index)
+            return true
+        }
+
+        return false
+    },
+    publish: function() {
+        var listeners = this.listeners
+        var count = listeners.length
+        var i = 0, xargs, listener
+
+        if (count > 0) {
+            this.firing = true
+            while (listener = listeners[i++]) {
+                xargs = sliceArgs(arguments)
+                if (listener.opt) {
+                    xargs.push(listener.opt)
+                }
+                if (listener && listener.fn.apply(listener.scope, xargs) === false) {
+                    return (this.firing = false)
+                }
+            }
+        }
+        this.firing = false
+
+        return true
+    },
+    clear: function() {
+        var l = this.listeners.length, i = l
+        while (i--) this._delete(i)
         this.listeners = []
-    }
-    Observer.prototype = {
-        subscribe: function(fn, scope, options) {
-            var listeners = this.listeners
-            if (!fn || this._find(fn, scope) !== -1) return false
+        return l
+    },
+    _find: function(fn, scope) {
+        var listeners = this.listeners
+        var i = listeners.length
+        var listener, s
 
-            var listener = {
-                fn: fn,
-                scope: scope || this.scope,
-                opt: options
-            }
-
-            if (this.firing) {
-                // if we are currently firing this event, don't disturb the listener loop
-                listeners = this.listeners = listeners.slice(0)
-            }
-            listeners.push(listener)
-
-            return true
-        },
-        unsubscribe: function(fn, scope) {
-            if (!fn) {
-                return this.clear()
-            }
-
-            var index = this._find(fn, scope)
-            if (index !== -1) {
-                this._delete(index)
-                return true
-            }
-
-            return false
-        },
-        publish: function() {
-            var listeners = this.listeners
-            var count = listeners.length
-            var i = 0, xargs, listener
-
-            if (count > 0) {
-                this.firing = true
-                while (listener = listeners[i++]) {
-                    xargs = sliceArgs(arguments)
-                    if (listener.opt) {
-                        xargs.push(listener.opt)
-                    }
-                    if (listener && listener.fn.apply(listener.scope, xargs) === false) {
-                        return (this.firing = false)
-                    }
-                }
-            }
-            this.firing = false
-
-            return true
-        },
-        clear: function() {
-            var l = this.listeners.length, i = l
-            while (i--) this._delete(i)
-            this.listeners = []
-            return l
-        },
-        _find: function(fn, scope) {
-            var listeners = this.listeners
-            var i = listeners.length
-            var listener, s
-
-            while (i--) {
-                if (listener = listeners[i]) {
-                    if (listener.fn === fn && (!scope || listener.scope === scope)) return i
-                }
-            }
-            return -1
-        },
-        _delete: function(index) {
-            var listeners = this.listeners
-            var o = listeners[index]
-            if (o) {
-                delete o.fn
-                delete o.scope
-                delete o.opt
-            }
-            listeners.splice(index, 1)
-        }
-    }
-
-    var Event = {
-        on: function(type, fn, scope, o) {
-            var config, ev
-            if (typeof type === 'object') {
-                o = type
-                for (type in o) {
-                    if (!o.hasOwnProperty(type)) continue
-                    config = o[type]
-                    this.on(type, config.fn || config, config.scope || o.scope, config.fn ? config : o)
-                }
-            } else {
-                this._events = this._events || {}
-                ev = this._events[type] || false
-                if (!ev) {
-                    ev = this._events[type] = new Observer(type, this)
-                }
-                ev.subscribe(fn, scope, o)
-            }
-        },
-        off: function(type, fn, scope) {
-            var config, ev, o, index
-            if (typeof type === 'object') {
-                o = type
-                for (type in o) {
-                    if (!o.hasOwnProperty(type)) continue
-                    config = o[type]
-                    this.un(type, config.fn || config, config.scope || o.scope)
-                }
-            } else {
-                ev = this._events[type]
-                if (ev) ev.unsubscribe(fn, scope)
-            }
-        },
-        clearEvent: function(type) {
-            var ev = this._events && this._events[type]
-            if (ev) ev.clear()
-        },
-        fire: function(type) {
-            var ev
-            if (!this._events || !(ev = this._events[type])) {
-                return true
-            }
-            return ev.publish.apply(ev, sliceArgs(arguments, 1))
-        }
-    }
-
-    // initialize namespace
-    function namespace(classPath, globalNamespace) {
-        if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
-        globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
-        var arr = classPath.split('.')
-        var namespace = globalNamespace
-        var className = arr.pop()
-
-        while (arr.length) {
-            var name = arr.shift()
-            var obj = namespace[name]
-            if (!obj) {
-                namespace[name] = obj = {}
-            }
-            namespace = obj
-        }
-
-        var clazz = namespace[className]
-        if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
-        namespace[className] = undefined
-        return {
-            namespace: namespace,
-            className: className
-        }
-    }
-
-    var create = Object.create ? 
-            function(o) { return Object.create(o) } : 
-            (function() { // Reusable constructor function for the Object.create() shim.
-                function F() {}
-                return function(o) {
-                    F.prototype = o
-                    return new F
-                }
-            }())
-
-    // define a class
-    function Class(name, superClass, factory) {
-        if (!factory) {
-            if (!superClass) {
-                throw new Error('class create failed, verify definitions')
-            }
-            factory = superClass
-            superClass = Object
-        }
-
-        function Constructor() {
-            if ( Z.isFunction(this.init) ) {
-                this.init.apply(this, arguments)
+        while (i--) {
+            if (listener = listeners[i]) {
+                if (listener.fn === fn && (!scope || listener.scope === scope)) return i
             }
         }
-        Constructor.toString = function() { return name }
+        return -1
+    },
+    _delete: function(index) {
+        var listeners = this.listeners
+        var o = listeners[index]
+        if (o) {
+            delete o.fn
+            delete o.scope
+            delete o.opt
+        }
+        listeners.splice(index, 1)
+    }
+}
 
-        var supr = superClass.prototype
-        // var proto = Constructor.prototype = new superClass
-        var proto = Constructor.prototype = create(supr)
-        proto.constructor = factory
-        factory.call(proto, supr)
-        
-        Z.extend(proto, Event)
+var Event = {
+    on: function(type, fn, scope, o) {
+        var config, ev
+        if (typeof type === 'object') {
+            o = type
+            for (type in o) {
+                if (!o.hasOwnProperty(type)) continue
+                config = o[type]
+                this.on(type, config.fn || config, config.scope || o.scope, config.fn ? config : o)
+            }
+        } else {
+            this._events = this._events || {}
+            ev = this._events[type] || false
+            if (!ev) {
+                ev = this._events[type] = new Observer(type, this)
+            }
+            ev.subscribe(fn, scope, o)
+        }
+    },
+    off: function(type, fn, scope) {
+        var config, ev, o, index
+        if (typeof type === 'object') {
+            o = type
+            for (type in o) {
+                if (!o.hasOwnProperty(type)) continue
+                config = o[type]
+                this.un(type, config.fn || config, config.scope || o.scope)
+            }
+        } else {
+            ev = this._events[type]
+            if (ev) ev.unsubscribe(fn, scope)
+        }
+    },
+    clearEvent: function(type) {
+        var ev = this._events && this._events[type]
+        if (ev) ev.clear()
+    },
+    fire: function(type) {
+        var ev
+        if (!this._events || !(ev = this._events[type])) return true
+        return ev.publish.apply(ev, sliceArgs(arguments, 1))
+    }
+}
 
-        if (Class.amd) return Constructor
-        var obj = namespace(name, Class.globalNamespace)
-        obj.namespace[obj.className] = Constructor
+// initialize namespace
+function namespace(classPath, globalNamespace) {
+    if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
+    globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
+    var arr = classPath.split('.')
+    var namespace = globalNamespace
+    var className = arr.pop()
+
+    while (arr.length) {
+        var name = arr.shift()
+        var obj = namespace[name]
+        if (!obj) {
+            namespace[name] = obj = {}
+        }
+        namespace = obj
     }
 
-    Class.statics = function(clazz, obj) {
-        Z.extend(clazz, obj)
+    var clazz = namespace[className]
+    if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
+    namespace[className] = undefined
+    return {
+        namespace: namespace,
+        className: className
+    }
+}
+
+var create = Object.create ? 
+        function(o) { return Object.create(o) } : 
+        (function() { // Reusable constructor function for the Object.create() shim.
+            function F() {}
+            return function(o) {
+                F.prototype = o
+                return new F
+            }
+        }())
+
+// define a class
+function Class(name, superClass, factory) {
+    if (!factory) {
+        if (!superClass) {
+            throw new Error('class create failed, verify definitions')
+        }
+        factory = superClass
+        superClass = Object
     }
 
-    Class.methods = function(clazz, obj, override) {
-        var proto = clazz.prototype
-        for (var m in obj) {
-            if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
-            if (override) {
+    function Constructor() {
+        if ( Z.isFunction(this.init) ) {
+            this.init.apply(this, arguments)
+        }
+    }
+    Constructor.toString = function() { return name }
+
+    var supr = superClass.prototype
+    // var proto = Constructor.prototype = new superClass
+    var proto = Constructor.prototype = create(supr)
+    proto.constructor = factory
+    factory.call(proto, supr)
+    
+    Z.extend(proto, Event)
+    var obj = namespace(name, Class.globalNamespace)
+    obj.namespace[obj.className] = Constructor
+
+    return Constructor
+}
+
+Z.statics = function(clazz, obj) {
+    Z.extend(clazz, obj)
+    return clazz
+}
+
+Z.methods = function(clazz, obj, override) {
+    var proto = clazz.prototype
+    for (var m in obj) {
+        if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
+        if (override) {
+            proto[m] = obj[m]
+        } else {
+            if (!proto[m]) {
                 proto[m] = obj[m]
-            } else {
-                if (!proto[m]) {
-                    proto[m] = obj[m]
-                }
             }
         }
     }
+    return clazz
+}
 
-    return Class
+Z.agument = function(clazz) {
+    var override = false, protos = slice.call(arguments, 1)
+    if ( U.isBoolean(clazz) ) {
+        override = true
+        clazz = arguments[1]
+        protos = slice.call(arguments, 2)
+    }
+
+    forEach(protos, function(proto) {
+        if ( Z.isFunction(proto) ) {
+            proto = proto.prototype
+        }
+        Class.methods(clazz, proto, override)
+    })
+
+    return clazz
+}
+
+return Class
 }()
 /**
  * CSS Selector
@@ -761,17 +790,24 @@ var query = function() {
         return result
     }
         
-    function query(selector, context) {
+    return function(selector, context) {
         var s = selector, arr = []
         var context = context === undefined ? doc : 
                 typeof context === 'string' ? query(context)[0] : context
                 
         if (!selector) return arr
         
-        // id 还是用docuemnt.getElementById最快
+        // id和tagName 直接使用 getElementById 和 getElementsByTagName
+
+        // id
         if ( rId.test(s) ) {
             arr[0] = byId( s.substr(1, s.length) )
             return arr
+        }
+
+        // Tag name
+        if ( rTag.test(s) ) {
+            return makeArray(context.getElementsByTagName(s))
         }
 
         // 优先使用querySelector，现代浏览器都实现它了
@@ -811,11 +847,6 @@ var query = function() {
             }
         }
 
-        // Tag name
-        if ( rTag.test(s) ) {
-            return makeArray(context.getElementsByTagName(s))
-        }
-
         // Attribute
         if ( rAttr.test(s) ) {
             var result = rAttr.exec(s)
@@ -824,7 +855,6 @@ var query = function() {
         }
     }
 
-    return query
 }()
 
 var tempParent = document.createElement('div')
@@ -842,8 +872,6 @@ function matches(el, selector) {
 }
 
 Z.matches = matches
-
-
 
 Z.prototype = {
     constructor: Z,
@@ -1006,8 +1034,35 @@ Z.each = forEach
 
 Z.map = map
 
+Z.now = now
+
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.cache.remove(this, key)
+        });        
+    }
+})
+
 
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
@@ -1033,10 +1088,10 @@ Z.isEmpty = function(obj) {
     return true
 }
 
-// Z.isPlainObject = function(obj) {
-//     if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
-//     return false
-// }
+Z.isPlainObject = function(obj) {
+    if (Z.isObject(obj) && 'isPrototypeOf' in obj) return true
+    return false
+}
 
 Z.isArrayLike = function(obj) {
     return obj.length === +obj.length && !Z.isString(obj)
@@ -1062,6 +1117,15 @@ Z.isZ = function(obj) {
     return obj.constructor === Z
 }
 
+Z.isURL = function(str) {
+    var regUrl = /^(?:ht|f)tp(?:s)?\:\/\/(?:[\w\-\.]+)\.\w+/i
+    return regUrl.test(str)
+}
+
+Z.isEmail = function(str) {
+    var regEmail = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+    return regEmail.test(str)
+}
 
 var rroot = /^(?:body|html)$/i
 
@@ -1476,7 +1540,7 @@ var delayFunc = ZFunc.delay
 var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
-// Utility functions -----------------------------------------------------------------------------
+// Utility functions ---------------------------------------------------------------------------
 function each(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
@@ -1507,9 +1571,6 @@ function returnFalse() {
 function returnTrue() {
     return true
 }
-function now() {
-    return (new Date).getTime()
-}
 function excuteHandler(elem, e, args /*only for trigger*/) {
     if (!elem || !e) return
     
@@ -1520,14 +1581,20 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     var events = elData.events
     var handlers = events[type]
     
+    var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
         if (e.namespace) {
-            if (e.namespace===handlerObj.namespace) {
-                callback(elem, type, e, handlerObj)
+            if (e.namespace === handlerObj.namespace) {
+                ret = callback(elem, type, e, handlerObj)
             }
         } else {
-            callback(elem, type, e, handlerObj)
+            ret = callback(elem, type, e, handlerObj)
+        }
+
+        if (ret === false) {
+            e.preventDefault()
+            e.stopPropagation()
         }
     }
 }
@@ -1559,7 +1626,7 @@ function callback(elem, type, e, handlerObj) {
     
     if (stopBubble) e.stopPropagation()
     
-    handler.apply(context, args)
+    return handler.apply(context, args)
 }
 // handlerObj class
 function Handler(config) {
@@ -1588,13 +1655,13 @@ function remove(elem, type, guid) {
     
     // 从缓存中删除指定类型事件相关数据
     delete events[type]
-    delete elData.elem
-    delete elData.handle
     
     // DOM中事件取消注册
     removeListener(elem, type, handle)
     // events是空对象时，从cache中删除
     if ( Z.isEmptyObject(events) ) {
+        delete elData.elem
+        delete elData.handle        
         delete elData.events
         delete cache[guid]
     }
@@ -1760,7 +1827,7 @@ function bind(elem, type, handler) {
     // 初始化handle
     if (!handle) {
         elData.handle = handle = function(e) {
-            excuteHandler(elData.elem, e)
+            return excuteHandler(elData.elem, e)
         }
     }
     
@@ -1795,29 +1862,25 @@ function bind(elem, type, handler) {
 // Remove event handler
 function unbind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
-    
     var id       = elem[guidStr]
     var elData   = id && cache[id]
     var events   = elData && elData.events
     var handlers = events && events[type]
-    var length   = arguments.length
     
-    switch (length) {
-        case 1:
-            for (var type in events) remove(elem, type, id)
-            break
-        case 2:
-            remove(elem, type, id)
-            break
-        case 3:
-            each(handlers, function(handlerObj, i) {
-                if (handlerObj.handler === handler || handlerObj.special === handler) {
-                    handlers.splice(i, 1)
-                    return true
-                }
-            })
-            if (handlers.length === 0) remove(elem, type, id)
-            break
+    if (handler) { // 传3个参数
+        each(handlers, function(handlerObj, i) {
+            if (handlerObj.handler === handler || handlerObj.special === handler) {
+                handlers.splice(i, 1)
+                return true
+            }
+        })
+        if (handlers.length === 0) remove(elem, type, id)
+    
+    } else if (type) { // 传两个参数
+        remove(elem, type, id)
+    
+    } else { // 传一个参数
+        for (var type in events) remove(elem, type, id)
     }
 }
 
@@ -1840,10 +1903,10 @@ function trigger(elem, type) {
 }
 
 // on / off
-forEach({on: bind, off: unbind}, function(callback, name) {
+forEach({on: bind, off: unbind}, function(fn, name) {
     Z.fn[name] = function(type, handler) {
         return this.each(function(el) {
-            callback(el, type, handler)
+            fn(el, type, handler)
         })
     }
 })
@@ -1886,7 +1949,7 @@ Z.fn.delegate = function(selector, type, handler) {
     }
     return this.each(function(el) {
         Z(el).on(type, function(e) {
-            var tar = e.tar
+            var tar = e.target
             Z(selector, this).each( function(el) {
                 if (tar == el || Z.contains(el, tar)) handler.call(el, e)
             })
@@ -1927,14 +1990,10 @@ function noop() {}
  */
 var createXHR = window.XMLHttpRequest ?
     function() {
-        try{
-            return new XMLHttpRequest()
-        } catch(e){}
+        return new XMLHttpRequest()
     } :
     function() {
-        try{
-            return new window.ActiveXObject('Microsoft.XMLHTTP')
-        } catch(e){}
+        return new window.ActiveXObject('Microsoft.XMLHTTP')
     }
     
 function ajax(url, options) {
@@ -1963,7 +2022,7 @@ function ajax(url, options) {
     
     // 对象转换成字符串键值对
     if ( Z.isObject(data) ) {
-        data = Z.Object.toQueryString(data)
+        data = Z.param(data)
     }
     if (method === 'GET' && data) {
         url += (url.indexOf('?') === -1 ? '?' : '&') + data
@@ -2017,10 +2076,10 @@ function onStateChange(xhr, type, success, failure, scope) {
         }
         // text, 返回空字符时执行success
         // json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
-        result !== undefined && success.call(scope, result)
+        result !== undefined && success.call(scope, result, s, xhr)
         
     } else {
-        failure(xhr, xhr.status)
+        failure(xhr, s)
     }
     xhr = null
 }
@@ -2032,10 +2091,10 @@ var ajaxOptions = {
     async: ['sync', 'async']
 }
 
-// Low-level Interface: Z.ajax
+// Low-level interface: Z.ajax
 Z.ajax = ajax
 
-// Shorthand Methods: Z.get, Z.post, Z.text, Z.json, Z.xml
+// Shorthand methods: Z.get, Z.post, Z.text, Z.json, Z.xml
 forEach(ajaxOptions, function(val, key) {
     forEach(val, function(item, index) {
         Z[item] = function(key, item) {
@@ -2109,7 +2168,7 @@ function jsonp(url, options) {
     var callbackName = options.jsonpCallback || generateRandomName()
     
     if ( Z.isObject(data) ) {
-        data = serialize(data)
+        data = Z.param(data)
     }
     var script = doc.createElement('script')
     
@@ -2164,7 +2223,7 @@ function jsonp(url, options) {
     }
     if (timestamp) {
         url += '&ts='
-        url += (new Date).getTime()
+        url += now()
     }
     
     window[callbackName] = function(json) {
@@ -2191,7 +2250,82 @@ Z.jsonp = function(url, opt, success) {
     return jsonp(url, opt)
 }
 
+function serialize(params, obj, traditional, scope) {
+    var array = Z.isArray(obj)
+    var hash = Z.isPlainObject(obj)
+    forEach(obj, function(val, key) {
+        if (scope) {
+            key = traditional ? scope :
+                scope + '[' + (hash || Z.isObject(val) || Z.isArray(val) ? key : '') + ']'    
+        }
+        
+        if (!scope && array) { // handle data in serializeArray() format
+            params.add(val.name, val.value)
+        } else if (Z.isArray(val) || ( !traditional && Z.isObject(val) )) { // recurse into nested objects
+            serialize(params, val, traditional, key)
+        } else {
+            params.add(key, val)
+        }
+    })
+}
 
+Z.param = function(obj, traditional) {
+    var params = []
+    params.add = function(k, v) { 
+        this.push(escape(k) + '=' + escape(v))
+    }
+    serialize(params, obj, traditional)
+    return params.join('&').replace(/%20/g, '+')
+}
+Z.cache = function() {
+    var seed = 0
+    var cache = {}
+    var id = '_uuid_'
+
+    // @private
+    function uuid(el) {
+        return el[id] || (el[id] = ++seed)
+    }
+
+    return {
+        set: function(el, key, val) {
+            if (!el) throw new Error('setting failed, invalid element')
+
+            var id = uuid(el)
+            var c = cache[id] || (cache[id] = {})
+            if (key) c[key] = val
+
+            return c
+        },
+        get: function(el, key, create) {
+            if (!el) throw new Error('getting failed, invalid element')
+
+            var id = uuid(el)
+            var elCache = cache[id] || (create && (cache[id] = {}))
+
+            if (!elCache) return null
+            return key !== undefined ? elCache[key] || null : elCache
+        },
+        has: function(el, key) {
+            return this.get(el, key) !== null
+        },
+        remove: function(el, key) {
+            var id = typeof el === 'object' ? uuid(el) : el
+            var elCache = cache[id]
+
+            if (!elCache) return false
+
+            if (key !== undefined) {
+                delete elCache[key]
+            } else {
+                delete cache[id]
+            }
+
+            return true
+        }
+    }
+
+}()
 
 // Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {
