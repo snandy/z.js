@@ -90,15 +90,8 @@
                 <li><a href="#Z.get">Z.get</a></li>
                 <li><a href="#Z.post">Z.post</a></li>
                 <li><a href="#Z.sync">Z.sync</a></li>
-                <li><a href="#Z.sync">Z.async</a></li>
-            </ul>
-
-            <a class="toc_title" href="#form">Form</a>
-            <ul class="toc_section">
-                <li><a href="#serialize">serialize</a></li>
-                <li><a href="#serializeArray">serializeArray</a></li>
-                <li><a href="#submit">submit</a>
-                </li>
+                <li><a href="#Z.async">Z.async</a></li>
+                <li><a href="#Z.param">Z.param</a></li>
             </ul>
 
             <a class="toc_title" href="#Objects">Objects</a>
@@ -108,7 +101,6 @@
                 <li><a href="#pairs">pairs</a></li>
                 <li><a href="#invert">invert</a></li>
                 <li><a href="#pick">pick</a></li>
-                <li><a href="#toQueryString">toQueryString</a></li>
             </ul>
 
             <a class="toc_title" href="#Arrays">Arrays</a>
@@ -161,8 +153,8 @@
                 <li><a href="#Z.isDocument">Z.isDocument</a></li>
                 <li><a href="#Z.isElement">Z.isElement</a></li>
                 <li><a href="#Z.isTextNode">Z.isTextNode</a></li>
-                <li><a href="#isURL">isURL</a></li>
-                <li><a href="#isEmail">isEmail</a></li>                
+                <li><a href="#Z.isURL">Z.isURL</a></li>
+                <li><a href="#Z.isEmail">Z.isEmail</a></li>                
                 <li><a href="#Z.isZ">Z.isZ</a></li>
             </ul>
 
@@ -180,6 +172,14 @@
                 <li><a href="#Z.ie10">Z.ie10</a></li>
                 <li><a href="#Z.maxthon">Z.maxthon</a></li>
                 <li><a href="#Z.tt">Z.tt</a></li>
+            </ul>
+
+            <a class="toc_title" href="#OOP">OOP</a>
+            <ul class="toc_section">
+                <li><a href="#Z.Class">Z.Class</a></li>
+                <li><a href="#Z.statics">Z.statics</a></li>
+                <li><a href="#Z.methods">Z.methods</a></li>
+                <li><a href="#Z.methods">Z.agument</a></li>
             </ul>
 
         </aside>
@@ -205,7 +205,15 @@
                     – <i>12.7k when gzipped</i>
                 </li>
             </ul>
+            
+            <ol>
+                <li>下载 <a target="_blank" href="http://github.com/snandy/z.js/archive/master.zip">zip包</a></li>
+                <li>git http 下载：<code>git clone http://github.com/snandy/z.js</code></li>
+                <li>git ssh  下载：<code>git clone git://github.com/snandy/z.js</code></li>
+            </ol>
+            <p>完整项目 <a target="_blank" href="http://github.com/snandy/z.js">Github</a></p>
 
+            <h3 id="download">使用</h3>
             <p>把Z.js引入到您的页面里</p>
 
             <div class="highlight">
@@ -1262,349 +1270,239 @@ one({ type: handler, type2: handler2, ... }) ⇒ self
                 <h2 id="ajax">Ajax requests</h2>
                 <article class=method id="Z.ajax">
                     <h3>Z.ajax </h3>
-                    <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest</code></pre>
+                    <pre class=signature><code>Z.ajax(options) ⇒ XMLHttpRequest
+Z.ajax(url, options) ⇒ XMLHttpRequest                        
+</code></pre>
                     <p>
-                        Perform an Ajax request. It can be to a local resource, or cross-domain via <a href="https://developer.mozilla.org/en/http_access_control">HTTP access control</a> support in browsers or <a href="http://json-p.org">JSONP</a>.
+                        发起一个Ajax请求，返回XMLHttpRequest对象
                     </p>
-
                     <p>Options:</p>
-
                     <ul>
                         <li>
-                            <code>
-                                type</code>
-                            (default: &ldquo;GET&rdquo;): HTTP request method (&ldquo;GET&rdquo;, &ldquo;POST&rdquo;, or other)
+                            <code>url</code>
+                            (default: none): 请求的URL
                         </li>
                         <li>
-                            <code>
-                                url</code>
-                            (default: current URL): URL to which the request is made
+                            <code>async</code>
+                            (default: true): 是否异步请求 true/false
                         </li>
                         <li>
-                            <code>
-                                data</code> (default: none): data for the request; for GET requests it is appended
-                            to query string of the URL. Non-string objects will get serialized with
-                            <a href="#Z.param">Z.param</a>
+                            <code>method</code>
+                            (default: true): 请求方式 POST or GET
+                        </li>                        
+                        <li>
+                            <code>type</code>(default: JSON): 
+                            后端返回的数据格式 JSON, XML, HTML, Plain Text
+                        </li>                        
+                        <li>
+                            <code>data</code> (default: none):
+                            请求参数，字符串或JSON ( 'a=1&b=2', {a:1, b:2})
                         </li>
                         <li>
-                            <code>
-                                processData</code>
-                            (default: true): whether to automatically serialize <code>
-                                data</code>
-                            for
-                            non-GET requests to string
+                            <code>timeout</code>
+                            (default: 0): 请求超时时间，当超过设定的时间后会放弃该次请求（xhr.abort）
                         </li>
                         <li>
-                            <code>
-                                contentType</code>
-                            (default: &ldquo;application/x-www-form-urlencoded&rdquo;): the Content-Type
-                            of the data being posted to the server (this can also be set via <code>
-                                headers</code>
-                            ).
-                            Pass <code>
-                                false</code>
-                            to skip setting the default value.
+                            <code>credential</code>
+                            (default: false): 跨域请求时是否带证书，为false不带http认证信息，比如cookie
                         </li>
                         <li>
-                            <code>
-                                dataType</code>
-                            (default: none): response type to expect from the server (&ldquo;json&rdquo;, &ldquo;jsonp&rdquo;, &ldquo;xml&rdquo;, &ldquo;html&rdquo;, or &ldquo;text&rdquo;)
+                            <code>scope</code>
+                            (default: window): 成功回调函数的执行上下文
                         </li>
                         <li>
-                            <code>
-                                timeout</code>
-                            (default: <code>
-                                0</code>
-                            ): request timeout in milliseconds, <code>
-                                0</code>
-                            for no timeout
+                            <code>success</code>
+                            (default: none): 请求成功回调函数
                         </li>
                         <li>
-                            <code>
-                                headers</code>
-                            : object of additional HTTP headers for the Ajax request
-                        </li>
-                        <li>
-                            <code>
-                                async</code>
-                            (default: true): set to <code>
-                                false</code>
-                            to issue a synchronous (blocking) request
-                        </li>
-                        <li>
-                            <code>
-                                global</code>
-                            (default: true): trigger global Ajax events on this request
-                        </li>
-                        <li>
-                            <code>
-                                context</code>
-                            (default: window): context to execute callbacks in
-                        </li>
-                        <li>
-                            <code>
-                                traditional</code>
-                            (default: false): activate traditional (shallow) serialization
-                            of <code>
-                                data</code>
-                            parameters with <a href="#Z.param">Z.param</a>
+                            <code>failure</code>
+                            (default: none): 请求失败回调函数
                         </li>
                     </ul>
 
-                    <p>
-                        If the URL contains <code>
-                            =?</code>
-                        or <code>
-                            dataType</code>
-                        is &ldquo;jsonp&rdquo;, the request is performed
-                        by injecting a <code>
-                            &lt;script&gt;</code>
-                        tag instead of using XMLHttpRequest (see <a href="http://json-p.org">JSONP</a>).
-                        This has the limitation of <code>
-                            contentType</code>
-                        , <code>
-                            dataType</code>
-                        , <code>
-                            headers</code>
-                        , and <code>
-                            async</code>
-                        not
-                        being supported.
-                    </p>
-
-                    <h4>Ajax callbacks</h4>
-
-                    <p>
-                        You can specify the following callback functions, which are given in order of execution:
-                    </p>
+                    <h4>Ajax 回调函数</h4>
 
                     <ol>
                         <li>
                             <p>
-                                <code>
-                                    beforeSend(xhr, settings)</code>
-                                : before the request is sent. Provides access to
-                                the xhr object. Return <code>
-                                    false</code>
-                                from the function to cancel the request
+                                <code>success(res, status, xhr)</code>
+                                : 请求成功回调，参数依次是返回数据、HTTP状态码、XHR对象
                             </p>
                         </li>
                         <li>
                             <p>
-                                <code>
-                                    success(data, status, xhr)</code>
-                                : when request succeeds
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    error(xhr, errorType, error)</code>
-                                : if there is an error (timeout, parse error,
-                                or status code not in HTTP 2xx)
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    complete(xhr, status)</code>
-                                : after the request is complete, regardless of error
-                                or success
+                                <code>failure(xhr, errorType)</code>
+                                : 请求失败回调，参数分别为XHR对象，错误类型。
                             </p>
                         </li>
                     </ol>
-
-                    <h4>Ajax events</h4>
-
-                    <p>
-                        These events are fired during the lifecycle of an Ajax request performed with
-                        the default setting of <code>
-                            global: true</code>
-                        :
-                    </p>
-
-                    <ol>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxStart</code>
-                                <i>(global)</i>: fired if no other Ajax requests are currently
-                                active
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxBeforeSend</code>
-                                (data: xhr, options): before sending the request; can be
-                                cancelled
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxSend</code>
-                                (data: xhr, options): like <code>
-                                    ajaxBeforeSend</code>
-                                , but not cancellable
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxSuccess</code>
-                                (data: xhr, options, data): when the response is success
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxError</code>
-                                (data: xhr, options, error): when there was an error
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxComplete</code>
-                                (data: xhr, options): after request has completed, regardless
-                                of error or success
-                            </p>
-                        </li>
-                        <li>
-                            <p>
-                                <code>
-                                    ajaxStop</code>
-                                <i>(global)</i>: fired if this was the last active Ajax request
-                            </p>
-                        </li>
-                    </ol>
-
-                    <p>
-                        By default, Ajax events are fired on the document object. However, if the <code>
-                            context</code>
-                        of a request is a DOM node, the events are fired on that node and will
-                        bubble up the DOM. The only exceptions to this are the global events <code>
-                            ajaxStart</code>
-                        &amp; <code>
-                            ajaxStop</code>
-                        .
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ajaxBeforeSend&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
-  <span class="c1">// This gets fired for every Ajax request performed on the page.</span>
-  <span class="c1">// The xhr object and Z.ajax() options are available for editing.</span>
-  <span class="c1">// Return false to cancel this request.</span>
-<span class="p">})</span>
-
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
-  <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
-  <span class="c1">// data to be added to query string:</span>
-  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span> <span class="p">},</span>
-  <span class="c1">// type of data we are expecting in return:</span>
-  <span class="nx">dataType</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">,</span>
-  <span class="nx">timeout</span><span class="o">:</span> <span class="mi">300</span><span class="p">,</span>
-  <span class="nx">context</span><span class="o">:</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
-  <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-    <span class="c1">// Supposing this JSON payload was received:</span>
-    <span class="c1">//   {&quot;project&quot;: {&quot;id&quot;: 42, &quot;html&quot;: &quot;&lt;div&gt;...&quot; }}</span>
-    <span class="c1">// append the HTML to context object.</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">project</span><span class="p">.</span><span class="nx">html</span><span class="p">)</span>
-  <span class="p">},</span>
-  <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xhr</span><span class="p">,</span> <span class="nx">type</span><span class="p">){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Ajax error!&#39;</span><span class="p">)</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-
-<span class="c1">// post a JSON payload:</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">ajax</span><span class="p">({</span>
-  <span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
-  <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;/projects&#39;</span><span class="p">,</span>
-  <span class="c1">// post payload:</span>
-  <span class="nx">data</span><span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span> <span class="p">}),</span>
-  <span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span>
-<span class="p">})</span>
-</code></pre>
-</div>
                 </article>
 
                 <article class=method id="Z.jsonp">
                     <h3>Z.jsonp <span class=emoji title=deprecated>🐶🔫</span></h3>
-                    <p class=warning>
-                        Deprecated, use <a href="#Z.ajax">Z.ajax</a> instead.
-                    </p>
-                    <pre class=signature><code>Z.jsonp(options) ⇒ mock XMLHttpRequest</code></pre>
+                    <pre class=signature><code>Z.jsonp(options)
+Z.jsonp(url, options)                        
+</code></pre>
                     <p>
-                        Perform a JSONP request to fetch data from another domain.
+                        发起一个JSONP跨域请求，获取JSON格式数据。
                     </p>
                     <p>
-                        This method has no advantages over <a href="#Z.ajax">Z.ajax</a> and should not be used.
-                    </p>
+                        JSONP使用Script tag发起请求，默认只能GET方式、异步请求、不能处理HTTP头。其参数作为URL一部分传递，当参数较多时需要注意各浏览器对URL长度的<a href="http://support.microsoft.com/kb/208427">限制</a>。
+                    </p>                    
+            <p>Options:</p>
+                    <ul>
+                        <li>
+                            <code>url</code>
+                            (default: none): 请求的URL
+                        </li>
+                        <li>
+                            <code>param</code>
+                            (default: none): 请求参数
+                        </li>
+                        <li>
+                            <code>timestamp</code>
+                            (default: none): 是否加时间戳（避免缓存）
+                        </li>                        
+                        <li>
+                            <code>success</code>(default: none): 
+                            请求成功回调函数
+                        </li>                        
+                        <li>
+                            <code>failure</code> (default: none):
+                            请求失败回调函数
+                        </li>
+                        <li>
+                            <code>jsonpCallback</code> (default: none):
+                            指定回调函数名称，默认会随机生成函数名。当使用缓存时，timestamp应设为false。
+                        </li>                        
+                    </ul>
                 </article>
+
+                <article class=method id="Z.text">
+                    <h3>Z.text</h3>
+                    <pre class=signature><code>Z.text(url, function(res, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.text(url, [data], [function(res, status, xhr){ ... }]) ⇒ XMLHttpRequest
+</code></pre>
+                    <p>
+                        执行一个GET请求，返回纯文本（Plain text）。这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
+                    </p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="s1">&#39;/whatevs.html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">txt</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="nb">'#tab'</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">txt</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.json">
+                    <h3>Z.json</h3>
+                    <pre class=signature><code>Z.json(url, function(res, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.json(url, [data], [function(res, status, xhr){ ... }]) ⇒ XMLHttpRequest
+</code></pre>
+                    <p>
+                        执行一个GET请求，返回JSON。这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
+                    </p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">json</span><span class="p">(</span><span class="s1">&#39;/add.action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="nb">'#tab'</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">obj.name</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.xml">
+                    <h3>Z.xml</h3>
+                    <pre class=signature><code>Z.xml(url, function(res, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.xml(url, [data], [function(res, status, xhr){ ... }]) ⇒ XMLHttpRequest
+</code></pre>
+                    <p>
+                        执行一个GET请求，返回XML。这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
+                    </p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">xml</span><span class="p">(</span><span class="s1">&#39;/add.action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">xml</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="nb">'#tab'</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">xml.documentElement.getElementsByTagName("AD")</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>                
 
                 <article class=method id="Z.get">
                     <h3>Z.get </h3>
-                    <pre class=signature><code>Z.get(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
-Z.get(url, [data], [function(data, status, xhr){ ... }], [dataType]) ⇒ XMLHttpRequest [v1.0]
+                    <pre class=signature><code>Z.get(url, function(res, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.get(url, [data], [function(res, status, xhr){ ... }]) ⇒ XMLHttpRequest
 </code></pre>
                     <p>
-                        Perform an Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
-                        method.
+                        执行一个Ajax GET请求，默认返回JSON。 这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
                     </p>
 
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/whatevs.html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
-  <span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span>
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/doXXX.action&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+  <span class="nx">Z</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">obj.name</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre>
 </div>
                 </article>
 
-                <article class=method id="Z.getJSON">
-                    <h3>Z.getJSON </h3>
-                    <pre class=signature><code>Z.getJSON(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
-Z.getJSON(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest [v1.0]
-</code></pre>
-                    
+                <article class=method id="Z.post">
+                    <h3>Z.post</h3>
+                    <pre class=signature><code>Z.post(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.post(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+</code></pre>                    
                     <p>
-                        Get JSON data via Ajax GET request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
-                        method.
+                        执行一个Ajax POST请求，默认返回JSON。 这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
                     </p>
-
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
-<span class="p">})</span>
-
-<span class="c1">// fetch data from another domain with JSONP</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;//example.com/awesome.json?callback=?&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">remoteData</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">remoteData</span><span class="p">)</span>
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span>
 <span class="p">})</span>
 </code></pre>
 </div>
                 </article>
+
+                <article class=method id="Z.sync">
+                    <h3>Z.sync</h3>
+                    <pre class=signature><code>Z.sync(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.sync(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+</code></pre>                    
+                    <p>
+                        执行一个Ajax同步请求，默认返回JSON。 这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">sync</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.async">
+                    <h3>Z.async</h3>
+                    <pre class=signature><code>Z.async(url, function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+Z.async(url, [data], function(data, status, xhr){ ... }) ⇒ XMLHttpRequest
+</code></pre>                    
+                    <p>
+                        执行一个Ajax异步请求，默认返回JSON。 这是一个<a href="#Z.ajax">Z.ajax</a>的便捷方法。
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">async</span><span class="p">(</span><span class="s1">&#39;/awesome.json&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">json</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">json</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>
+
 
                 <article class=method id="Z.param">
                     <h3>Z.param </h3>
                     <pre class=signature><code>Z.param(object, [shallow]) ⇒ string
 Z.param(array) ⇒ string
 </code></pre>
-                    
-  
-
                     <p>
-                        Serialize an object to a URL-encoded string representation for use in Ajax
-                        request query strings and post data. If shallow is set, nested objects are
-                        not serialized and nested array values won&rsquo;t use square brackets on their keys.
+                        序列号一个对象为HTTP URL需要的查询参数，如设置了shallow为true，则会递归序列化。
                     </p>
-
-                    <p>
-                        Also accepts an array in <a href="#serializeArray">serializeArray</a> format, where each
-                        item has &ldquo;name&rdquo; and &ldquo;value&rdquo; properties.
-                    </p>
-
                     <div class="highlight">
                         <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">two</span><span class="o">:</span> <span class="mi">2</span> <span class="p">}})</span>
 <span class="c1">//=&gt; &quot;foo[one]=1&amp;foo[two]=2)&quot;</span>
@@ -1620,100 +1518,6 @@ Z.param(array) ⇒ string
 
 <span class="nx">Z</span><span class="p">.</span><span class="nx">param</span><span class="p">({</span> <span class="nx">foo</span><span class="o">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="nx">nested</span><span class="o">:</span> <span class="p">{</span> <span class="nx">will</span><span class="o">:</span> <span class="s1">&#39;be ignored&#39;</span> <span class="p">}},</span> <span class="kc">true</span><span class="p">)</span>
 <span class="c1">//=&gt; &quot;foo=bar&amp;nested=[object+Object]&quot;</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="Z.post">
-                    <h3>Z.post </h3>
-                    <pre class=signature><code>Z.post(url, [data], function(data, status, xhr){ ... }, [dataType]) ⇒ XMLHttpRequest
-</code></pre>
-                    
-  
-
-                    <p>
-                        Perform an Ajax POST request. This is a shortcut for the <a href="#Z.ajax">Z.ajax</a>
-                        method.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">sample</span><span class="o">:</span> <span class="s1">&#39;payload&#39;</span> <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
-  <span class="c1">// process response</span>
-<span class="p">})</span>
-</code></pre>
-</div>
-                    <p>
-                        <code>
-                            data</code>
-                        can also be a string:
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create&#39;</span><span class="p">,</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#some_form&#39;</span><span class="p">).</span><span class="nx">serialize</span><span class="p">(),</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
-  <span class="c1">// ...</span>
-<span class="p">})</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="load">
-                    <h3>load </h3>
-                    <pre class=signature><code>load(url, function(data, status, xhr){ ... }) ⇒ self
-</code></pre>
-                    
-  
-
-                    <p>
-                        Set the html contents of the current collection to the result of a GET Ajax call to the given URL. Optionally, a CSS selector can be specified in the URL, like so, to use only the HTML content matching the selector for updating the collection:
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#some_element&#39;</span><span class="p">).</span><span class="nx">load</span><span class="p">(</span><span class="s1">&#39;/foo.html #bar&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                    <p>
-                        If no CSS selector is given, the complete response text is used instead.
-                    </p>
-
-                    <p>
-                        Note that any JavaScript blocks found are only executed in case no selector is given.
-                    </p>
-
-                </article>
-
-                <hr>
-                <h2 id="form">Form methods</h2>
-
-                <article class=method id="serialize">
-                    <h3>serialize </h3>
-                    <pre class=signature><code>serialize() ⇒ string
-</code></pre>
-                    
-  
-
-                    <p>
-                        Serialize form values to an URL-encoded string for use in Ajax post requests.
-                    </p>
-
-                </article>
-
-                <article class=method id="serializeArray">
-                    <h3>serializeArray </h3>
-                    <pre class=signature><code>serializeArray() ⇒ array</code></pre>
-                    
-                    <p>
-                        Serialize form into an array of objects with <code>
-                            name</code>
-                        and <code>
-                            value</code> properties.
-                        Disabled form controls, buttons, and unchecked radio buttons/checkboxes are skipped.
-                        The result doesn&rsquo;t include data from file inputs.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">serializeArray</span><span class="p">()</span>
-<span class="c1">//=&gt; [{ name: &#39;size&#39;, value: &#39;micro&#39; },</span>
-<span class="c1">//    { name: &#39;name&#39;, value: &#39;Z.js&#39; }]</span>
 </code></pre>
 </div>
                 </article>
@@ -1990,7 +1794,7 @@ Z.param(array) ⇒ string
 </div>                        
                 </article>
 
-                <article class="method" id="isURL">
+                <article class="method" id="Z.isURL">
                     <h3>isURL</h3>
 <pre class="signature">Z.String.isURL(string) ⇒ boolean</pre>
                     <p>
@@ -1998,7 +1802,7 @@ Z.param(array) ⇒ string
                     </p>
                 </article>
 
-                <article class="method" id="isEmail">
+                <article class="method" id="Z.isEmail">
                     <h3>isEmail</h3>
 <pre class="signature">Z.String.isEmail(string) ⇒ boolean</pre>
                     <p>
@@ -2038,9 +1842,160 @@ Z.param(array) ⇒ string
 </code></pre>
                     </div>
                 </article>
-
+                    
 
                 <hr>
+                <h2 id="OOP">面向对象</h2>
+                <article class=method id="Z.Class">
+                    <h3>Z.Class</h3>
+                    <pre class=signature><code>Z.Class(name, factory) ⇒ function
+Z.Class(name, [superClass], factory) ⇒ function                        
+</code></pre>
+                    <p>
+                        定义一个类，默认定义的window上。name为类名，字符串类型；superClass为父类，function类型；factory为构造函数，function类型。
+                    </p>
+                    <p>定义一个简单类</p>
+                    <div class="highlight">
+<pre><code class="js">Z.Class('Person', function() {
+    this.init = function(name, age) {
+        this.name = name
+        this.age = age
+    }
+    this.log = function() {
+        alert('name: ' + this.name + ', age: ' + this.age)
+    }
+})
+var p = new Person('John McCarthy', 80)
+p.log() // 'name: John McCarthy, age: 80'
+</code></pre>
+</div>           
+
+                    <p>私有属性、方法</p>
+                    <div class="highlight">
+<pre><code class="js">Z.Class('Person', function() {
+    var privateVar = []
+    var helpMethod = function() { ... }
+    this.init = function(name, age) {
+        ...
+    }
+})
+</code></pre>
+</div>
+
+                    <p>定义一个命名空间类</p>
+                    <div class="highlight">
+<pre><code class="js">Z.Class('Z.ui.Dialog', function() {
+    this.init = function(options) {
+        ...
+    }
+    this.open = function() {
+        ...
+    }
+})
+var dialog = new Z.ui.Dialog(options)
+dialog.open()
+</code></pre>
+</div>    
+                    <p>定义一个命名空间类</p>
+                    <div class="highlight">
+<pre><code class="js">Z.Class('Z.ui.Dialog', function() {
+    this.init = function(options) {
+        ...
+    }
+    this.open = function() {
+        ...
+    }
+})
+var dialog = new Z.ui.Dialog(options)
+dialog.open()
+</code></pre>
+</div>
+
+                    <p>指定顶级命名空间</p>
+                    <div class="highlight">
+<pre><code class="js">var Blog = {}
+Z.Class.globalNamespace = Blog
+Z.Class('ui.Dialog', function() {
+    this.init = function(name, age) {
+        ...
+    }
+})
+var dialog = new Blog.ui.Dialog()
+</code></pre>
+</div>
+
+              <p>继承</p>
+                    <div class="highlight">
+<pre><code class="js">Z.Class('Z.ui.Dialog', Z.ui.Window, function(supr) {
+    this.init = function(options) {
+        supr.init.call(options)
+        ...
+    }
+    this.show = function() {
+        ...
+    }
+})
+</code></pre>
+</div>
+
+                </article>
+
+                <article class=method id="Z.statics">
+                    <h3>Z.statics</h3>
+                    <pre class=signature><code>Z.statics(clazz, obj) ⇒ function</code></pre>
+                    <p>
+                        给类添加静态属性、方法。
+                    </p>
+                    <div class="highlight">
+                    <pre><code class="js">Class.statics(Person, {
+    prop: 'xx',
+    method: function() { ... }
+})
+Person.prop // -》xx
+Person.method() // call static method
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.methods">
+                    <h3>Z.methods</h3>
+                    <pre class=signature><code>Z.methods(clazz, obj [,override]) ⇒ function</code></pre>
+                    <p>
+                        给类添加属性、方法。实际是添加到类的prototype上。override为true表示将覆盖原有的属性、方法。
+                    </p>
+                    <div class="highlight">
+                    <pre><code class="js">Class.methods(Person, {
+    prop: 'xx',
+    method: function() { ... }
+})
+var p = new Person()
+p.prop // -》xx
+p.method() // call instance's method
+</code></pre>
+</div>                        
+                </article>
+
+                <article class=method id="Z.agument">
+                    <h3>Z.agument</h3>
+                    <pre class=signature><code>Z.agument(clazz, clazz1, class2, [...]) ⇒ function
+Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function                        
+</code></pre>
+                    <p>
+                        掺合，多继承，override为true表示将覆盖原有的属性、方法。clazz1/clazz2为function类型时只继承其原型上的属性，方法。
+                    </p>
+                    <div class="highlight">
+                    <p>从对象掺合</p>
+                    <pre><code class="js">Class.agument(Z.ui.Dialog, {show: function() {}}, {hide: function() {}})                        
+</code></pre>
+                    <p>从多个类继承</p>
+                    <pre><code class="js">Class.agument(Z.ui.Dialog, Z.ui.Component, Z.ui.window)                     
+</code></pre>
+</div>                        
+                </article>
+
+
+
+                <hr>    
                 <h2 id="thanks">鸣谢</h2>
                 <p>
                     This documentation is based on the layout of the
