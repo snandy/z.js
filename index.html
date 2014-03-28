@@ -715,6 +715,16 @@ get(index) ⇒ DOM node
 </div>
                 </article>
 
+                <article class=method id="ready">
+                    <h3>ready </h3>
+                    <pre class=signature><code>ready(function(Z){ ... }) ⇒ self</code></pre>
+                    <p>
+                        Attach an event handler for the &ldquo;DOMContentLoaded&rdquo; event that fires when the DOM
+                        on the page is ready. It&rsquo;s recommended to use the <a href="#Z()">Z()</a> function instead
+                        of this method.
+                    </p>
+                </article>
+
 
                 <hr>
                 <h2 id="DOM">DOM操作</h2>
@@ -921,23 +931,18 @@ height(function(index, oldHeight){ ... }) ⇒ self
 
 
                 <article class=method id="position">
-                    <h3>position <span class=version>v1.0+</span></h3>
+                    <h3>position</h3>
                     <pre class=signature><code>position() ⇒ object</code></pre>
                     <p>
-                        Get the position of the first element in the collection, relative to the <a href="#offsetParent">offsetParent</a>. This information is useful when absolutely
-                        positioning an element to appear aligned with another.
+                        获取集合中第一个元素的位置，相对于最近定位的父元素。
                     </p>
 
                     <p>
-                        Returns an object with properties: <code>
-                            top</code>
-                        , <code>
-                            left</code>
-                        .
+                        返回对象具有的属性: <code>top</code>, <code>left</code>.
                     </p>
 
                     <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="nx">element</span><span class="p">.</span><span class="nx">position</span><span class="p">()</span>
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">pos</span> <span class="o">=</span> Z(<span class="s1">'#ad'</span>)<span class="p">.</span><span class="nx">position</span><span class="p">()</span>
 
 <span class="c1">// position a tooltip relative to the element</span>
 <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#tooltip&#39;</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
@@ -952,28 +957,20 @@ height(function(index, oldHeight){ ... }) ⇒ self
                 <article class=method id="offset">
                     <h3>offset </h3>
                     <pre class=signature><code>offset() ⇒ object
-offset(coordinates) ⇒ self [v1.0]
-offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
+offset(coordinates) ⇒ self
+offset(function(index, oldOffset){ ... }) ⇒ self
 </code></pre>
                     <p>
-                        Get position of the element in the document. Returns an object with properties: <code>
+                        获取元素相对于文档 (document) 的位置，返回的对象具有属性: <code>
                             top</code>
                         , <code>
                             left</code>
-                        , <code>
-                            width</code>
-                        and <code>
-                            height</code>
                         .
                     </p>
 
                     <p>
-                        When given an object with properties <code>
-                            left</code>
-                        and <code>
-                            top</code>
-                        , use those values to
-                        position each element in the collection relative to the document.
+                        当传参数coordinates(具有<code>left</code>
+                        和<code>top</code>属性)，将设置元素的top、left。
                     </p>
                 </article>
 
@@ -981,29 +978,17 @@ offset(function(index, oldOffset){ ... }) ⇒ self [v1.0]
                     <h3>offsetParent</h3>
                     <pre class=signature><code>offsetParent() ⇒ collection</code></pre>
                     <p>
-                        Find the first ancestor element that is <em>positioned</em>, meaning its CSS <code>
-                            position</code>
-                        value is &ldquo;relative&rdquo;, &ldquo;absolute&rdquo; or &ldquo;fixed&rdquo;.
-                    </p>
-
-                </article>
-
-                <article class=method id="ready">
-                    <h3>ready </h3>
-                    <pre class=signature><code>ready(function(Z){ ... }) ⇒ self</code></pre>
-                    <p>
-                        Attach an event handler for the &ldquo;DOMContentLoaded&rdquo; event that fires when the DOM
-                        on the page is ready. It&rsquo;s recommended to use the <a href="#Z()">Z()</a> function instead
-                        of this method.
+                        获取最近定位的父元素，也即具有relative，absolute或fixed的父元素。
                     </p>
                 </article>
 
                 <article class=method id="scrollTop">
                     <h3>scrollTop</h3>
-                    <pre class=signature><code>scrollTop() ⇒ number</code></pre>
+                    <pre class=signature><code>scrollTop() ⇒ number
+scrollTop(top) ⇒ self
+</code></pre>
                     <p>
-                        Gets the value of how many pixels were scrolled so far on window or scrollable
-                        element on the page.
+                        获取或设置元素的scrollTop。
                     </p>
                 </article>
 
