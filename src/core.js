@@ -10,15 +10,15 @@ Z.prototype = {
         // For Z() object
         if ( Z.isZ(selector) ) return selector
 
-        // For Array or nodes
-        if ( Z.isArrayLike(selector) && !Z.isString(selector) ) return this.pushStack(selector)
-
         // For HTMLElement or window
         if (selector.nodeType || selector === window) {
             this[0] = selector
             this.length = 1
             return
         }
+
+        // For Array or nodes
+        if ( Z.isArrayLike(selector) ) return this.pushStack(selector)
 
         // For CSS selector
         var nodes = query(selector, context)
@@ -67,6 +67,18 @@ Z.prototype = {
             (i < 0 ? this.slice(i)[0] : this[i])
     },
 
+    parent: function() {
+        return Z( this[0].parentNode )
+    },
+    
+    next: function() {
+        return Z( nextOrPrev(this[0], 'nextSibling') )
+    },
+
+    prev: function() {
+        return Z( nextOrPrev(this[0], 'previousSibling') )
+    },
+    
     each: function(iterator) {
         forEach(this, iterator)
         return this
@@ -87,8 +99,9 @@ Z.prototype = {
 
     closest: function(selector, context) {
         var node = this[0], collection = false
-        while ( node && !matches(node, selector) )
+        while ( node && !matches(node, selector) ) {
             node = node !== context && !Z.isDocument(node) && node.parentNode
+        }
         return Z(node)
     },
 

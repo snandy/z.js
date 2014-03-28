@@ -7,8 +7,11 @@
 			html, body {
 				margin: 0;
 			}
-			.red {
-				color: red;
+			#p2 {
+				height: 100px;
+                width: 300px;
+                border: 1px solid gray;
+                overflow-y: auto;
 			}
 		</style>
 		<script type="text/javascript" src="../z.src.js"></script>
@@ -25,17 +28,44 @@
 			</div>
 			<p>段落</p>
 		</div>
-		<p id="p2">
-			<span class="cls">span.cls</span>
-		</p>
+		<div id="p2">
+			<p class="cls">p.cls</p>
+            啊啊啊
+            <ul>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+                <li>1</li>
+            </ul>
+            事实上
+            <br/>
+            aa
+            <a href="#ss">ss</a>
+		</div>
 		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
-
+        <button>TEST</button>
 	<script>
 		
-		Z('p').on('click', function() {
-			Z(this).addClass('red')
+		Z('button').on('click', function() {
+			// var top = Z('#p2').scrollTop()
+            // alert(top)
+
+            var top = Z(window).scrollTop(130)
+            // alert(top)
 		})
 
+function nextOrPrev(elem, op) {
+    var dest 
+    while ( elem && (dest=elem[op]) && (dest.nodeType !== 1 || dest.tagName === 'BR') ) {
+        elem = dest
+    }
+    return dest
+}
+var ss = nextOrPrev(Z('ul')[0], 'previousSibling')
 	</script>
 	</body>
 </html>

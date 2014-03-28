@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-28 15:31:51
+ * @snandy 2014-03-28 19:50:16
  *
  */
 ~function(window, undefined) {
@@ -120,6 +120,17 @@ function generateUUID(id) {
 
 function now() {
     return (new Date).getTime()
+}
+
+/*
+ * op: nextSibling | previousSibling
+ */
+function nextOrPrev(elem, op) {
+    var dest 
+    while ( elem && (dest=elem[op]) && (dest.nodeType !== 1 || dest.tagName === 'BR') ) {
+        elem = dest
+    }
+    return dest
 }
 
 /**
@@ -885,15 +896,15 @@ Z.prototype = {
         // For Z() object
         if ( Z.isZ(selector) ) return selector
 
-        // For Array or nodes
-        if ( Z.isArrayLike(selector) && !Z.isString(selector) ) return this.pushStack(selector)
-
         // For HTMLElement or window
         if (selector.nodeType || selector === window) {
             this[0] = selector
             this.length = 1
             return
         }
+
+        // For Array or nodes
+        if ( Z.isArrayLike(selector) ) return this.pushStack(selector)
 
         // For CSS selector
         var nodes = query(selector, context)
@@ -942,6 +953,18 @@ Z.prototype = {
             (i < 0 ? this.slice(i)[0] : this[i])
     },
 
+    parent: function() {
+        return Z( this[0].parentNode )
+    },
+    
+    next: function() {
+        return Z( nextOrPrev(this[0], 'nextSibling') )
+    },
+
+    prev: function() {
+        return Z( nextOrPrev(this[0], 'previousSibling') )
+    },
+    
     each: function(iterator) {
         forEach(this, iterator)
         return this
@@ -962,8 +985,9 @@ Z.prototype = {
 
     closest: function(selector, context) {
         var node = this[0], collection = false
-        while ( node && !matches(node, selector) )
+        while ( node && !matches(node, selector) ) {
             node = node !== context && !Z.isDocument(node) && node.parentNode
+        }
         return Z(node)
     },
 
@@ -1477,7 +1501,6 @@ Z.fn.extend({
     },
     position: function() {
         if (!this[0]) return
-        
         var $parent = this.offsetParent()
         var offset  = this.offset()
         var parentOffset = rroot.test($parent[0].nodeName) ? {top: 0, left: 0} : $parent.offset()
@@ -1490,6 +1513,23 @@ Z.fn.extend({
         return {
             top:  offset.top  - parentOffset.top,
             left: offset.left - parentOffset.left
+        }
+    },
+    scrollTop: function(top) {
+        var isWindow = this[0] == window
+        if (top === undefined) {
+            if (isWindow) {
+                return window.pageXOffset || doc.documentElement.scrollTop || doc.body.scrollTop
+            }
+            return this[0].scrollTop
+        } else {
+            if ( isWindow ) {
+                window.scrollTo(0, top)
+            }
+            this.each(function() {
+                this.scrollTop = top
+            })
+            return this
         }
     },
     text: function(val) {

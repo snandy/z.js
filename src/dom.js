@@ -349,7 +349,6 @@ Z.fn.extend({
     },
     position: function() {
         if (!this[0]) return
-        
         var $parent = this.offsetParent()
         var offset  = this.offset()
         var parentOffset = rroot.test($parent[0].nodeName) ? {top: 0, left: 0} : $parent.offset()
@@ -362,6 +361,23 @@ Z.fn.extend({
         return {
             top:  offset.top  - parentOffset.top,
             left: offset.left - parentOffset.left
+        }
+    },
+    scrollTop: function(top) {
+        var isWindow = this[0] == window
+        if (top === undefined) {
+            if (isWindow) {
+                return window.pageXOffset || doc.documentElement.scrollTop || doc.body.scrollTop
+            }
+            return this[0].scrollTop
+        } else {
+            if ( isWindow ) {
+                window.scrollTo(0, top)
+            }
+            this.each(function() {
+                this.scrollTop = top
+            })
+            return this
         }
     },
     text: function(val) {

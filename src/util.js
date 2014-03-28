@@ -51,6 +51,17 @@ function now() {
     return (new Date).getTime()
 }
 
+/*
+ * op: nextSibling | previousSibling
+ */
+function nextOrPrev(elem, op) {
+    var dest 
+    while ( elem && (dest=elem[op]) && (dest.nodeType !== 1 || dest.tagName === 'BR') ) {
+        elem = dest
+    }
+    return dest
+}
+
 /**
  * Browser Detect
  * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
