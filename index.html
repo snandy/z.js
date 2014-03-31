@@ -22,31 +22,37 @@
             <a class="toc_title" href="#core">Core</a>
             <ul class="toc_section">
                 <li><a href="#Z()">Z()</a></li>
-                <li><a href="#Z.contains">Z.contains</a></li>
-                <li><a href="#Z.each">Z.each</a></li>
-                <li><a href="#Z.extend">Z.extend</a></li>
-                <li><a href="#Z.map">Z.map</a></li>
-                <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
-                <li><a href="#closest">closest</a></li>
-                <li><a href="#concat">concat</a></li>
-                <li><a href="#data">data</a></li>
-                <li><a href="#each">each</a></li>
-                <li><a href="#empty">empty</a></li>
-                <li><a href="#eq">eq</a></li>
                 <li><a href="#find">find</a></li>
+                <li><a href="#eq">eq</a></li>
                 <li><a href="#first">first</a></li>
-                <li><a href="#get">get</a></li>
-                <li><a href="#hide">hide</a></li>
                 <li><a href="#last">last</a></li>
-                <li><a href="#map">map</a></li>
+                <li><a href="#prev">prev</a></li>
+                <li><a href="#next">next</a></li>
                 <li><a href="#parent">parent</a></li>
+                <li><a href="#closest">closest</a></li>
                 <li><a href="#push">push</a></li>
-                <li><a href="#ready">ready</a></li>
-                <li><a href="#reduce">reduce</a></li>
-                <li><a href="#remove">remove</a></li>                
-                <li><a href="#show">show</a></li>
+                <li><a href="#sort">sort</a></li>
                 <li><a href="#slice">slice</a></li>
-                <li><a href="#toggle">toggle</a></li>                
+                <li><a href="#splice">splice</a></li>
+                <li><a href="#get">get</a></li>
+                <li><a href="#toArray">toArray</a></li>
+                
+                <li><a href="#each">each</a></li>
+                <li><a href="#map">map</a></li>
+                <li><a href="#data">data</a></li>
+                <li><a href="#removeData">removeData</a></li>
+                <li><a href="#remove">remove</a></li>
+                <li><a href="#empty">empty</a></li>                                                
+                <li><a href="#show">show</a></li>
+                <li><a href="#hide">hide</a></li>
+                <li><a href="#toggle">toggle</a></li>
+
+                <li><a href="#ready">ready</a></li>
+                <li><a href="#Z.extend">Z.extend</a></li>
+                <li><a href="#Z.each">Z.each</a></li>
+                <li><a href="#Z.map">Z.map</a></li>
+                <li><a href="#Z.contains">Z.contains</a></li>
+                <li><a href="#Z.parseJSON">Z.parseJSON</a></li>
             </ul>
 
             <a class="toc_title" href="#DOM">DOM</a>
@@ -289,89 +295,104 @@ Z(function(Z){ ... }) ⇒ DOM Ready
                     </p>
                 </article>
 
-                <article class=method id="Z.contains">
-                    <h3>Z.contains</h3>
-                    <pre class=signature><code>Z.contains(parent, node) ⇒ boolean</code></pre>
-                    <p>
-                        判断元素parent里是否包含给定的元素node，包含返回true，否则返回false
-                    </p>
-                </article>
 
-                <article class=method id="Z.each">
-                    <h3>Z.each</h3>
-                    <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection</code></pre>
+                <article class=method id="find">
+                    <h3>find</h3>
+                    <pre class=signature><code>find(selector) ⇒ collection
+</code></pre>
                     <p>
-                        遍历一个数组或JS对象，迭代函数内返回<code>false</code>将停止迭代。
+                        在指定元素内部查找匹配的css selector元素。
                     </p>
+
                     <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;item %d is: %s&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
-<span class="p">})</span>
-
-<span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="s1">&#39;micro&#39;</span> <span class="p">}</span>
-<span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s: %s&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
-<span class="p">})</span>
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#myform&#39;</span><span class="p">)</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
 </code></pre>
 </div>
                 </article>
-
-                <article class=method id="Z.extend">
-                    <h3>Z.extend</h3>
-                    <pre class=signature><code>Z.extend(target, [source, [source2, ...]]) ⇒ target
-Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
-</code></pre>
-                    
+                <article class=method id="eq">
+                    <h3>eq</h3>
+                    <pre class=signature><code>eq(index) ⇒ collection</code></pre>
                     <p>
-                        扩展一个对象，会覆盖目标对象的已有属性值。默认是浅复制，第一个参数为 <code>true</code> 时为深复制。
+                        获取集合中指定位置的元素，返回的为一个<code>Z</code>对象。
                     </p>
-                    <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="s1">&#39;patridge&#39;</span> <span class="p">},</span>
-    <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">two</span><span class="o">:</span> <span class="s1">&#39;turtle doves&#39;</span> <span class="p">}</span>
 
-<span class="nx">Z</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">source</span><span class="p">)</span>
-<span class="c1">//=&gt; { one: &#39;patridge&#39;,</span>
-<span class="c1">//     two: &#39;turtle doves&#39; }</span>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">//=&gt; 返回集合里第一个元素</span>
+<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">//=&gt; 返回集合里最后一个元素</span>
 </code></pre>
 </div>
                 </article>
 
 
-                <article class=method id="Z.map">
-                    <h3>Z.map</h3>
-                    <pre class=signature><code>Z.map(collection, function(item, index){ ... }) ⇒ collection</code></pre>
+                <article class=method id="first">
+                    <h3>first</h3>
+                    <pre class=signature><code>first() ⇒ self</code></pre>
+                    <p>获取集合里的第一个元素.</p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">first</span><span class="p">()</span>
+</code></pre>
+</div>
+                </article>
+                
+                <article class=method id="last">
+                    <h3>last </h3>
+                    <pre class=signature><code>last() ⇒ collection
+</code></pre>
                     <p>
-                        迭代一个集合，过滤<code>null</code>
-                        和 <code>undefined</code> 后返回一个新集合。
+                        Get the last element of the current collection.
                     </p>
 
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()</span>
+</code></pre>
+</div>
                 </article>
 
-                <article class=method id="Z.parseJSON">
-                    <h3>Z.parseJSON</h3>
-                    <pre class=signature><code>Z.parseJSON(string) ⇒ object</code></pre>
-                    <p>
-                    将字符串解析成JSON格式。
-                    </p>
+
+                <article class=method id="prev">
+                    <h3>prev</h3>
+                    <pre class=signature><code>prev() ⇒ self</code></pre>
+                    <p>获取当前元素的前一个兄弟元素。</p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">prev</span><span class="p">()</span>
+</code></pre>
+</div>
+                </article>
+                
+                <article class=method id="next">
+                    <h3>next</h3>
+                    <pre class=signature><code>next() ⇒ self
+</code></pre>   
+                    <p>获取当前元素的后一个兄弟元素。</p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">next</span><span class="p">()</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="parent">
+                    <h3>parent</h3>
+                    <pre class=signature><code>parent() ⇒ self
+</code></pre>   
+                    <p>获取当前元素的后父元素。</p>
+
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">parent</span><span class="p">()</span>
+</code></pre>
+</div>
                 </article>
 
                 <article class=method id="closest">
                     <h3>closest</h3>
                     <pre class=signature><code>closest(selector, [context]) ⇒ collection
-closest(collection) ⇒ collection
-closest(element) ⇒ collection
 </code></pre>
                     <p>
-                        Traverse upwards from the current element to find the first element that
-                        matches the selector. If context node is given, consider only elements that are
-                        its descendants. This method is similar to <a href="#parents"><code>
-                            parents(selector)</code></a>, but
-                        it only returns the first ancestor matched.
-                    </p>
-
-                    <p>
-                        If a Z.js collection or element is given, the resulting element will have to
-                        match one of the given elements instead of a selector.
+                        向上查找符合选择器的元素，context指定查找的范围。注意与
+                        <a href="#parent"><code>parent()</code></a>的区别。
                     </p>
 
                     <div class="highlight">
@@ -379,59 +400,65 @@ closest(element) ⇒ collection
 <span class="nx">input</span><span class="p">.</span><span class="nx">closest</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">)</span>
 </code></pre>
 </div>
-                </article>
+                </article>                
 
-                <article class=method id="concat">
-                    <h3>concat</h3>
-                    <pre class=signature><code>concat(nodes, [node2, ...]) ⇒ self</code></pre>
+                <article class=method id="push">
+                    <h3>push </h3>
+                    <pre class=signature><code>push(element, [element2, ...]) ⇒ self</code></pre>
                     <p>
-                        Modify the collection by adding elements to it. If any of the arguments is an
-                        array, its elements are merged into the current collection.
-                    </p>
-                    <p class=compat>
-                        This is a Z.js-provided method that is not part of the jQuery API.
+                        从集合尾部添加元素。
                     </p>
                 </article>
 
-                <article class=method id="contents">
-                    <h3>contents <span class=version>v1.0+</span></h3>
-                    <pre class=signature><code>contents() ⇒ collection
+                <article class=method id="sort">
+                    <h3>sort</h3>
+                    <pre class=signature><code>sort(function() { ... }) ⇒ self</code></pre>
+                    <p>
+                        排序元素。
+                    </p>
+                </article>
+
+                <article class=method id="slice">
+                    <h3>slice</h3>
+                    <pre class=signature><code>slice() ⇒ self</code></pre>
+                    <p>
+                        截取集合里的元素，同数组的slice。
+                    </p>
+                </article>
+
+                <article class=method id="splice">
+                    <h3>splice</h3>
+                    <pre class=signature><code>splice() ⇒ self</code></pre>
+                    <p>
+                        截取集合里的元素，同数组的splice。
+                    </p>
+                </article>
+
+                <article class=method id="get">
+                    <h3>get</h3>
+                    <pre class=signature><code>get() ⇒ array
+get(index) ⇒ DOM node
 </code></pre>
                     <p>
-                        Get the children of each element in the collection, including text
-                        and comment nodes.
+                        将集合元素对象转成DOM元素数组返回，如果传了index则只返回一个元素。
                     </p>
-                </article>
 
-                <article class=method id="data">
-                    <h3>data</h3>
-                    <pre class=signature><code>data(name) ⇒ value
-data(name, value) ⇒ self
+                    <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
+<span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span>   <span class="c1">//=&gt; get all headings as an array</span>
+<span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">//=&gt; get first heading node</span>
 </code></pre>
-                    <p>
-                        Read or write <code>data-*</code>
-                        DOM attributes. Behaves like <a href="#attr">attr</a>, but prepends <code>data-</code>
-                        to the attribute name.
-                    </p>
-
-                    <p>
-                        When reading attribute values, the following conversions apply: <span class=version>v1.0+</span>
-                    </p>
-
-                    <ul>
-                        <li>&ldquo;true&rdquo;, &ldquo;false&rdquo;, and &ldquo;null&rdquo; are converted to corresponding types;</li>
-                        <li>number values are converted to actual numeric types;</li>
-                        <li>JSON values are parsed, if it&rsquo;s valid JSON;</li>
-                        <li>everything else is returned as string.</li>
-                    </ul>
-
-                    <p class=compat>
-                        Z.js's basic implementation of `data()` only stores strings.
-                        To store arbitrary objects, include the optional "data" module
-                        in your custom build of Z.js.
-                    </p>
-
+</div>
                 </article>
+
+                <article class=method id="toArray">
+                    <h3>toArray</h3>
+                    <pre class=signature><code>toArray() ⇒ self</code></pre>
+                    <p>
+                        将<code>Z</code>集合转成对应DOM元素的数组，即去掉wrapper。
+                    </p>
+                </article>
+
 
                 <article class=method id="each">
                     <h3>each</h3>
@@ -447,174 +474,7 @@ data(name, value) ⇒ self
 </code></pre>
 </div>
                 </article>
-
-                <article class=method id="empty">
-                    <h3>empty</h3>
-                    <pre class=signature><code>empty() ⇒ self
-</code></pre>
-                    <p>
-                        Clear DOM contents of each element in the collection.
-                    </p>
-
-                </article>
-
-                <article class=method id="eq">
-                    <h3>eq</h3>
-                    <pre class=signature><code>eq(index) ⇒ collection</code></pre>
-                    <p>
-                        Get the item at position specified by index from the current collection.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>   <span class="c1">//=&gt; only the first list item</span>
-<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">eq</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">//=&gt; only the last list item</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="find">
-                    <h3>find</h3>
-                    <pre class=signature><code>find(selector) ⇒ collection
-find(collection) ⇒ collection [v1.0]
-find(element) ⇒ collection [v1.0]
-</code></pre>
-                    <p>
-                        Find elements that match CSS selector executed in scope of nodes in the
-                        current collection.
-                    </p>
-
-                    <p>
-                        If a Z.js collection or element is given, filter those elements down to only
-                        ones that are descendants of element in the current collection.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">form</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#myform&#39;</span><span class="p">)</span>
-<span class="nx">form</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="s1">&#39;input, select&#39;</span><span class="p">)</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="first">
-                    <h3>first</h3>
-                    <pre class=signature><code>first() ⇒ collection</code></pre>
-                    <p>Get the first element of the current collection.</p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;form&#39;</span><span class="p">).</span><span class="nx">first</span><span class="p">()</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="forEach">
-                    <h3>forEach</h3>
-                    <pre class=signature><code>forEach(function(item, index, array){ ... }, [context])</code></pre>
-                    <p>
-                        Iterate through every element of the collection. Similar to <a href="#each">each</a>, but
-                        the arguments for the iterator functions are different, and returning <code>
-                            false</code>
-                        from the iterator won&rsquo;t stop the iteration.
-                    </p>
-
-                    <p class=compat>This is a Z.js-provided method that is not part of the jQuery API.</p>
-                </article>
-
-                <article class=method id="get">
-                    <h3>get</h3>
-                    <pre class=signature><code>get() ⇒ array
-get(index) ⇒ DOM node
-</code></pre>
-                    <p>
-                        Get all elements or a single element from the current collection. When no index
-                        is given, returns all elements in an ordinary array. When index is specified,
-                        return only the element at that position. This is different than <a href="#eq">eq</a> in
-                        the way that the returned node is <em>not</em> wrapped in a Z.js collection.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;h2&#39;</span><span class="p">)</span>
-<span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span>   <span class="c1">//=&gt; get all headings as an array</span>
-<span class="nx">elements</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">//=&gt; get first heading node</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="hide">
-                    <h3>hide</h3>
-                    <pre class=signature><code>hide() ⇒ self</code></pre>
-                    <p>
-                        Hide elements in this collection by setting their <code>
-                            display</code>
-                        CSS property to <code>
-                            none</code>
-                        .
-                    </p>
-
-                </article>
-
-                <article class=method id="push">
-                    <h3>push </h3>
-                    <pre class=signature><code>push(element, [element2, ...]) ⇒ self</code></pre>
-                    <p>
-                        Add elements to the end of the current collection.
-                    </p>
-
-                    <p class=compat>
-                        This is a Z.js-provided method that is not part of the jQuery API.
-                    </p>
-
-                </article>
                 
-
-                <article class=method id="index">
-                    <h3>index </h3>
-                    <pre class=signature><code>index([element]) ⇒ number</code></pre>
-                    <p>
-                        Get the position of an element. When no element is given, returns position of
-                        the current element among its siblings. When an element is given, returns its
-                        position in the current collection. Returns <code>
-                            -1</code>
-                        if not found.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li:nth-child(2)&#39;</span><span class="p">).</span><span class="nx">index</span><span class="p">()</span>  <span class="c1">//=&gt; 1</span>
-</code></pre>
-</div>
-                </article>
-
-                <article class=method id="indexOf">
-                    <h3>indexOf </h3>
-                    <pre class=signature><code>indexOf(element, [fromIndex]) ⇒ number</code></pre>
-                    <p>
-                        Get the position of an element in the current collection. If fromIndex number is
-                        given, search only from that position onwards. Returns the 0-based position when
-                        found and <code>
-                            -1</code>
-                        if not found. Use of <a href="#index">index</a> is recommended over this
-                        method.
-                    </p>
-
-                    <p class=compat>
-                        This is a Z.js-provided method that is not part of the jQuery API.
-                    </p>
-
-                </article>
-
-                <article class=method id="last">
-                    <h3>last </h3>
-                    <pre class=signature><code>last() ⇒ collection
-</code></pre>
-                    <p>
-                        Get the last element of the current collection.
-                    </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">).</span><span class="nx">last</span><span class="p">()</span>
-</code></pre>
-</div>
-                </article>
-
                 <article class=method id="map">
                     <h3>map </h3>
                     <pre class=signature><code>map(function(index, item){ ... }) ⇒ collection
@@ -642,16 +502,35 @@ get(index) ⇒ DOM node
 </div>
                 </article>
 
-                <article class=method id="reduce">
-                    <h3>reduce </h3>
-                    <pre class=signature><code>reduce(function(memo, item, index, array){ ... }, [initial]) ⇒ value</code></pre>
+                <article class=method id="data">
+                    <h3>data</h3>
+                    <pre class=signature><code>data(name) ⇒ value
+data(name, value) ⇒ self
+</code></pre>
                     <p>
-                        Identical to <a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/Reduce">Array.reduce</a> that iterates over current collection.
+                        获取第一个元素的扩展属性的值，或者设置所有元素扩展属性。
                     </p>
 
-                    <p class=compat>
-                        This is a Z.js-provided method that is not part of the jQuery API.
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
+<span class="nx">input</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;mydata&#39;</span>, 10<span class="p">)</span>
+<span class="nx">input</span><span class="p">.</span><span class="nx">data</span><span class="p">(</span><span class="s1">&#39;mydata&#39;</span><span class="p">)  //=&gt; 10</span>
+</code></pre>
+</div>
+                </article>                
+
+                <article class=method id="removeData">
+                    <h3>removeData</h3>
+                    <pre class=signature><code>removeData(name) ⇒ value</code></pre>
+                    <p>
+                        删除所有元素扩展属性。
                     </p>
+
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
+<span class="nx">input</span><span class="p">.</span><span class="nx">removeData</span><span class="p">(</span><span class="s1">&#39;mydata&#39;</span><span class="p">)</span>
+</code></pre>
+</div>
                 </article>
 
                 <article class=method id="remove">
@@ -663,13 +542,11 @@ get(index) ⇒ DOM node
                     </p>
                 </article>
 
-                <article class=method id="replaceWith">
-                    <h3>replaceWith</h3>
-                    <pre class=signature><code>replaceWith(content) ⇒ self</code></pre>
+                <article class=method id="empty">
+                    <h3>empty</h3>
+                    <pre class=signature><code>empty() ⇒ self</code></pre>
                     <p>
-                        Replace each element in the collection&mdash;both its contents and the element
-                        itself&mdash;with the new content. Content can be of any type described in
-                        <a href="#before">before</a>.
+                        清空指定元素的所有子元素.
                     </p>
                 </article>
 
@@ -682,19 +559,13 @@ get(index) ⇒ DOM node
                     </p>
                 </article>
 
-                <article class=method id="slice">
-                    <h3>slice </h3>
-                    <pre class=signature><code>slice(start, [end]) ⇒ array</code></pre>
+                <article class=method id="hide">
+                    <h3>hide</h3>
+                    <pre class=signature><code>hide() ⇒ self</code></pre>
                     <p>
-                        Extract the subset of this array, starting at <code>
-                            start</code>
-                        index. If <code>
-                            end</code>
-                        is
-                        specified, extract up to but not including <code>
-                            end</code>
-                        index.
+                        通过css的display隐藏元素。
                     </p>
+
                 </article>
 
                 <article class=method id="toggle">
@@ -725,6 +596,71 @@ get(index) ⇒ DOM node
                     </p>
                 </article>
 
+                <article class=method id="Z.extend">
+                    <h3>Z.extend</h3>
+                    <pre class=signature><code>Z.extend(target, [source, [source2, ...]]) ⇒ target
+Z.extend(true, target, [source, ...]) ⇒ target [v1.0]
+</code></pre>
+                    
+                    <p>
+                        扩展一个对象，会覆盖目标对象的已有属性值。默认是浅复制，第一个参数为 <code>true</code> 时为深复制。
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">one</span><span class="o">:</span> <span class="s1">&#39;patridge&#39;</span> <span class="p">},</span>
+    <span class="nx">source</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">two</span><span class="o">:</span> <span class="s1">&#39;turtle doves&#39;</span> <span class="p">}</span>
+
+<span class="nx">Z</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">source</span><span class="p">)</span>
+<span class="c1">//=&gt; { one: &#39;patridge&#39;,</span>
+<span class="c1">//     two: &#39;turtle doves&#39; }</span>
+</code></pre>
+</div>
+                </article>
+
+
+                <article class=method id="Z.each">
+                    <h3>Z.each</h3>
+                    <pre class=signature><code>Z.each(collection, function(index, item){ ... }) ⇒ collection</code></pre>
+                    <p>
+                        遍历一个数组或JS对象，迭代函数内返回<code>false</code>将停止迭代。
+                    </p>
+                    <div class="highlight">
+                        <pre><code class="js"><span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">index</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;item %d is: %s&#39;</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">item</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">hash</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Z.js&#39;</span><span class="p">,</span> <span class="nx">size</span><span class="o">:</span> <span class="s1">&#39;micro&#39;</span> <span class="p">}</span>
+<span class="nx">Z</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="nx">hash</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s: %s&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+                </article>
+
+                <article class=method id="Z.map">
+                    <h3>Z.map</h3>
+                    <pre class=signature><code>Z.map(collection, function(item, index){ ... }) ⇒ collection</code></pre>
+                    <p>
+                        迭代一个集合，过滤<code>null</code>
+                        和 <code>undefined</code> 后返回一个新集合。
+                    </p>
+
+                </article>
+
+                <article class=method id="Z.contains">
+                    <h3>Z.contains</h3>
+                    <pre class=signature><code>Z.contains(parent, node) ⇒ boolean</code></pre>
+                    <p>
+                        判断元素parent里是否包含给定的元素node，包含返回true，否则返回false
+                    </p>
+                </article>
+
+                <article class=method id="Z.parseJSON">
+                    <h3>Z.parseJSON</h3>
+                    <pre class=signature><code>Z.parseJSON(string) ⇒ object</code></pre>
+                    <p>
+                    将字符串解析成JSON格式。
+                    </p>
+                </article>
 
                 <hr>
                 <h2 id="DOM">DOM操作</h2>
