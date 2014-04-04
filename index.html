@@ -36,16 +36,10 @@
                 <li><a href="#splice">splice</a></li>
                 <li><a href="#get">get</a></li>
                 <li><a href="#toArray">toArray</a></li>
-                
                 <li><a href="#each">each</a></li>
                 <li><a href="#map">map</a></li>
                 <li><a href="#data">data</a></li>
                 <li><a href="#removeData">removeData</a></li>
-                <li><a href="#remove">remove</a></li>
-                <li><a href="#empty">empty</a></li>                                                
-                <li><a href="#show">show</a></li>
-                <li><a href="#hide">hide</a></li>
-                <li><a href="#toggle">toggle</a></li>
                 <li><a href="#Z.ready">Z.ready</a></li>
                 <li><a href="#Z.extend">Z.extend</a></li>
                 <li><a href="#Z.each">Z.each</a></li>
@@ -75,6 +69,11 @@
                 <li><a href="#offset">offset</a></li>
                 <li><a href="#offsetParent">offsetParent</a></li>
                 <li><a href="#scrollTop">scrollTop</a></li>
+                <li><a href="#show">show</a></li>
+                <li><a href="#hide">hide</a></li>
+                <li><a href="#toggle">toggle</a></li>     
+                <li><a href="#remove">remove</a></li>
+                <li><a href="#empty">empty</a></li>                                
             </ul>
 
             <a class="toc_title" href="#event">Event</a>
@@ -531,49 +530,6 @@ data(name, value) ⇒ self
 </div>
                 </article>
 
-                <article class=method id="remove">
-                    <h3>remove </h3>
-                    <pre class=signature><code>remove() ⇒ self</code></pre>
-                    <p>
-                        Remove elements in the current collection from their parent nodes, effectively
-                        detaching them from the DOM.
-                    </p>
-                </article>
-
-                <article class=method id="empty">
-                    <h3>empty</h3>
-                    <pre class=signature><code>empty() ⇒ self</code></pre>
-                    <p>
-                        清空指定元素的所有子元素.
-                    </p>
-                </article>
-
-                <article class=method id="show">
-                    <h3>show</h3>
-                    <pre class=signature><code>show() ⇒ self</code></pre>
-                    <p>
-                        Restore the default value for the &ldquo;display&rdquo; property of each element in the
-                        array, effectively showing them if they were hidden with <a href="#hide">hide</a>.
-                    </p>
-                </article>
-
-                <article class=method id="hide">
-                    <h3>hide</h3>
-                    <pre class=signature><code>hide() ⇒ self</code></pre>
-                    <p>
-                        通过css的display隐藏元素。
-                    </p>
-
-                </article>
-
-                <article class=method id="toggle">
-                    <h3>toggle </h3>
-                    <pre class=signature><code>toggle([setting]) ⇒ self</code></pre>
-                    <p>
-                        元素显示/隐藏切换，如果元素初始时隐藏的，则显示，反之隐藏。
-                    </p>
-                </article>
-
                 <article class=method id="Z.ready">
                     <h3>Z.ready</h3>
                     <pre class=signature><code>Z.ready(function(Z){ ... }) ⇒ self</code></pre>
@@ -885,9 +841,7 @@ offset(function(index, oldOffset){ ... }) ⇒ self
                     <p>
                         获取元素相对于文档 (document) 的位置，返回的对象具有属性: <code>
                             top</code>
-                        , <code>
-                            left</code>
-                        .
+                        , <code>left</code>.
                     </p>
 
                     <p>
@@ -913,7 +867,48 @@ scrollTop(top) ⇒ self
                         获取或设置元素的scrollTop。
                     </p>
                 </article>
+                <article class=method id="show">
+                    <h3>show</h3>
+                    <pre class=signature><code>show() ⇒ self</code></pre>
+                    <p>
+                        Restore the default value for the &ldquo;display&rdquo; property of each element in the
+                        array, effectively showing them if they were hidden with <a href="#hide">hide</a>.
+                    </p>
+                </article>
 
+                <article class=method id="hide">
+                    <h3>hide</h3>
+                    <pre class=signature><code>hide() ⇒ self</code></pre>
+                    <p>
+                        通过css的display隐藏元素。
+                    </p>
+
+                </article>
+
+                <article class=method id="toggle">
+                    <h3>toggle </h3>
+                    <pre class=signature><code>toggle([setting]) ⇒ self</code></pre>
+                    <p>
+                        元素显示/隐藏切换，如果元素初始时隐藏的，则显示，反之隐藏。
+                    </p>
+                </article>
+
+                <article class=method id="remove">
+                    <h3>remove </h3>
+                    <pre class=signature><code>remove() ⇒ self</code></pre>
+                    <p>
+                        Remove elements in the current collection from their parent nodes, effectively
+                        detaching them from the DOM.
+                    </p>
+                </article>
+
+                <article class=method id="empty">
+                    <h3>empty</h3>
+                    <pre class=signature><code>empty() ⇒ self</code></pre>
+                    <p>
+                        清空指定元素的所有子元素.
+                    </p>
+                </article>
 
                 <hr>
                 <h2 id="event">事件</h2>
@@ -1340,7 +1335,7 @@ Z.Class(name, [superClass], factory) ⇒ function
 <span class="kd">var</span> p = new Person(<span class="s1">'John McCarthy'</span>, 80)
 p.log() // 'name: John McCarthy, age: 80'
 </code></pre>
-</div>           
+</div>
 
                     <p>私有属性、方法</p>
                     <div class="highlight">
