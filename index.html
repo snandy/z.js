@@ -46,7 +46,6 @@
                 <li><a href="#show">show</a></li>
                 <li><a href="#hide">hide</a></li>
                 <li><a href="#toggle">toggle</a></li>
-
                 <li><a href="#ready">ready</a></li>
                 <li><a href="#Z.extend">Z.extend</a></li>
                 <li><a href="#Z.each">Z.each</a></li>
@@ -126,23 +125,23 @@
 
             <a class="toc_title" href="#Arrays">Arrays</a>
             <ul class="toc_section">
-                <li><a href="#forEach">forEach</a></li>
-                <li><a href="#map">map</a></li>
-                <li><a href="#every">every</a></li>
-                <li><a href="#some">some</a></li>
-                <li><a href="#contains">contains</a></li>
-                <li><a href="#filter">filter</a></li>
-                <li><a href="#unique">unique</a></li>
+                <li><a href="#Z.Array.forEach">forEach</a></li>
+                <li><a href="#Z.Array.map">map</a></li>
+                <li><a href="#Z.Array.every">every</a></li>
+                <li><a href="#Z.Array.some">some</a></li>
+                <li><a href="#Z.Array.contains">contains</a></li>
+                <li><a href="#Z.Array.filter">filter</a></li>
+                <li><a href="#Z.Array.unique">unique</a></li>
             </ul>
 
             <a class="toc_title" href="#Functions">Functions</a>
             <ul class="toc_section">
-                <li><a href="#bind">bind</a></li>
-                <li><a href="#once">once</a></li>
-                <li><a href="#uniq">uniq</a></li>
-                <li><a href="#delay">delay</a></li>
-                <li><a href="#debounce">debounce</a></li>
-                <li><a href="#throttle">throttle</a></li>
+                <li><a href="#Z.Function.bind">bind</a></li>
+                <li><a href="#Z.Function.once">once</a></li>
+                <li><a href="#Z.Function.uniq">uniq</a></li>
+                <li><a href="#Z.Function.delay">delay</a></li>
+                <li><a href="#Z.Function.debounce">debounce</a></li>
+                <li><a href="#Z.Function.throttle">throttle</a></li>
             </ul>
 
             <a class="toc_title" href="#Strings">Strings</a>
@@ -289,7 +288,6 @@ Z(function(Z){ ... }) ⇒ DOM Ready
 <span class="p">})</span>
 </code></pre>
 </div>
-
                     <p class="compat">
                     依据2/8原则，也为了使 <code>z.js</code> 足够轻量，IE8以下仅实现了最常用的id, className, tagName, attribute选择器。
                     </p>
@@ -572,27 +570,15 @@ data(name, value) ⇒ self
                     <h3>toggle </h3>
                     <pre class=signature><code>toggle([setting]) ⇒ self</code></pre>
                     <p>
-                        Toggle between showing and hiding each of the elements, based on whether the
-                        first element is visible or not. If <code>
-                            setting</code>
-                        is present, this method behaves
-                        like <a href="#show">show</a> if setting is truthy or <a href="#hide">hide</a> otherwise.
+                        元素显示/隐藏切换，如果元素初始时隐藏的，则显示，反之隐藏。
                     </p>
-
-                    <div class="highlight">
-                        <pre><code class="js"><span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;input[type=text]&#39;</span><span class="p">)</span>
-<span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#too_long&#39;</span><span class="p">).</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">val</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">140</span><span class="p">)</span>
-</code></pre>
-</div>
                 </article>
 
                 <article class=method id="ready">
                     <h3>ready </h3>
                     <pre class=signature><code>ready(function(Z){ ... }) ⇒ self</code></pre>
                     <p>
-                        Attach an event handler for the &ldquo;DOMContentLoaded&rdquo; event that fires when the DOM
-                        on the page is ready. It&rsquo;s recommended to use the <a href="#Z()">Z()</a> function instead
-                        of this method.
+                        DOM Ready （&ldquo;DOMContentLoaded&rdquo; ）或页面load后执行，推荐使用<a href="#Z()">Z()</a> 替代该方法。
                     </p>
                 </article>
 
@@ -1467,12 +1453,132 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
 
                 <hr>
                 <h2 id="Objects">对象相关</h2>
-                <article class=method id="Z.Objects.keys">
+                <article class=method id="keys">
                     <h3>Z.Objects.keys</h3>
-                    <pre class=signature><code>Z.Objects.keys(clazz, clazz1, class2, [...]) ⇒ function
-Z.Objects.keys(override, clazz, class1, clazz2, [...]) ⇒ function                        
+                    <pre class=signature><code>Z.Objects.keys(obj) ⇒ array
 </code></pre>                 
+<pre>Z.Object.keys({one:1, two:2, three:3});
+=&gt; ['one', 'two', 'three']</pre>
+
                 </article>
+
+                <article class=method id="values">
+                    <h3>Z.Objects.values</h3>
+                    <pre class=signature><code>Z.Objects.values(obj) ⇒ array
+</code></pre>                 
+<pre>Z.Object.keys({one:1, two:2, three:3});
+=&gt; [1, 2, 3]</pre>
+
+                </article>
+
+                <article class=method id="pairs">
+                    <h3>Z.Objects.pairs</h3>
+                    <pre class=signature><code>Z.Objects.pairs(obj) ⇒ array
+</code></pre>                 
+<pre>Z.Object.pairs({one:1, two:2, three:3});
+=&gt; [['one', 1], ['two', 2], ['three', 3]]</pre>
+
+                </article>
+
+                <article class=method id="invert">
+                    <h3>Z.Objects.invert</h3>
+                    <pre class=signature><code>Z.Objects.invert(obj) ⇒ object
+</code></pre>                 
+<pre>Z.Object.invert({one:1, two:2, three:3});
+=&gt; {'1': 'one', '2': 'two', '3': 'three'}</pre>
+
+                </article>
+
+                <article class=method id="pick">
+                    <h3>Z.Objects.pick</h3>
+                    <pre class=signature><code>Z.Objects.pick(obj, *keys) ⇒ object
+</code></pre>                 
+<pre>Z.Object.pick({one:1, two:2, three:3}, 'one', 'three');
+=&gt; {one: 1, three: 3}</pre>
+
+                </article>
+
+                <hr>
+                <h2 id="Arrays">数组</h2>
+                <article class=method id="Z.Array.forEach">
+                    <h3>Z.Array.forEach</h3>
+                    <pre class=signature><code>Z.Array.forEach(obj, function(){ ... }, context)
+</code></pre>
+                </article>                
+
+                <article class=method id="Z.Array.map">
+                    <h3>Z.Array.map</h3>
+                    <pre class=signature><code>Z.Array.map(obj, function(){ ... }, context)
+</code></pre>
+                </article>    
+
+                <article class=method id="Z.Array.every">
+                    <h3>Z.Array.every</h3>
+                    <pre class=signature><code>Z.Array.every(obj, function(){ ... }, context)
+</code></pre>
+                </article>    
+
+                <article class=method id="Z.Array.some">
+                    <h3>Z.Array.some</h3>
+                    <pre class=signature><code>Z.Array.some(obj, function(){ ... }, context)
+</code></pre>
+                </article>
+
+                <article class=method id="Z.Array.contains">
+                    <h3>Z.Array.contains</h3>
+                    <pre class=signature><code>Z.Array.contains(obj, item) ⇒ boolean
+</code></pre>
+                </article>
+
+                <article class=method id="Z.Array.filter">
+                    <h3>Z.Array.filter</h3>
+                    <pre class=signature><code>Z.Array.filter(obj, function(){ ... }, context)
+</code></pre>
+                </article>
+
+                <article class=method id="Z.Array.unique">
+                    <h3>Z.Array.unique</h3>
+                    <pre class=signature><code>Z.Array.unique(obj, function(){ ... }, context)
+</code></pre>
+                </article>
+
+                <hr>
+                <h2 id="Strings">函数相关</h2>
+                <article class=method id="Z.Function.bind">
+                    <h3>Z.Function.bind</h3>
+                    <pre class=signature><code>Z.Function.bind(func, context) ⇒ function
+</code></pre>
+                </article>
+
+                <article class=method id="Z.Function.once">
+                    <h3>Z.Function.once</h3>
+                    <pre class=signature><code>Z.Function.once(func) ⇒ function
+</code></pre>
+                </article>              
+
+                <article class=method id="Z.Function.uniq">
+                    <h3>Z.Function.uniq</h3>
+                    <pre class=signature><code>Z.Function.uniq(func, wait) ⇒ function
+</code></pre>
+                </article>  
+
+                <article class=method id="Z.Function.delay">
+                    <h3>Z.Function.delay</h3>
+                    <pre class=signature><code>Z.Function.delay(func, wait) ⇒ function
+</code></pre>
+                </article>  
+
+                <article class=method id="Z.Function.debounce">
+                    <h3>Z.Function.debounce</h3>
+                    <pre class=signature><code>Z.Function.debounce(func, wait, immediate) ⇒ function
+</code></pre>
+                </article>  
+
+                <article class=method id="Z.Function.throttle">
+                    <h3>Z.Function.throttle</h3>
+                    <pre class=signature><code>Z.Function.throttle(func, wait) ⇒ function
+</code></pre>
+                </article>  
 
                 <hr>
                 <h2 id="Strings">字符串</h2>
