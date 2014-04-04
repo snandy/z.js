@@ -407,6 +407,21 @@ Z.fn.extend({
 		this.each(function(el) {
 			el.style.display = ''
 		})
-	}
+	},
+    hide: function() {
+        this.each(function(el) {
+            el.style.display = 'none'
+        })        
+    },
+    toggle: function() {
+        this.each(function(el) {
+            if (el.style.display !== 'none') {
+                el.style.display = 'none'
+            } else {
+                el.style.display = ''
+            }
+            
+        })        
+    }
 })
 

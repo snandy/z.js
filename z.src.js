@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-28 19:50:16
+ * @snandy 2014-04-04 14:27:44
  *
  */
 ~function(window, undefined) {
@@ -1559,7 +1559,22 @@ Z.fn.extend({
 		this.each(function(el) {
 			el.style.display = ''
 		})
-	}
+	},
+    hide: function() {
+        this.each(function(el) {
+            el.style.display = 'none'
+        })        
+    },
+    toggle: function() {
+        this.each(function(el) {
+            if (el.style.display !== 'none') {
+                el.style.display = 'none'
+            } else {
+                el.style.display = ''
+            }
+            
+        })        
+    }
 })
 
 
