@@ -1452,6 +1452,7 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                     <h3>Z.Objects.keys</h3>
                     <pre class=signature><code>Z.Objects.keys(obj) ⇒ array
 </code></pre>                 
+                <p>提取对象的key，返回存放key的数组。</p>
 <pre>Z.Object.keys({one:1, two:2, three:3});
 =&gt; ['one', 'two', 'three']</pre>
 
@@ -1461,6 +1462,7 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                     <h3>Z.Objects.values</h3>
                     <pre class=signature><code>Z.Objects.values(obj) ⇒ array
 </code></pre>                 
+                <p>提取对象的value，返回存放value的数组。</p>
 <pre>Z.Object.keys({one:1, two:2, three:3});
 =&gt; [1, 2, 3]</pre>
 
@@ -1470,6 +1472,7 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                     <h3>Z.Objects.pairs</h3>
                     <pre class=signature><code>Z.Objects.pairs(obj) ⇒ array
 </code></pre>                 
+                <p>对象转成数组，数组第一个元素存放key，第二个存放value。</p>
 <pre>Z.Object.pairs({one:1, two:2, three:3});
 =&gt; [['one', 1], ['two', 2], ['three', 3]]</pre>
 
@@ -1479,6 +1482,7 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                     <h3>Z.Objects.invert</h3>
                     <pre class=signature><code>Z.Objects.invert(obj) ⇒ object
 </code></pre>                 
+                <p>把对象的key和value互换后返回。</p>
 <pre>Z.Object.invert({one:1, two:2, three:3});
 =&gt; {'1': 'one', '2': 'two', '3': 'three'}</pre>
 
@@ -1488,6 +1492,7 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                     <h3>Z.Objects.pick</h3>
                     <pre class=signature><code>Z.Objects.pick(obj, *keys) ⇒ object
 </code></pre>                 
+                <p>抽取指定的key的对象后返回。</p>
 <pre>Z.Object.pick({one:1, two:2, three:3}, 'one', 'three');
 =&gt; {one: 1, three: 3}</pre>
 
@@ -1538,41 +1543,47 @@ Z.agument(override, clazz, class1, clazz2, [...]) ⇒ function
                 </article>
 
                 <hr>
-                <h2 id="Strings">函数相关</h2>
+                <h2 id="Functions">函数相关</h2>
                 <article class=method id="Z.Function.bind">
                     <h3>Z.Function.bind</h3>
                     <pre class=signature><code>Z.Function.bind(func, context) ⇒ function
 </code></pre>
+                <p>绑定函数在指定上下文对象上执行。</p>
                 </article>
 
                 <article class=method id="Z.Function.once">
                     <h3>Z.Function.once</h3>
                     <pre class=signature><code>Z.Function.once(func) ⇒ function
 </code></pre>
+                <p>返回一个新函数，该函数仅会执行一次。</p>
                 </article>              
 
                 <article class=method id="Z.Function.uniq">
                     <h3>Z.Function.uniq</h3>
                     <pre class=signature><code>Z.Function.uniq(func, wait) ⇒ function
 </code></pre>
+                <p>指定的函数只有达到指定的时间才会执行，比如提交订单时防止用户点击过快。</p>
                 </article>  
 
                 <article class=method id="Z.Function.delay">
                     <h3>Z.Function.delay</h3>
                     <pre class=signature><code>Z.Function.delay(func, wait) ⇒ function
 </code></pre>
+                <p>延迟一定时间函数才执行。</p>
                 </article>  
 
                 <article class=method id="Z.Function.debounce">
                     <h3>Z.Function.debounce</h3>
                     <pre class=signature><code>Z.Function.debounce(func, wait, immediate) ⇒ function
 </code></pre>
+                <p>于uniq类似，多用在scroll等时间中。</p>
                 </article>  
 
                 <article class=method id="Z.Function.throttle">
                     <h3>Z.Function.throttle</h3>
                     <pre class=signature><code>Z.Function.throttle(func, wait) ⇒ function
 </code></pre>
+                <p>事件节流，一些频繁调用的事件如scroll、resize。</p>
                 </article>  
 
                 <hr>
