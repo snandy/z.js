@@ -1,3 +1,4 @@
+~function(Z) {
 
 var guid = 1
 var guidStr = '__guid__'
@@ -16,12 +17,11 @@ var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
 // Utility functions ---------------------------------------------------------------------------
-function each(arr, callback) {
+var each = function(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
     }
 }
-
 var addListener = function() {
     if (w3c) {
         return function(el, type, handler) { el.addEventListener(type, handler, false) } 
@@ -437,3 +437,4 @@ Z.fn.undelegate = function(type, fn) {
     })
 }
 
+}(Z)

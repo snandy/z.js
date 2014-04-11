@@ -1,3 +1,4 @@
+~function(Z) {
 
 // parse json string
 function parseJSON(str) {
@@ -16,7 +17,6 @@ Z.parseJSON = parseJSON
     
 // empty function
 function noop() {}
-
 
 /**
  *  Ajax API
@@ -154,7 +154,6 @@ forEach(ajaxOptions, function(val, key) {
         }(key, item)
     })
 })
-
 
 /**
  *  JSONP API
@@ -312,3 +311,5 @@ Z.param = function(obj, traditional) {
     serialize(params, obj, traditional)
     return params.join('&').replace(/%20/g, '+')
 }
+
+}(Z)

@@ -1,3 +1,4 @@
+~function(Z) {
 
 var rroot = /^(?:body|html)$/i
 
@@ -425,3 +426,4 @@ Z.fn.extend({
     }
 })
 
+}(Z)

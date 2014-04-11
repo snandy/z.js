@@ -33,9 +33,6 @@
  *
  */
 
-function byId(id) {
-    return document.getElementById(id)
-}
 var query = function() {
     // selector regular expression
     var rId = /^#[\w\-]+/
@@ -43,6 +40,9 @@ var query = function() {
     var rCls = /^([\w\-]+)?\.([\w\-]+)/
     var rAttr = /^([\w]+)?\[([\w]+-?[\w]+?)(=(\w+))?\]/
 
+    function byId(id) {
+        return document.getElementById(id)
+    }
     function check(attr, val, node) {
         var reg = RegExp('(?:^|\\s+)' + val + '(?:\\s+|$)')
         var attribute = attr === 'className' ? node.className : node.getAttribute(attr)
@@ -133,18 +133,20 @@ var query = function() {
 
 }()
 
-var tempParent = document.createElement('div')
-function matches(el, selector) {
-    if (!el || el.nodeType !== 1) return false
-    var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                          el.oMatchesSelector || el.matchesSelector
-    if (matchesSelector) return matchesSelector.call(el, selector)
-    // fall back to performing a selector:
-    var match, parent = el.parentNode, temp = !parent
-    if (temp) (parent = tempParent).appendChild(el)
-    match = query(selector, parent)
-    temp && tempParent.removeChild(el)
-    return !!match.length
-}
+var matches = function() {
+    var tempParent = document.createElement('div')
+    return function(el, selector) {
+        if (!el || el.nodeType !== 1) return false
+        var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                              el.oMatchesSelector || el.matchesSelector
+        if (matchesSelector) return matchesSelector.call(el, selector)
+        // fall back to performing a selector:
+        var match, parent = el.parentNode, temp = !parent
+        if (temp) (parent = tempParent).appendChild(el)
+        match = query(selector, parent)
+        temp && tempParent.removeChild(el)
+        return !!match.length
+    }
+}()
 
 Z.matches = matches

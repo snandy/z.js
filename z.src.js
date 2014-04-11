@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-04 14:27:44
+ * @snandy 2014-04-11 16:24:22
  *
  */
 ~function(window, undefined) {
@@ -768,9 +768,6 @@ return Class
  *
  */
 
-function byId(id) {
-    return document.getElementById(id)
-}
 var query = function() {
     // selector regular expression
     var rId = /^#[\w\-]+/
@@ -778,6 +775,9 @@ var query = function() {
     var rCls = /^([\w\-]+)?\.([\w\-]+)/
     var rAttr = /^([\w]+)?\[([\w]+-?[\w]+?)(=(\w+))?\]/
 
+    function byId(id) {
+        return document.getElementById(id)
+    }
     function check(attr, val, node) {
         var reg = RegExp('(?:^|\\s+)' + val + '(?:\\s+|$)')
         var attribute = attr === 'className' ? node.className : node.getAttribute(attr)
@@ -868,19 +868,21 @@ var query = function() {
 
 }()
 
-var tempParent = document.createElement('div')
-function matches(el, selector) {
-    if (!el || el.nodeType !== 1) return false
-    var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                          el.oMatchesSelector || el.matchesSelector
-    if (matchesSelector) return matchesSelector.call(el, selector)
-    // fall back to performing a selector:
-    var match, parent = el.parentNode, temp = !parent
-    if (temp) (parent = tempParent).appendChild(el)
-    match = query(selector, parent)
-    temp && tempParent.removeChild(el)
-    return !!match.length
-}
+var matches = function() {
+    var tempParent = document.createElement('div')
+    return function(el, selector) {
+        if (!el || el.nodeType !== 1) return false
+        var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
+                              el.oMatchesSelector || el.matchesSelector
+        if (matchesSelector) return matchesSelector.call(el, selector)
+        // fall back to performing a selector:
+        var match, parent = el.parentNode, temp = !parent
+        if (temp) (parent = tempParent).appendChild(el)
+        match = query(selector, parent)
+        temp && tempParent.removeChild(el)
+        return !!match.length
+    }
+}()
 
 Z.matches = matches
 
@@ -1150,6 +1152,7 @@ Z.isEmail = function(str) {
     var regEmail = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
     return regEmail.test(str)
 }
+~function(Z) {
 
 var rroot = /^(?:body|html)$/i
 
@@ -1577,7 +1580,8 @@ Z.fn.extend({
     }
 })
 
-
+}(Z)
+~function(Z) {
 
 var guid = 1
 var guidStr = '__guid__'
@@ -1596,12 +1600,11 @@ var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
 // Utility functions ---------------------------------------------------------------------------
-function each(arr, callback) {
+var each = function(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
     }
 }
-
 var addListener = function() {
     if (w3c) {
         return function(el, type, handler) { el.addEventListener(type, handler, false) } 
@@ -2017,7 +2020,8 @@ Z.fn.undelegate = function(type, fn) {
     })
 }
 
-
+}(Z)
+~function(Z) {
 
 // parse json string
 function parseJSON(str) {
@@ -2036,7 +2040,6 @@ Z.parseJSON = parseJSON
     
 // empty function
 function noop() {}
-
 
 /**
  *  Ajax API
@@ -2174,7 +2177,6 @@ forEach(ajaxOptions, function(val, key) {
         }(key, item)
     })
 })
-
 
 /**
  *  JSONP API
@@ -2332,6 +2334,8 @@ Z.param = function(obj, traditional) {
     serialize(params, obj, traditional)
     return params.join('&').replace(/%20/g, '+')
 }
+
+}(Z)
 Z.cache = function() {
     var seed = 0
     var cache = {}
