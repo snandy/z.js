@@ -185,11 +185,26 @@ function Class(name, superClass, factory) {
     }
 
     function Constructor() {
+        var args = arguments
+        var len = args.length
+
+        // 去new，暂支持最长4个参数，建议使用1-2个参数，对象属性方式可以添加更多
+        if ( !(this instanceof Constructor) ) {
+            switch (len) {
+                case 1: return new Constructor(args[0])
+                case 2: return new Constructor(args[0], args[1])
+                case 3: return new Constructor(args[0], args[1], args[2])
+                case 4: return new Constructor(args[0], args[1], args[2], args[3])
+                default: return new Constructor()
+            }
+        }
+
+        // 调用真正构造器初始化字段/属性
         if ( Z.isFunction(this.init) ) {
-            this.init.apply(this, arguments)
+            this.init.apply(this, args)
         }
     }
-    Constructor.toString = function() { return name }
+    Constructor.toString = function() { return 'Class ' + name + '\n' + factory}
 
     var supr = superClass.prototype
     // var proto = Constructor.prototype = new superClass
