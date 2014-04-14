@@ -38,20 +38,21 @@
  *
  */
 
-Z.declareUI('DragDrop', function() {
+Z.declareUI('Dragdrop', function() {
 
-var $win = Z(window)
-var $doc = Z(document)
-var doc  = $doc[0] 
+var winObj = Z(window)
+var docObj = Z(document)
+var doc  = docObj[0] 
 var ZF = Z.Function
+var axisReg = /^xy$/
 
 /*
  * 获取视窗的宽高
  */
 function getViewSize() {
     return {
-        width: $win.width(),
-        height: $win.height()
+        width: winObj.width(),
+        height: winObj.height()
     }
 }
 
@@ -68,8 +69,6 @@ this.init = function(option) {
     }, option)
 
     this.option = option
-
-    var axisReg = /^xy$/
     var handle   = this.handle
 
     var dragObj  = this.dragObj = Z(option.elem)
@@ -78,15 +77,14 @@ this.init = function(option) {
 
     // 暂存配置对象
     dragObj.data('optionData', option)
-    dragObj.data('originData', $.extend({}, option))
+    dragObj.data('originData', Z.extend({}, option))
 
     // 设置鼠标状态
     downObj.css('cursor', option.cursor)
 
     // 需要使用的一些状态变量
     var self = this
-    var diffX, diffY, viewSize
-    var dragElemWidth, dragElemHeight, dragElemMarginTop, dragElemMarginLeft
+    var viewSize
 
     // 鼠标mousedown
     downObj.mousedown(function(ev) {
@@ -96,49 +94,52 @@ this.init = function(option) {
         // 鼠标按下的时候计算下window的宽高，拖拽元素尺寸. 
         // 不要再mousemove内计算
         viewSize = getViewSize()
-        dragElemWidth = Math.max(dargElem.offsetWidth, dargElem.clientWidth)
-        dragElemHeight = Math.max(dargElem.offsetHeight, dargElem.clientHeight)
-        dragElemMarginTop = parseInt(dargElem.style.marginTop, 10) || 0
-        dragElemMarginLeft = parseInt(dargElem.style.marginLeft, 10) || 0
+        self.dragElemWidth = Math.max(dargElem.offsetWidth, dargElem.clientWidth)
+        self.dragElemHeight = Math.max(dargElem.offsetHeight, dargElem.clientHeight)
+        self.dragElemMarginTop = parseInt(dargElem.style.marginTop, 10) || 0
+        self.dragElemMarginLeft = parseInt(dargElem.style.marginLeft, 10) || 0
 
         // 仅在窗口可视范围内移动
         if (option.inwin) {
-            var winX = viewSize.width - dragElemWidth
-            var winY = viewSize.height - dragElemHeight
+            var winX = viewSize.width - self.dragElemWidth
+            var winY = viewSize.height - self.dragElemHeight
             option.area = [0, winX, 0, winY]
+        }
+
+        var mousemove = ZF.bind(self.onMousemove, self)
+        self.mouseup = ZF.bind(self.onMouseup, self)
+        self.mousemove = function(ev) {
+            mousemove(ev)
         }
 
         if (window.captureEvents) { //标准DOM
             ev.stopPropagation()
             ev.preventDefault()
-            $win.blur(mouseup)
+            winObj.blur(self.mouseup)
         } else if(dargElem.setCapture) { //IE
             dargElem.setCapture()
             ev.cancelBubble = true
-            dragObj.bind('losecapture', mouseup)
+            dragObj.bind('losecapture', self.mouseup)
         }
         
-        diffX = ev.clientX - dargElem.offsetLeft
-        diffY = ev.clientY - dargElem.offsetTop
+        self.diffX = ev.clientX - dargElem.offsetLeft
+        self.diffY = ev.clientY - dargElem.offsetTop
 
-        var onMousemove = ZF.bind(self.onMousemove, self)
-        $doc.mousemove(function(ev) {
-            onMousemove(ev)
-        })
-        $doc.mouseup(mouseup)
+        docObj.mousemove(self.mousemove)
+        docObj.mouseup(self.mouseup)
 
         // drag start event
-        if (option.start) {
-            option.start.call(dragObj)
-        }
-    }
+        // if (option.start) {
+        //     option.start.call(dragObj)
+        // }
+    })
 
 }
 
 this.onMousemove = function(ev) {
     var minX, maxX, minY, maxY    
-    var moveX = ev.clientX - diffX
-    var moveY = ev.clientY - diffY
+    var moveX = ev.clientX - this.diffX
+    var moveY = ev.clientY - this.diffY
     var option = this.option
     var dragObj = this.dragObj 
     var dragElem = this.dragElem
@@ -160,234 +161,38 @@ this.onMousemove = function(ev) {
     if (option.canDrag) {
         var axis = option.axis
         //设置位置，并修正margin
-        moveX = moveX - dragElemMarginTop
-        moveY = moveY - dragElemMarginLeft
+        moveX = moveX - this.dragElemMarginTop
+        moveY = moveY - this.dragElemMarginLeft
         if (axis === 'x' || axisReg.test(axis)) {
-            dargElem.style.left = moveX + 'px'
+            dragElem.style.left = moveX + 'px'
         }
         if (axis === 'y' || axisReg.test(axis)) {
-            dargElem.style.top =  moveY + 'px'
+            dragElem.style.top =  moveY + 'px'
         }
     }
     // drag event
-    if (option.drag) {
-        option.drag.call(dragObj, moveX, moveY)
-    }
+    // if (option.drag) {
+    //     option.drag.call(dragObj, moveX, moveY)
+    // }
 }
 
 this.onMouseup = function(ev) {
+    var self = this
+
     // 删除事件注册
-    $doc.unbind('mousemove', mousemove)
-    $doc.unbind('mouseup', mouseup)
+    docObj.off('mousemove', this.mousemove)
+    docObj.off('mouseup', this.mouseup)
 
     if (window.releaseEvents) { //标准DOM
-        $win.unbind('blur', mouseup)
-    } else if(dargElem.releaseCapture) { //IE
-        dragObj.unbind('losecapture', mouseup)
-        dargElem.releaseCapture()
+        winObj.off('blur', this.mouseup)
+    } else if (dargElem.releaseCapture) { //IE
+        dragObj.off('losecapture', this.mouseup)
+        dragElem.releaseCapture()
     }
     // drag end evnet
-    if (option.end) {
-        option.end.call(dragObj)
-    }
+    // if (option.end) {
+    //     option.end.call(dragObj)
+    // }
 }
 
 })
-
-~function(window, $) {
-
-var $win = $(window)
-var $doc = $(window.document)
-var doc  = $doc[0]
-
-/**
- * 获取视窗的宽高
- */
-function getViewSize() {
-    return {
-        width: $win.width(),
-        height: $win.height()
-    }
-}
-
-/**
- * @private initilize 初始化拖拽
- * @param {Object} option
- * @param {Object} jqObject
- */
-function initilize(option, jqObject) {
-    option = option || {}
-    var axisReg = /^xy$/
-    var option = $.extend({
-        handle: '',
-        canDrag: option.canDrag !== false,
-        axis: option.axis || 'xy',
-        area: option.area || [],
-        inwin: option.inwin,
-        cursor: 'move',
-        zIndex: ''
-    }, option)
-
-    jqObject.each(function(i, elem) {
-        var handle   = option.handle
-        var dragObj  = $(elem)
-        var downObj  = handle ? dragObj.find(handle) : dragObj
-        var dargElem = dragObj[0]
-
-        // 暂存配置对象
-        dragObj.data('optionData', option)
-        dragObj.data('originData', $.extend({}, option))
-
-        // 设置鼠标状态
-        downObj.css('cursor', option.cursor)
-
-        // 需要使用的一些状态变量
-        var diffX, diffY, viewSize
-        var dragElemWidth, dragElemHeight, dragElemMarginTop, dragElemMarginLeft
-
-        // 鼠标mousedown
-        downObj.mousedown(function(ev) {
-            // 模拟拖拽，需要设置为绝对定位
-            dragObj.css('position', 'absolute')
-            
-            // 鼠标按下的时候计算下window的宽高，拖拽元素尺寸. 
-            // 不要再mousemove内计算
-            viewSize = getViewSize()
-            dragElemWidth = Math.max(dargElem.offsetWidth, dargElem.clientWidth)
-            dragElemHeight = Math.max(dargElem.offsetHeight, dargElem.clientHeight)
-            dragElemMarginTop = parseInt(dargElem.style.marginTop, 10) || 0
-            dragElemMarginLeft = parseInt(dargElem.style.marginLeft, 10) || 0
-
-            // 仅在窗口可视范围内移动
-            if (option.inwin) {
-                var winX = viewSize.width - dragElemWidth
-                var winY = viewSize.height - dragElemHeight
-                option.area = [0, winX, 0, winY]
-            }
-
-            if (window.captureEvents) { //标准DOM
-                ev.stopPropagation()
-                ev.preventDefault()
-                $win.blur(mouseup)
-            } else if(dargElem.setCapture) { //IE
-                dargElem.setCapture()
-                ev.cancelBubble = true
-                dragObj.bind('losecapture', mouseup)
-            }
-            
-            diffX = ev.clientX - dargElem.offsetLeft
-            diffY = ev.clientY - dargElem.offsetTop
-            $doc.mousemove(mousemove)
-            $doc.mouseup(mouseup)
-
-            // drag start event
-            if (option.start) {
-                option.start.call(dragObj)
-            }
-        })
-
-        function mousemove(ev) {
-            var minX, maxX, minY, maxY
-            var moveX = ev.clientX - diffX
-            var moveY = ev.clientY - diffY
-            
-            // 设置拖拽范围
-            if (option.area) {
-                minX = option.area[0]
-                maxX = option.area[1]
-                minY = option.area[2]
-                maxY = option.area[3]
-                moveX < minX && (moveX = minX) // left 最小值
-                moveX > maxX && (moveX = maxX) // left 最大值
-                moveY < minY && (moveY = minY) // top 最小值
-                moveY > maxY && (moveY = maxY) // top 最大值
-            }
-
-            // 设置是否可拖拽，有时可能有取消元素拖拽行为的需求
-            if (option.canDrag) {
-                var axis = option.axis
-                //设置位置，并修正margin
-                moveX = moveX - dragElemMarginTop
-                moveY = moveY - dragElemMarginLeft
-                if (axis === 'x' || axisReg.test(axis)) {
-                    dargElem.style.left = moveX + 'px'
-                }
-                if (axis === 'y' || axisReg.test(axis)) {
-                    dargElem.style.top =  moveY + 'px'
-                }
-            }
-            // drag event
-            if (option.drag) {
-                option.drag.call(dragObj, moveX, moveY)
-            }
-        }
-        function mouseup(ev) {
-            // 删除事件注册
-            $doc.unbind('mousemove', mousemove)
-            $doc.unbind('mouseup', mouseup)
-
-            if (window.releaseEvents) { //标准DOM
-                $win.unbind('blur', mouseup)
-            } else if(dargElem.releaseCapture) { //IE
-                dragObj.unbind('losecapture', mouseup)
-                dargElem.releaseCapture()
-            }
-            // drag end evnet
-            if (option.end) {
-                option.end.call(dragObj)
-            }
-        }
-        
-    })    
-}
-
-/**
- * @method dragable jQuery拖拽插件
- * @param {Object} option
- * @param {String} key
- * @param {String} value
- */
-$.fn.dragable = function(option, key, value) {
-
-    if (typeof option === 'string') {
-        var oldOption = this.data('optionData')
-        switch (option) {
-            case 'destroy':
-                break
-            case 'disable':
-                oldOption.canDrag = false
-                break
-            case 'enable':
-                oldOption.canDrag = true
-                break
-            case 'reset':
-                var originOption = this.data('originData')
-                $.extend(true, oldOption, originOption)
-                break
-            case 'option':
-                if (key && value === undefined) {
-                    return oldOption[key]
-                }
-                switch (key) {
-                    case 'axis':
-                        oldOption.axis = value
-                        break
-                    case 'cursor':
-                        oldOption.cursor = value
-                        break
-                    case 'zIndex':
-                        oldOption.zIndex = value
-                        break
-                }
-                break
-            default:;
-        }
-
-    } else if (typeof option === 'object') {
-        initilize(option, this)
-    }
-
-    return this
-}
-
-}(this, jQuery);

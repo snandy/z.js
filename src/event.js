@@ -405,7 +405,7 @@ Z.fn.fire = function(type) {
 }
 
 // Shorthand Methods
-forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouseup,keydown,keyup,keypress,focus,blur'.split(','), function(name) {
+forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mousemove,mouseup,keydown,keyup,keypress,focus,blur,losecapture'.split(','), function(name) {
     Z.fn[name] = function(handler) {
         if (arguments.length === 0) {
             this.fire(name)

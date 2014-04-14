@@ -1,6 +1,239 @@
 ~function(Z) {
 
+var rcapital = /[A-Z]/g
+var ropa1 = /opacity=/i
+var ropa2 = /opacity=([^)]*)/i
 var rroot = /^(?:body|html)$/i
+var cssWidth = ['Left', 'Right']
+var cssHeight = ['Top', 'Botton']
+
+function getWindow(el) {
+    return Z.isWindow(el) ? el :
+        el.nodeType === 9 ?
+        el.defaultView || el.parentWindow : false
+}
+
+function getOffset(el, doc, docElem, box) {
+    try {
+        box = el.getBoundingClientRect()
+    } catch(e) {}
+
+    if ( !box || !Z.contains(docElem, el) ) {
+        return box ? {top: box.top, left: box.left} : {top: 0, left: 0}
+    }
+
+    var body = doc.body
+    var win = getWindow(doc)
+    var clientTop  = docElem.clientTop  || body.clientTop  || 0
+    var clientLeft = docElem.clientLeft || body.clientLeft || 0
+    var scrollTop  = win.pageYOffset || docElem.scrollTop  || body.scrollTop
+    var scrollLeft = win.pageXOffset || docElem.scrollLeft || body.scrollLeft
+    var top  = box.top  + scrollTop  - clientTop
+    var left = box.left + scrollLeft - clientLeft
+
+    return {top: top, left: left}
+}
+
+function setOffset(el, options) {
+    var curElem = Z(el)
+    var posi = curElem.css('position')
+    
+    if (posi === 'static') el.style.position = 'relative'
+    
+    var top = 'top'
+    var left = 'left'
+    var curOffset = curElem.offset()
+    var curCSSTop = curElem.css('top')
+    var curCSSLeft = curElem.css('left')
+    var calculatePosition = (posi === 'absolute' || posi === 'fixed') && ([curCSSTop, curCSSLeft].join(',')).indexOf('auto') > -1
+    var props = {}, curPosition = {}, curTop, curLeft
+        
+    if (calculatePosition) {
+        curPosition = curElem.pos()
+        curTop = curPosition.top
+        curLeft = curPosition.left
+    } else {
+        curTop = parseFloat(curCSSTop) || 0
+        curLeft = parseFloat(curCSSLeft) || 0
+    }
+
+    if (options.top != null) {
+        props.top = (options.top - curOffset.top) + curTop
+    }
+    if (options.left != null) {
+        props.left = (options.left - curOffset.left) + curLeft
+    }
+    
+    curElem.css(props)
+}
+
+function camelFn(name) {
+    return name.replace(rcapital, function(match) {
+        return '-' + match.toLowerCase()
+    })
+}
+
+function getCSS(el, name) {
+    if (name == 'opacity') {
+        var opacity, filter, style
+        if (support.opacity) {
+            style = window.getComputedStyle(el, null)
+            opacity = style.opacity
+            // http://www.cnblogs.com/snandy/archive/2011/07/27/2118441.html
+            if (opacity.length > 1) {
+                opacity = opacity.substr(0, 3)
+            }
+            return parseFloat(opacity)
+        } else {
+            style = el.currentStyle
+            filter = style.filter
+            return ropa1.test(filter) ? parseFloat(filter.match(ropa2)[1]) / 100 : 1
+        }
+    } else {
+        var cssName = camelFn(name)
+        if (window.getComputedStyle) {
+            return window.getComputedStyle(el, null).getPropertyValue(cssName)
+        }
+        if (doc.defaultView && doc.defaultView.getComputedStyle) {
+            var computedStyle = doc.defaultView.getComputedStyle(el, null)
+            if (computedStyle) {
+                return computedStyle.getPropertyValue(cssName)
+            }
+        }
+        if (el.currentStyle) {
+            return el.currentStyle[name]
+        }
+        return el.style[name]
+    }
+}
+
+function setCSS(el, name, val) {
+    if (name == 'opacity') {
+        if (support.opacity) {
+            el.style.opacity = (val == 1 ? '' : '' + val)
+        } else {
+            el.style.filter = 'alpha(opacity=' + val * 100 + ');'
+            el.style.zoom = 1
+        }
+    } else {
+        if ( Z.isNumber(val) ) val += 'px'
+        el.style[name] = val
+    }
+}
+
+// 获取元素宽高
+function getWidthOrHeight(el, name, extra) {
+    // Start with offset property
+    var val = name === "width" ? el.offsetWidth : el.offsetHeight
+    var which = name === "width" ? cssWidth : cssHeight
+    
+    // display is none
+    if(val === 0) {
+        return 0
+    }
+    
+    // css3 box-sizing
+    if(extra === 'border-box') {
+        return val
+    }
+    
+    for (var i = 0, a; a = which[i++];) {
+        val -= parseFloat( getCSS(el, "border" + a + "Width") ) || 0
+        val -= parseFloat( getCSS(el, "padding" + a) ) || 0
+    }
+
+    if (extra === undefined) {
+        return val
+    }
+
+    if (extra === 'padding' || extra === "margin" || extra === "border") {
+        for (var i = 0, a; a = which[i++];) {
+            val += parseFloat( getCSS( el, extra + a + (extra==='border' ? 'Width' : '')) ) || 0
+        }
+        return val
+    }
+}
+
+function getWorH(el, wh, extra) {
+    switch(extra) {
+        case 'border-box':
+        case 'margin':
+        case 'padding':
+        case 'border':
+            return getWidthOrHeight(el, wh, extra)
+        default:
+            return getWidthOrHeight(el, wh)
+    }
+}
+
+// 获取文档宽高
+function getDocWH(name) {
+    name = name.replace(/^(\w)/, function(match) {
+        return match.toUpperCase()
+    })
+    var val = Math.max(
+        doc.documentElement["client" + name],
+        doc.body["scroll" + name], doc.documentElement["scroll" + name],
+        doc.body["offset" + name], doc.documentElement["offset" + name]
+    )
+    return val
+}
+
+// 获取window的宽高
+function getWinWH(which) {
+    if (which === 'width') {
+        return window['innerWidth'] || doc.documentElement.clientWidth
+    } else if (which === 'height') {
+        return window['innerHeight'] || doc.documentElement.clientHeight
+    }
+}
+
+Z.support = support
+
+Z.contains = function(a, b) {
+    try {
+        return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
+    } catch(e) {}
+}
+
+Z.ready = function(callback) {
+    var done = false, top = true
+
+    var root = doc.documentElement
+    var add = doc.addEventListener ? 'addEventListener' : 'attachEvent'
+    var rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent'
+    var pre = doc.addEventListener ? '' : 'on'
+
+    function init(e) {
+        if (e.type == 'readystatechange' && doc.readyState != 'complete') return
+        (e.type == 'load' ? window : doc)[rem](pre + e.type, init, false)
+        if (!done && (done = true)) callback(Z)
+    }
+
+    function poll() {
+        try { 
+            root.doScroll('left') 
+        } catch(e) { 
+            setTimeout(poll, 50)
+            return
+        }
+        init('poll')
+    }
+
+    if (doc.readyState == 'complete') {
+        callback(Z)
+    } else {
+        if (doc.createEventObject && root.doScroll) {
+            try {
+                top = !window.frameElement
+            } catch(e) { }
+            if (top) poll()
+        }
+        doc[add](pre + 'DOMContentLoaded', init, false)
+        doc[add](pre + 'readystatechange', init, false)
+        window[add](pre + 'load', init, false)
+    }
+}
 
 // 元素class属性操作
 var domClass = function() {
@@ -75,118 +308,6 @@ var domClass = function() {
         replace : replace
     }
 }()
-
-function getWindow(el) {
-    return Z.isWindow(el) ? el :
-        el.nodeType === 9 ?
-        el.defaultView || el.parentWindow : false
-}
-
-function getOffset(el, doc, docElem, box) {
-    try {
-        box = el.getBoundingClientRect()
-    } catch(e) {}
-
-    if ( !box || !Z.contains(docElem, el) ) {
-        return box ? {top: box.top, left: box.left} : {top: 0, left: 0}
-    }
-
-    var body = doc.body
-    var win = getWindow(doc)
-    var clientTop  = docElem.clientTop  || body.clientTop  || 0
-    var clientLeft = docElem.clientLeft || body.clientLeft || 0
-    var scrollTop  = win.pageYOffset || docElem.scrollTop  || body.scrollTop
-    var scrollLeft = win.pageXOffset || docElem.scrollLeft || body.scrollLeft
-    var top  = box.top  + scrollTop  - clientTop
-    var left = box.left + scrollLeft - clientLeft
-
-    return {top: top, left: left}
-}
-
-function setOffset(el, options) {
-    var curElem = Z(el)
-    var posi = curElem.css('position')
-    
-    if (posi === 'static') el.style.position = 'relative'
-    
-    var top = 'top'
-    var left = 'left'
-    var curOffset = curElem.offset()
-    var curCSSTop = curElem.css('top')
-    var curCSSLeft = curElem.css('left')
-    var calculatePosition = (posi === 'absolute' || posi === 'fixed') && ([curCSSTop, curCSSLeft].join(',')).indexOf('auto') > -1
-    var props = {}, curPosition = {}, curTop, curLeft
-        
-    if (calculatePosition) {
-        curPosition = curElem.pos()
-        curTop = curPosition.top
-        curLeft = curPosition.left
-    } else {
-        curTop = parseFloat(curCSSTop) || 0
-        curLeft = parseFloat(curCSSLeft) || 0
-    }
-
-    if (options.top != null) {
-        props.top = (options.top - curOffset.top) + curTop
-    }
-    if (options.left != null) {
-        props.left = (options.left - curOffset.left) + curLeft
-    }
-    
-    curElem.css(props)
-}
-
-function camelFn(name) {
-    return name.replace(/[A-Z]/g, function(match) {
-        return '-' + match.toLowerCase()
-    })
-}
-
-Z.support = support
-Z.contains = function(a, b) {
-    try {
-        return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
-    } catch(e) {}
-}
-
-Z.ready = function(callback) {
-    var done = false, top = true
-
-    var root = doc.documentElement
-    var add = doc.addEventListener ? 'addEventListener' : 'attachEvent'
-    var rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent'
-    var pre = doc.addEventListener ? '' : 'on'
-
-    function init(e) {
-        if (e.type == 'readystatechange' && doc.readyState != 'complete') return
-        (e.type == 'load' ? window : doc)[rem](pre + e.type, init, false)
-        if (!done && (done = true)) callback(Z)
-    }
-
-    function poll() {
-        try { 
-            root.doScroll('left') 
-        } catch(e) { 
-            setTimeout(poll, 50)
-            return
-        }
-        init('poll')
-    }
-
-    if (doc.readyState == 'complete') {
-        callback(Z)
-    } else {
-        if (doc.createEventObject && root.doScroll) {
-            try {
-                top = !window.frameElement
-            } catch(e) { }
-            if (top) poll()
-        }
-        doc[add](pre + 'DOMContentLoaded', init, false)
-        doc[add](pre + 'readystatechange', init, false)
-        window[add](pre + 'load', init, false)
-    }
-}
 
 Z.fn.extend({
     hasClass: function(name) {
@@ -288,51 +409,10 @@ Z.fn.extend({
             return
         }
         if (val === undefined) {
-            var el = this[0], style
-            if (name == 'opacity') {
-                var opacity, filter
-                var reg = /opacity=/i
-                if (support.opacity) {
-                    style = window.getComputedStyle(el, null)
-                    opacity = style.opacity
-                    // http://www.cnblogs.com/snandy/archive/2011/07/27/2118441.html
-                    if (opacity.length > 1) {
-                        opacity = opacity.substr(0, 3)
-                    }
-                    return parseFloat(opacity)
-                } else {
-                    style = el.currentStyle
-                    filter = style.filter
-                    return reg.test(filter) ? parseFloat(filter.match(/opacity=([^)]*)/i)[1]) / 100 : 1
-                }
-            } else {
-                if (window.getComputedStyle) {
-                    return window.getComputedStyle(el, null).getPropertyValue(camelFn(name))
-                }
-                if (doc.defaultView && doc.defaultView.getComputedStyle) {
-                    var computedStyle = doc.defaultView.getComputedStyle(el, null)
-                    if (computedStyle) {
-                        return computedStyle.getPropertyValue(camelFn(name))
-                    }
-                }
-                if (el.currentStyle) {
-                    return el.currentStyle[name]
-                }
-                return el.style[name]
-            }
+            return getCSS(this[0], name)
         } else {
             this.each(function(el) {
-                if (name == 'opacity') {
-                    if (support.opacity) {
-                        el.style.opacity = (val == 1 ? '' : '' + val)
-                    } else {
-                        el.style.filter = 'alpha(opacity=' + val * 100 + ');'
-                        el.style.zoom = 1
-                    }
-                } else {
-                    if ( Z.isNumber(val) ) val += 'px'
-                    el.style[name] = val
-                }
+                setCSS(el, name, val)
             })
             return this
         }
@@ -441,6 +521,21 @@ Z.fn.extend({
             }
             
         })        
+    }
+})
+
+forEach(['width', 'height'], function(name) {
+    Z.fn[name] = function(val) {
+        var obj = this[0]
+        if (!this.length) return
+        if (val === undefined) {
+            if ( Z.isWindow(obj) ) return getWinWH(name)
+            if ( Z.isDocument(obj) ) return getDocWH(name)
+            return getWorH(obj, name)
+
+        } else {
+
+        }
     }
 })
 

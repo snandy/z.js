@@ -9,9 +9,11 @@
 			}
 		</style>
 		<script src="../z.src.js"></script>
-        <script src="../dra3gdrop.js"></script>
+        <script src="../dragdrop.js"></script>
 	</head>
 	<body style="height: 1000px">
+
+        <div style="border:1px solid gray;width:200px;" id="dd">TEST</div>
 <script>
 Z.Class('Person', function() {
     this.init = function(name, age) {
@@ -20,7 +22,11 @@ Z.Class('Person', function() {
     }
 })
 
-var p1 = new Person('John', 33)
+var div = Z('#dd')[0]
+var ddObj = new Z.ui.Dragdrop({elem:div})
+// var p1 = new Person('John', 33)
+
+
 </script>
 	</body>
 </html>
