@@ -4,7 +4,9 @@
  * Create a function bound to a given object (assigning `this`, and arguments, optionally)
  * @singleton
  */
+
 Z.Function = function() {
+    var emptyClass = noop()
     function bind(func, context) {
         var args, bound
         if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, sliceArgs(arguments, 1))
@@ -12,9 +14,9 @@ Z.Function = function() {
         args = sliceArgs(arguments, 2)
         return bound = function() {
             if (!(this instanceof bound)) return func.apply(context, args.concat(sliceArgs(arguments)))
-            noop.prototype = func.prototype
-            var self = new noop
-            noop.prototype = null
+            emptyClass.prototype = func.prototype
+            var self = new emptyClass
+            emptyClass.prototype = null
             var result = func.apply(self, args.concat(sliceArgs(arguments)))
             if (Object(result) === result) return result
             return self

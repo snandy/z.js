@@ -24,11 +24,11 @@ module.exports = function(grunt) {
 	
 	var concat = function() {
 		var intro = ['src/intro.js', 'src/support.js', 'src/util.js']
-		var lang = ['object.js', 'function.js', 'array.js', 'string.js', 'class.js'].map(function(fileName) {
-			return 'src/lang/' + fileName
+		var lang = ['object', 'function', 'array', 'string', 'class'].map(function(fileName) {
+			return 'src/lang/' + fileName + '.js'
 		})
-		var core = ['selector.js', 'core.js', 'is.js', 'dom.js', 'event.js', 'io.js', 'cache.js'].map(function(fileName) {
-			return 'src/' + fileName
+		var core = ['selector', 'core', 'is', 'dom', 'event', 'io', 'loader','cache'].map(function(fileName) {
+			return 'src/' + fileName + '.js'
 		})
 		var outro = ['src/outro.js']
 
@@ -43,10 +43,14 @@ module.exports = function(grunt) {
 			options: {
 				banner: banner
 			},
-			zjs: {
+			z: {
 				// intro在首部，outro在尾部
 				src: concat,
 				dest: 'z.src.js'
+			},
+			ui: {
+				src: ['src/ui/dragdrop.js'],
+				dest: 'dragdrop.js'
 			}
 		},
 		uglify: {

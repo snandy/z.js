@@ -1,5 +1,7 @@
 ~function(Z) {
 
+var emptyFunc = noop()
+
 // parse json string
 function parseJSON(str) {
     try {
@@ -14,9 +16,6 @@ function parseJSON(str) {
 
 // exports 
 Z.parseJSON = parseJSON
-    
-// empty function
-function noop() {}
 
 /**
  *  Ajax API
@@ -49,8 +48,8 @@ function ajax(url, options) {
     var credential = options.credential
     var data       = options.data
     var scope      = options.scope
-    var success    = options.success || noop
-    var failure    = options.failure || noop
+    var success    = options.success || emptyFunc
+    var failure    = options.failure || emptyFunc
     
     // 大小写都行，但大写是匹配HTTP协议习惯
     method  = method.toUpperCase()
@@ -160,7 +159,7 @@ forEach(ajaxOptions, function(val, key) {
  *  Z.jsonp
  *  
  */    
-var ie678 = !-[1,]
+var ie678 = Z.ie6 || Z.ie7 || Z.ie8
 var opera = window.opera
 var head = doc.head || doc.getElementsByTagName('head')[0]
 var jsonpDone = false
@@ -194,8 +193,8 @@ function jsonp(url, options) {
     var url     = url + '?'
     var data    = options.data
     var charset = options.charset
-    var success = options.success || noop
-    var failure = options.failure || noop
+    var success = options.success || emptyFunc
+    var failure = options.failure || emptyFunc
     var scope   = options.scope || window
     var timestamp = options.timestamp
     var jsonpName = options.jsonpName || 'callback'

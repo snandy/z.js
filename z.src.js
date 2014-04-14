@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-11 16:24:22
+ * @snandy 2014-04-12 14:33:00
  *
  */
 ~function(window, undefined) {
@@ -122,6 +122,10 @@ function now() {
     return (new Date).getTime()
 }
 
+function noop() {
+    return function() {}
+}
+
 /*
  * op: nextSibling | previousSibling
  */
@@ -169,6 +173,9 @@ var Browser = function(ua) {
     return b
 }(navigator.userAgent.toLowerCase())
 
+Z.declareUI = function(name, superClass, factory) {
+    Z.Class('Z.ui.' + name, superClass, factory)
+}
 
 /**
  * @class Z.Object
@@ -228,7 +235,9 @@ var Browser = function(ua) {
  * Create a function bound to a given object (assigning `this`, and arguments, optionally)
  * @singleton
  */
+
 Z.Function = function() {
+    var emptyClass = noop()
     function bind(func, context) {
         var args, bound
         if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, sliceArgs(arguments, 1))
@@ -236,9 +245,9 @@ Z.Function = function() {
         args = sliceArgs(arguments, 2)
         return bound = function() {
             if (!(this instanceof bound)) return func.apply(context, args.concat(sliceArgs(arguments)))
-            noop.prototype = func.prototype
-            var self = new noop
-            noop.prototype = null
+            emptyClass.prototype = func.prototype
+            var self = new emptyClass
+            emptyClass.prototype = null
             var result = func.apply(self, args.concat(sliceArgs(arguments)))
             if (Object(result) === result) return result
             return self
@@ -1085,7 +1094,7 @@ Z.fn.extend({
     removeData: function(key) {
         return this.each(function() {
             Z.cache.remove(this, key)
-        });        
+        })
     }
 })
 
@@ -1346,26 +1355,31 @@ Z.fn.extend({
     hasClass: function(name) {
         return domClass.has(this[0], name)
     },
+
     addClass: function(name) {
         return this.each( function(el) {
             domClass.add(el, name)
         })
     },
+
     removeClass: function(name) {
         return this.each( function(el) {
             domClass.remove(el, name)
         })
     },
+
     toggleClass: function(name) {
         return this.each( function(el) {
             domClass.toggle(el, name)
         })
     },
+
     replaceClass: function(oCls, nCls) {
         return this.each( function(el) {
             domClass.replace(el, oCls, nCls)
         })
     },
+
     attr: function(name, val) {
         if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
             for (var ar in name) {
@@ -1399,6 +1413,7 @@ Z.fn.extend({
             return this
         }
     },
+
     removeAttr: function(name) {
         if (Z.isString(name)) {
             this.each( function(el) {
@@ -1407,10 +1422,12 @@ Z.fn.extend({
         }
         return this
     },
+
     hasAttr: function(name) {
         if (this.attr(name)) return true
         return false
     },
+
     prop: function(name, val) {
         if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
             for (var ar in name) {
@@ -1427,6 +1444,7 @@ Z.fn.extend({
             return this
         }
     },
+
     css: function(name, val) {
         if ( Z.isObject(name) ) {
             for (var k in name) this.css(k, name[k])
@@ -1481,8 +1499,8 @@ Z.fn.extend({
             })
             return this
         }
-
     },
+
     offsetParent: function() {
         var parent = this[0].offsetParent || doc.body
         while ( parent && (!rroot.test(parent.nodeName) && Z(parent).css('position') === 'static') ) {
@@ -1490,6 +1508,7 @@ Z.fn.extend({
         }
         return Z(parent)
     },
+
     offset: function(options) {
         if (arguments.length) {
             return options === undefined ? this :
@@ -1502,6 +1521,7 @@ Z.fn.extend({
         if (!doc) return null
         return getOffset(el, doc, doc.documentElement)
     },
+
     position: function() {
         if (!this[0]) return
         var $parent = this.offsetParent()
@@ -1518,6 +1538,7 @@ Z.fn.extend({
             left: offset.left - parentOffset.left
         }
     },
+
     scrollTop: function(top) {
         var isWindow = this[0] == window
         if (top === undefined) {
@@ -1535,15 +1556,18 @@ Z.fn.extend({
             return this
         }
     },
+
     text: function(val) {
         return this.prop(this[0].innerText === undefined ? 'textContent' : 'innerText', val)
     },
+
     html: function(val) {
         if (Z.isFunction(val)) {
             val = val()
         }
         return this.prop('innerHTML', val)
     },
+
     val: function(val) {
         if (Z.isFunction(val)) {
             val = val()
@@ -1558,16 +1582,19 @@ Z.fn.extend({
             return this.prop('value', val)
         }
     },
+
 	show: function() {
 		this.each(function(el) {
 			el.style.display = ''
 		})
 	},
+
     hide: function() {
         this.each(function(el) {
             el.style.display = 'none'
         })        
     },
+
     toggle: function() {
         this.each(function(el) {
             if (el.style.display !== 'none') {
@@ -1581,6 +1608,7 @@ Z.fn.extend({
 })
 
 }(Z)
+
 ~function(Z) {
 
 var guid = 1
@@ -2021,7 +2049,10 @@ Z.fn.undelegate = function(type, fn) {
 }
 
 }(Z)
+
 ~function(Z) {
+
+var emptyFunc = noop()
 
 // parse json string
 function parseJSON(str) {
@@ -2037,9 +2068,6 @@ function parseJSON(str) {
 
 // exports 
 Z.parseJSON = parseJSON
-    
-// empty function
-function noop() {}
 
 /**
  *  Ajax API
@@ -2072,8 +2100,8 @@ function ajax(url, options) {
     var credential = options.credential
     var data       = options.data
     var scope      = options.scope
-    var success    = options.success || noop
-    var failure    = options.failure || noop
+    var success    = options.success || emptyFunc
+    var failure    = options.failure || emptyFunc
     
     // 大小写都行，但大写是匹配HTTP协议习惯
     method  = method.toUpperCase()
@@ -2183,7 +2211,7 @@ forEach(ajaxOptions, function(val, key) {
  *  Z.jsonp
  *  
  */    
-var ie678 = !-[1,]
+var ie678 = Z.ie6 || Z.ie7 || Z.ie8
 var opera = window.opera
 var head = doc.head || doc.getElementsByTagName('head')[0]
 var jsonpDone = false
@@ -2217,8 +2245,8 @@ function jsonp(url, options) {
     var url     = url + '?'
     var data    = options.data
     var charset = options.charset
-    var success = options.success || noop
-    var failure = options.failure || noop
+    var success = options.success || emptyFunc
+    var failure = options.failure || emptyFunc
     var scope   = options.scope || window
     var timestamp = options.timestamp
     var jsonpName = options.jsonpName || 'callback'
@@ -2336,6 +2364,136 @@ Z.param = function(obj, traditional) {
 }
 
 }(Z)
+
+/**
+ * js/css LazyLoad
+ * 
+ * 变量hash记录已经加载过的资源，避免重复加载
+ * 
+ * Z.loadScript('a.js', function() { ... })
+ *
+ * Z.loadScript('a.js', option, function() { ... })
+ * 
+ * 加载多个js后才回调，缺陷是js文件不存在，那么也将触发回调
+ * Z.loadScript(['a.js','b.js','c.js'], function() { ... })
+ * 
+ * option
+ *   charset: 'utf-8'
+ *   scope: xx
+ * 
+ * 加载多个css后才回调，IE6/7/8/9和Opera中支持link的onreadystatechange事件
+ * Firefox/Safari/Chrome既不支持onreadystatechange，也不支持onload。使用setTimeout延迟加载
+ *
+ * Z.loadLink('a.css', function() { ... })
+ * 
+ */
+
+~function(Z) {
+
+var hash = {}
+var emptyFunc = noop()
+var head = doc.head || doc.getElementsByTagName('head')[0]
+
+function createEl(type, attrs) {
+    var el = doc.createElement(type), attr
+    for (attr in attrs) {
+        el.setAttribute(attr, attrs[attr])
+    }
+    return el
+}
+function done(list, obj) {
+    hash[obj.url] = true
+    list.shift()
+    if (!list.length) {
+        obj.callback.call(obj.scope)
+    }
+}
+function load(type, urls, option, callback) {
+
+    if (Z.isString(urls)) {
+        urls = [urls]
+    }
+
+    if (Z.isFunction(option)) {
+        callback = option
+        option = {}
+    }
+
+    option = option || {}
+
+    var obj = {
+        scope: option.scope || window,
+        callback: callback || emptyFunc
+    }
+    var list = [].concat(urls)
+    var charset = option.charset || 'utf-8'
+
+    forEach(urls, function(url, i) {
+        var el = null
+            
+        // 已经加载的不再加载
+        if (hash[url]) {
+            throw new Error('warning: ' + url + ' has loaded.')
+        }
+
+        if (type === 'js') {
+            el = createEl('script', {
+                src: url,
+                async: 'async',
+                charset: charset
+            })
+        } else {
+            el = createEl('link', {
+                href: url,
+                rel: 'stylesheet',
+                type: 'text/css'
+            })
+        }
+
+        (function(url) {
+            if (Z.ie) {
+                el.onreadystatechange = function() {
+                    var readyState = this.readyState
+                    if(readyState === 'loaded' || readyState === 'complete') {
+                        obj.url = url
+                        this.onreadystatechange = null
+                        done(list, obj)
+                    }
+                }
+            } else {
+                if (type == 'js') {
+                    el.onload = el.onerror = function() {
+                        obj.url = url
+                        done(list, obj)
+                    }
+                } else {
+                    setTimeout(function() {
+                        obj.url = url
+                        done(list, obj)
+                    }, 100)
+                }
+            }
+        })(url)
+        
+        if (type === 'js') {
+            head.insertBefore(el, head.firstChild)
+        } else {
+            head.appendChild(el)
+        }
+    })
+
+}
+
+Z.loadScript = function(urls, option, callback) {
+    load('js', urls, option, callback)
+}
+
+Z.loadLink = function(urls, option, callback) {
+    load('css', urls, option, callback)
+}
+
+}(Z)
+
 Z.cache = function() {
     var seed = 0
     var cache = {}
@@ -2383,8 +2541,8 @@ Z.cache = function() {
             return true
         }
     }
-
 }()
+
 
 // Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {

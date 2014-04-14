@@ -197,6 +197,6 @@ Z.fn.extend({
     removeData: function(key) {
         return this.each(function() {
             Z.cache.remove(this, key)
-        });        
+        })
     }
 })

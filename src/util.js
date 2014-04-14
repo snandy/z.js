@@ -51,6 +51,10 @@ function now() {
     return (new Date).getTime()
 }
 
+function noop() {
+    return function() {}
+}
+
 /*
  * op: nextSibling | previousSibling
  */
@@ -98,3 +102,6 @@ var Browser = function(ua) {
     return b
 }(navigator.userAgent.toLowerCase())
 
+Z.declareUI = function(name, superClass, factory) {
+    Z.Class('Z.ui.' + name, superClass, factory)
+}

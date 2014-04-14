@@ -192,26 +192,31 @@ Z.fn.extend({
     hasClass: function(name) {
         return domClass.has(this[0], name)
     },
+
     addClass: function(name) {
         return this.each( function(el) {
             domClass.add(el, name)
         })
     },
+
     removeClass: function(name) {
         return this.each( function(el) {
             domClass.remove(el, name)
         })
     },
+
     toggleClass: function(name) {
         return this.each( function(el) {
             domClass.toggle(el, name)
         })
     },
+
     replaceClass: function(oCls, nCls) {
         return this.each( function(el) {
             domClass.replace(el, oCls, nCls)
         })
     },
+
     attr: function(name, val) {
         if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
             for (var ar in name) {
@@ -245,6 +250,7 @@ Z.fn.extend({
             return this
         }
     },
+
     removeAttr: function(name) {
         if (Z.isString(name)) {
             this.each( function(el) {
@@ -253,10 +259,12 @@ Z.fn.extend({
         }
         return this
     },
+
     hasAttr: function(name) {
         if (this.attr(name)) return true
         return false
     },
+
     prop: function(name, val) {
         if ( Z.isObject(name) && !Z.isEmptyObject(name) ) {
             for (var ar in name) {
@@ -273,6 +281,7 @@ Z.fn.extend({
             return this
         }
     },
+
     css: function(name, val) {
         if ( Z.isObject(name) ) {
             for (var k in name) this.css(k, name[k])
@@ -327,8 +336,8 @@ Z.fn.extend({
             })
             return this
         }
-
     },
+
     offsetParent: function() {
         var parent = this[0].offsetParent || doc.body
         while ( parent && (!rroot.test(parent.nodeName) && Z(parent).css('position') === 'static') ) {
@@ -336,6 +345,7 @@ Z.fn.extend({
         }
         return Z(parent)
     },
+
     offset: function(options) {
         if (arguments.length) {
             return options === undefined ? this :
@@ -348,6 +358,7 @@ Z.fn.extend({
         if (!doc) return null
         return getOffset(el, doc, doc.documentElement)
     },
+
     position: function() {
         if (!this[0]) return
         var $parent = this.offsetParent()
@@ -364,6 +375,7 @@ Z.fn.extend({
             left: offset.left - parentOffset.left
         }
     },
+
     scrollTop: function(top) {
         var isWindow = this[0] == window
         if (top === undefined) {
@@ -381,15 +393,18 @@ Z.fn.extend({
             return this
         }
     },
+
     text: function(val) {
         return this.prop(this[0].innerText === undefined ? 'textContent' : 'innerText', val)
     },
+
     html: function(val) {
         if (Z.isFunction(val)) {
             val = val()
         }
         return this.prop('innerHTML', val)
     },
+
     val: function(val) {
         if (Z.isFunction(val)) {
             val = val()
@@ -404,16 +419,19 @@ Z.fn.extend({
             return this.prop('value', val)
         }
     },
+
 	show: function() {
 		this.each(function(el) {
 			el.style.display = ''
 		})
 	},
+
     hide: function() {
         this.each(function(el) {
             el.style.display = 'none'
         })        
     },
+
     toggle: function() {
         this.each(function(el) {
             if (el.style.display !== 'none') {
