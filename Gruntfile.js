@@ -50,7 +50,7 @@ module.exports = function(grunt) {
 			},
 			ui: {
 				src: ['src/ui/dragdrop.js'],
-				dest: 'dragdrop.js'
+				dest: 'ui.js'
 			}
 		},
 		uglify: {
