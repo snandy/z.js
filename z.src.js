@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-14 18:27:27
+ * @snandy 2014-04-15 17:57:44
  *
  */
 ~function(window, undefined) {
@@ -30,6 +30,13 @@ function Z(selector, context) {
 
 Z.identity = function(val) { return val }
 
+Z.viewSize = function() {
+    var winObj = Z(window)
+    return {
+        width: winObj.width(),
+        height: winObj.height()
+    }
+}
 
 // 特性检测
 var support = function() {

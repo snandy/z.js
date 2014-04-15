@@ -25,3 +25,10 @@ function Z(selector, context) {
 
 Z.identity = function(val) { return val }
 
+Z.viewSize = function() {
+    var winObj = Z(window)
+    return {
+        width: winObj.width(),
+        height: winObj.height()
+    }
+}

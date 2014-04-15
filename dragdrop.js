@@ -1,8 +1,13 @@
+/*!
+ * Z.js v0.1.0
+ * @snandy 2014-04-15 17:57:44
+ *
+ */
 /**
  * 拖拽插件
  *
- * 使用
- * Z.ui.Dragable(option)
+ * 简单使用
+ * $(selector).dragable()
  * 
  * 配置对象 option
  * Dargable({
@@ -18,10 +23,24 @@
  * })
  * 
  * 方法 method
- * stopDrag // 停止拖拽
- * startDrag  // 开启拖拽
+ * $(selector).dragable('disable') // 停止拖拽
+ * $(selector).dragable('enable')  // 开启拖拽
+ * $(selector).dragable('reset')   // 重置配置对象option
  *
  * 事件 event [start:开始拖拽, drag:拖拽中, end:拖拽结束]
+ * 
+ * $(selector).dragable({
+ *     start: function() {
+ *   
+ *     },
+ *     drag: function() {
+ *   
+ *     },
+ *     end: function() {
+ *   
+ *     }
+ * })
+ * 
  *
  */
 

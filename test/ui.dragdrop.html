@@ -13,20 +13,27 @@
 	</head>
 	<body style="height: 1000px">
 
-        <div style="border:1px solid gray;width:200px;" id="dd">TEST</div>
+        <div style="border:1px solid gray;width:200px;" id="dd"><span class="a">aaa</span><br><a href="#">sohu</a></div>
 <script>
-Z.Class('Person', function() {
-    this.init = function(name, age) {
-        this.name = name
-        this.age = age
-    }
-})
+// Z.Class('Person', function() {
+//     this.init = function(name, age) {
+//         this.name = name
+//         this.age = age
+//     }
+// })
 
 var div = Z('#dd')[0]
-var ddObj = new Z.ui.Dragdrop({elem:div})
+
+var ddObj = Z.ui.Dragdrop({elem: div, inwin: true, handle: '.a'})
 // var p1 = new Person('John', 33)
+ddObj.on('drag', function() {
+    console.log(arguments)
+    console.log(this)
+})
 
-
+ddObj.on('end', function() {
+    console.log('end')
+})
 </script>
 	</body>
 </html>
