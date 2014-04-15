@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-15 18:07:30
+ * @snandy 2014-04-15 18:24:21
  *
  */
 ~function(window, undefined) {
@@ -1124,6 +1124,7 @@ Z.fn.extend({
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
     Z['is' + name] = function(obj) {
+        if (obj === undefined || obj === null) return false
         return toString.call(obj) === '[object ' + name + ']'
     }
 })

@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-15 18:07:30
+ * @snandy 2014-04-15 18:24:21
  *
  */
 /**
@@ -98,7 +98,7 @@ this.onMousedown = function(ev) {
     } else if(dragElem.setCapture) { //IE
         dragElem.setCapture()
         ev.cancelBubble = true
-        this.dragObj.bind('losecapture', this.mouseup)
+        this.dragObj.on('losecapture', this.mouseup)
     }
     
     this.diffX = ev.clientX - dragElem.offsetLeft
