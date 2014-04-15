@@ -2,6 +2,7 @@
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
     Z['is' + name] = function(obj) {
+        if (obj === undefined || obj === null) return false
         return toString.call(obj) === '[object ' + name + ']'
     }
 })
