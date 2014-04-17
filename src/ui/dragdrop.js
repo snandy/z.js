@@ -1,27 +1,28 @@
 /**
  * 拖拽插件
  *
- * 使用
- * Z.ui.Dragable(option)
+ * 使用 Use
+ *   Z.ui.Dragable(option)
  * 
- * 配置对象 option
- * Dargable({
- *    elem: // DOM元素
- *    handle:  // @string   鼠标按下开始拖动的元素
- *    canDrag: // @boolean  默认: true
- *    axis:    // @string   拖拽方向，默认: "xy"。x: 仅水平方向，y: 仅垂直方向
- *    area:    // @array    [minX,maxX,minY,maxY] 拖拽范围 默认任意拖动
- *    inwin:   // @boolean  仅在浏览器窗口内拖动
- *    cursor:  // @string   鼠标状态
- *    zIndex:  // @number   拖拽时zIndex值
- *    fixed:   // @boolean  出现滚动条时保持fixed 默认true
- * })
+ * 配置 Option
+ *   elem:    // DOM元素
+ *   handle:  // @string   鼠标按下开始拖动的元素
+ *   canDrag: // @boolean  默认: true
+ *   axis:    // @string   拖拽方向，默认: "xy"。x: 仅水平方向，y: 仅垂直方向
+ *   area:    // @array    [minX,maxX,minY,maxY] 拖拽范围 默认任意拖动
+ *   inwin:   // @boolean  仅在浏览器窗口内拖动
+ *   cursor:  // @string   鼠标状态
+ *   zIndex:  // @number   拖拽时zIndex值
+ *   fixed:   // @boolean  出现滚动条时保持fixed 默认true
  * 
- * 方法 method
- * stopDrag // 停止拖拽
- * startDrag  // 开启拖拽
+ * 方法 Method
+ *   stopDrag   // 停止拖拽
+ *   startDrag  // 开启拖拽
  *
- * 事件 event [start:开始拖拽, drag:拖拽中, end:拖拽结束]
+ * 事件 Event 
+ *   start  开始拖拽 
+ *   drag   拖拽中
+ *   end    拖拽结束
  *
  */
 
@@ -45,7 +46,7 @@ this.init = function(elem, option) {
     this.cursor = option.cursor || 'move'
     this.zIndex = option.zIndex || ''
     this.dragObj = Z(this.elem)
-    this.downObj = this.handle ? this.dragObj.find(this.handle) : dragObj
+    this.downObj = this.handle ? this.dragObj.find(this.handle) : this.dragObj
 
     // 暂存配置对象
     // this.dragObj.data('optionData', option)

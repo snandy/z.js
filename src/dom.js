@@ -539,7 +539,9 @@ forEach(['width', 'height'], function(name) {
             return getWorH(obj, name)
 
         } else {
-
+            if (!isNaN(val)) {
+                obj.style[name] = val + 'px'
+            }
         }
     }
 })

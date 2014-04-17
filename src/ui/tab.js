@@ -1,9 +1,11 @@
 /**
- * 页签组件 
+ * 页签组件
+ *
+ * 使用 Use
  *   Z.ui.Tab(elem, option)
  *   Z.ui.Tab('.single', {eventType: 'click'})
  *
- * Option
+ * 配置 Option
  *   elem            // DOM元素或CSS选择器
  *   eventType:      // 默认 "mouseover"，鼠标移动到上面时切换，可选 "click"
  *   currClass:      // 默认 "curr"
@@ -13,6 +15,13 @@
  *   tabNavVal:      // tab的css属性选择器的key，默认为 tab-nav
  *   tabConVal:      // tab content的css属性选择器的key，默认为 tab-content
  *   index:          // 指定当前的tab, autoPlay必须为true
+ *
+ * 方法 Method
+ *   paly 播放
+ *   stop 停止播放
+ *
+ * 事件 Event
+ *   change 页签切换事件
  *
  */
 Z.declareUI('Tab', function() {
@@ -49,7 +58,11 @@ this.init = function(elem, option) {
     this.length = navObj.length
 
     // 设置当前tab，默认为第一个
-    this.change(this.currIndex)
+    if (this.currIndex) {
+        navObj.removeClass(this.currClass)
+        contentObj.hide()
+        this.change(this.currIndex)
+    }
 
     // 自动播放
     if (this.autoPlay) {
