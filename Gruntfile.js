@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 		return str
 	}()
 	
-	var concat = function() {
+	var zjs = function() {
 		var intro = ['src/intro.js', 'src/support.js', 'src/util.js']
 		var lang = ['object', 'function', 'array', 'string', 'class'].map(function(fileName) {
 			return 'src/lang/' + fileName + '.js'
@@ -35,6 +35,12 @@ module.exports = function(grunt) {
 		return intro.concat(lang, core, outro)
 	}()
 
+	var ui = function() {
+		var arr = ['dragdrop', 'tab'].map(function(fileName) {
+			return 'src/ui/' + fileName + '.js'
+		})
+		return arr
+	}()
 
 	// 配置
 	grunt.initConfig({
@@ -45,11 +51,11 @@ module.exports = function(grunt) {
 			},
 			z: {
 				// intro在首部，outro在尾部
-				src: concat,
+				src: zjs,
 				dest: 'z.src.js'
 			},
 			ui: {
-				src: ['src/ui/dragdrop.js'],
+				src: ui,
 				dest: 'ui.js'
 			}
 		},
@@ -57,9 +63,13 @@ module.exports = function(grunt) {
 			options: {
 				banner: banner
 			},
-			build: {
+			z: {
 				src: ['z.src.js'],
 				dest: 'z.js'
+			},
+			ui: {
+				src: ui,
+				dest: 'ui.js'
 			}
 		}
 	})

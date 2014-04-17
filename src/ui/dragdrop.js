@@ -33,10 +33,10 @@ var doc  = docObj[0]
 var ZF = Z.Function
 var axisReg = /^xy$/
 
-this.init = function(option) {
+this.init = function(elem, option) {
 
     // 相关属性数据
-    this.elem = option.elem 
+    this.elem = Z.isElement(elem) ? elem : Z(elem)[0]
     this.handle = option.handle
     this.canDrag = option.canDrag !== false
     this.axis = option.axis || 'xy'

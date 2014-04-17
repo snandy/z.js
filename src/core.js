@@ -67,6 +67,20 @@ Z.prototype = {
             (i < 0 ? this.slice(i)[0] : this[i])
     },
 
+    index: function(obj) {
+        var elem = obj, index = false
+        if (Z.isZ(obj)) {
+            elem = obj[0]
+        }
+        this.each(function(el, i) {
+            if (el == elem) {
+                index = i
+                return true
+            }
+        })
+        return index
+    },
+
     parent: function() {
         return Z( this[0].parentNode )
     },

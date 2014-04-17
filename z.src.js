@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-15 18:24:21
+ * @snandy 2014-04-17 11:15:09
  *
  */
 ~function(window, undefined) {
@@ -986,6 +986,20 @@ Z.prototype = {
             (i < 0 ? this.slice(i)[0] : this[i])
     },
 
+    index: function(obj) {
+        var elem = obj, index = false
+        if (Z.isZ(obj)) {
+            elem = obj[0]
+        }
+        this.each(function(el, i) {
+            if (el == elem) {
+                index = i
+                return true
+            }
+        })
+        return index
+    },
+
     parent: function() {
         return Z( this[0].parentNode )
     },
@@ -1688,7 +1702,12 @@ Z.fn.extend({
 
 	show: function() {
 		this.each(function(el) {
-			el.style.display = ''
+            var tagName = el.tagName
+            var elem = doc.createElement(tagName)
+            doc.body.appendChild(elem)
+            var displayVal = Z(elem).css('display')
+            doc.body.removeChild(elem)
+			el.style.display = displayVal
 		})
 	},
 

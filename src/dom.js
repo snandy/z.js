@@ -502,7 +502,12 @@ Z.fn.extend({
 
 	show: function() {
 		this.each(function(el) {
-			el.style.display = ''
+            var tagName = el.tagName
+            var elem = doc.createElement(tagName)
+            doc.body.appendChild(elem)
+            var displayVal = Z(elem).css('display')
+            doc.body.removeChild(elem)
+			el.style.display = displayVal
 		})
 	},
 
