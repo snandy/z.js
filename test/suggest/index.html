@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>tab.js</title>
+        <style type="text/css">
+            body {margin:0;padding:0;}
+            input {width:200px;}
+            .suggest-div{
+                border:1px solid #C1C1C1;
+            }
+            .suggest-div ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .suggest-div .suggest-li{
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                padding: 3px 2px;
+            }
+            .suggest-div .curr {
+                background: #33CCFF;
+                color: white;
+                padding:3px 2px;
+            }
+        </style>
+        <script src="../../z.src.js"></script>
+		<script src="../../ui.js"></script>
+        <script src="/zgit.com/lib/jquery/jquery-1.11.0.js"></script>
+	</head>
+	<body>
+        <div id="cc" style="width:520px;height:100px;margin:30px auto;text-align:center;padding:10px;border:1px solid gray;">
+            <div style="float:left">
+                <label>新浪</label>
+                <input type="text" id="sina"/>
+            </div>
+            <div style="float:right">
+                <label>搜狐</label>
+                <input type="text" id="sohu"/>
+            </div>
+        </div>
+	</body>
+    <script>
+        var suggest = Z.ui.Suggest('#sina', {
+            data: ['sina.cn','sina.com','vip.sina.com.cn','2008.sina.com','263.sina.com']
+        })
+    </script>
+</html>
