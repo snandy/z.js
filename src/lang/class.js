@@ -140,7 +140,7 @@ var Event = {
 
 // initialize namespace
 function namespace(classPath, globalNamespace) {
-    if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
+    if ( !Z.isString(classPath) ) Z.error('classPath must be a string')
     globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
     var arr = classPath.split('.')
     var namespace = globalNamespace
@@ -156,7 +156,7 @@ function namespace(classPath, globalNamespace) {
     }
 
     var clazz = namespace[className]
-    if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
+    if ( Z.isFunction(clazz) ) Z.error(className + ' is already defined')
     namespace[className] = undefined
     return {
         namespace: namespace,
@@ -178,7 +178,7 @@ var create = Object.create ?
 function Class(name, superClass, factory) {
     if (!factory) {
         if (!superClass) {
-            throw new Error('class create failed, verify definitions')
+            Z.error('class create failed, verify definitions')
         }
         factory = superClass
         superClass = Object
@@ -227,7 +227,7 @@ Z.statics = function(clazz, obj) {
 Z.methods = function(clazz, obj, override) {
     var proto = clazz.prototype
     for (var m in obj) {
-        if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
+        if ( !Z.isFunction(obj[m]) ) Z.error(m + ' is not a function')
         if (override) {
             proto[m] = obj[m]
         } else {

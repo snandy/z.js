@@ -8,7 +8,7 @@
 				margin: 0;
 			}
 		</style>
-		<script type="text/javascript" src="../z.src.js"></script>
+		<script type="text/javascript" src="../z.js"></script>
 	</head>
 	<body style="height: 1000px">
 	
@@ -27,8 +27,14 @@
 			<span class="cls">span.cls</span>
 		</p>
 		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
+
+		<div id="d1">d1</div>
 	<script>
-		
+		function isNumber(obj) {
+			return obj - parseFloat( obj ) >= 0
+		}
+
+		var frag = document.createDocumentFragment()
 
 	</script>
 	</body>

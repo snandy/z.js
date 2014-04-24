@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-17 11:50:38
+ * @snandy 2014-04-24 18:04:49
  *
  */
 ~function(window, undefined) {
@@ -29,6 +29,10 @@ function Z(selector, context) {
 }
 
 Z.identity = function(val) { return val }
+
+Z.error = function(msg) {
+    throw new Error(msg)
+}
 
 Z.viewSize = function() {
     var winObj = Z(window)
@@ -463,11 +467,11 @@ Z.String = function() {
         },
         toInt: function(str, base) {
             if (this.isNumberStr(str)) return parseInt(str, base||10)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         toFloat: function(str) {
             if (this.isNumberStr(str)) return parseFloat(str)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         urlAppend : function(url, str) {
             if (Z.isString(str) && str.length) {
@@ -645,7 +649,7 @@ var Event = {
 
 // initialize namespace
 function namespace(classPath, globalNamespace) {
-    if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
+    if ( !Z.isString(classPath) ) Z.error('classPath must be a string')
     globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
     var arr = classPath.split('.')
     var namespace = globalNamespace
@@ -661,7 +665,7 @@ function namespace(classPath, globalNamespace) {
     }
 
     var clazz = namespace[className]
-    if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
+    if ( Z.isFunction(clazz) ) Z.error(className + ' is already defined')
     namespace[className] = undefined
     return {
         namespace: namespace,
@@ -683,7 +687,7 @@ var create = Object.create ?
 function Class(name, superClass, factory) {
     if (!factory) {
         if (!superClass) {
-            throw new Error('class create failed, verify definitions')
+            Z.error('class create failed, verify definitions')
         }
         factory = superClass
         superClass = Object
@@ -732,7 +736,7 @@ Z.statics = function(clazz, obj) {
 Z.methods = function(clazz, obj, override) {
     var proto = clazz.prototype
     for (var m in obj) {
-        if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
+        if ( !Z.isFunction(obj[m]) ) Z.error(m + ' is not a function')
         if (override) {
             proto[m] = obj[m]
         } else {
@@ -859,7 +863,7 @@ var query = function() {
                 try {
                     return context.querySelectorAll('#' + id + ' ' + s)
                 } catch(e){
-                    throw new Error('querySelectorAll: ' + e)
+                    Z.error('querySelectorAll: ' + e)
                 } finally {
                     old ? context.id = old : context.removeAttribute('id')
                 }
@@ -1025,8 +1029,22 @@ Z.prototype = {
 
     remove: function() {
         return this.each(function() {
-            if (this.parentNode != null)
-            this.parentNode.removeChild(this)
+            if (this.parentNode != null) {
+                Z.Cache.remove(this)
+                this.parentNode.removeChild(this)
+            }
+        })
+    },
+
+    empty: function() {
+        return this.each(function() {
+            while(this.firstChild) {
+                var child = this.firstChild
+                if (Z.isElement(child)) {
+                    Z.Cache.remove(child)
+                }
+                this.removeChild(child)
+            }
         })
     },
 
@@ -1110,29 +1128,6 @@ Z.now = now
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
 
-// data, removeData
-Z.fn.extend({
-    data: function(key, value) {
-        var el = this[0]
-        var cache = Z.cache
-        if (key === undefined) {
-            return cache.get(el)
-        }
-        
-        if (value === undefined) {
-            return cache.get(el, key)
-        } else {
-            this.each(function() {
-                cache.set(this, key, value)
-            })
-        }
-    },
-    removeData: function(key) {
-        return this.each(function() {
-            Z.cache.remove(this, key)
-        })
-    }
-})
 
 
 // Z.isArray, Z.isBoolean, ...
@@ -1203,9 +1198,25 @@ Z.isEmail = function(str) {
 var rcapital = /[A-Z]/g
 var ropa1 = /opacity=/i
 var ropa2 = /opacity=([^)]*)/i
+var rtagName = /<([\w:]+)/
 var rroot = /^(?:body|html)$/i
 var cssWidth = ['Left', 'Right']
-var cssHeight = ['Top', 'Botton']
+var cssHeight = ['Top', 'Bottom']
+var displays = {}
+
+function defaultDisplay(tagName) {
+    var display = displays[tagName]
+
+    if (!display) {
+        var elem = doc.createElement(tagName)
+        doc.body.appendChild(elem)
+        var display = Z(elem).css('display')
+        displays[tagName] = display
+        doc.body.removeChild(elem)
+    }
+
+    return display
+}
 
 function getWindow(el) {
     return Z.isWindow(el) ? el :
@@ -1273,6 +1284,12 @@ function camelFn(name) {
     })
 }
 
+function firstLetterUpper(name) {
+    return name.replace(/^(\w)/, function(match) {
+        return match.toUpperCase()
+    })
+}
+
 function getCSS(el, name) {
     if (name == 'opacity') {
         var opacity, filter, style
@@ -1324,57 +1341,47 @@ function setCSS(el, name, val) {
 // 获取元素宽高
 function getWidthOrHeight(el, name, extra) {
     // Start with offset property
-    var val = name === "width" ? el.offsetWidth : el.offsetHeight
-    var which = name === "width" ? cssWidth : cssHeight
-    
+    var val = name === 'width' ? el.offsetWidth : el.offsetHeight
+    var which = name === 'width' ? cssWidth : cssHeight
+
     // display is none
-    if(val === 0) {
+    if (val === 0) {
         return 0
     }
     
-    // css3 box-sizing
-    if(extra === 'border-box') {
-        return val
-    }
-    
-    for (var i = 0, a; a = which[i++];) {
-        val -= parseFloat( getCSS(el, "border" + a + "Width") ) || 0
-        val -= parseFloat( getCSS(el, "padding" + a) ) || 0
-    }
-
-    if (extra === undefined) {
-        return val
-    }
-
-    if (extra === 'padding' || extra === "margin" || extra === "border") {
+    if (extra === undefined) { // content
+        // 减去borderWidth和padding
         for (var i = 0, a; a = which[i++];) {
-            val += parseFloat( getCSS( el, extra + a + (extra==='border' ? 'Width' : '')) ) || 0
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+            val -= parseFloat( getCSS(el, 'padding' + a) ) || 0
+        }
+        return val
+    }
+
+    if (extra === 'inner') { // content+padding
+        for (var i = 0, a; a = which[i++];) {
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+        }
+        return val
+
+    } else if (extra === 'outer') { // content+padding+border
+        return val
+
+    } else if (extra === 'margin') { // content+padding+border+margin
+        for (var i = 0, a; a = which[i++];) {
+            val += parseFloat( getCSS( el, 'margin' + a ) ) || 0
         }
         return val
     }
 }
 
-function getWorH(el, wh, extra) {
-    switch(extra) {
-        case 'border-box':
-        case 'margin':
-        case 'padding':
-        case 'border':
-            return getWidthOrHeight(el, wh, extra)
-        default:
-            return getWidthOrHeight(el, wh)
-    }
-}
-
 // 获取文档宽高
 function getDocWH(name) {
-    name = name.replace(/^(\w)/, function(match) {
-        return match.toUpperCase()
-    })
+    name = firstLetterUpper(name)
     var val = Math.max(
-        doc.documentElement["client" + name],
-        doc.body["scroll" + name], doc.documentElement["scroll" + name],
-        doc.body["offset" + name], doc.documentElement["offset" + name]
+        doc.documentElement['client' + name],
+        doc.body['scroll' + name], doc.documentElement['scroll' + name],
+        doc.body['offset' + name], doc.documentElement['offset' + name]
     )
     return val
 }
@@ -1387,6 +1394,32 @@ function getWinWH(which) {
         return window['innerHeight'] || doc.documentElement.clientHeight
     }
 }
+
+function manipulationDOM(elem) {
+    if (Z.isElement(elem)) {
+        return [elem]
+    }
+    if (Z.isZ(elem)) {
+        return elem.toArray()
+    }
+    var div, nodes = []
+    if (Z.isString(elem)) {
+        if (rtagName.test(elem)) {
+            div = doc.createElement('div')
+            div.innerHTML = elem
+            while (div.firstChild) {
+                nodes.push(div.firstChild)
+                div.removeChild(div.firstChild)
+            }
+            div = null
+            return nodes
+        } else {
+            return [doc.createTextNode(elem)]
+        }
+    }
+}
+
+// Z.m = manipulationDOM
 
 Z.support = support
 
@@ -1701,18 +1734,14 @@ Z.fn.extend({
     },
 
 	show: function() {
-		this.each(function(el) {
-            var tagName = el.tagName
-            var elem = doc.createElement(tagName)
-            doc.body.appendChild(elem)
-            var displayVal = Z(elem).css('display')
-            doc.body.removeChild(elem)
+		return this.each(function(el) {
+            var displayVal = defaultDisplay(el.tagName)
 			el.style.display = displayVal
 		})
 	},
 
     hide: function() {
-        this.each(function(el) {
+        return this.each(function(el) {
             el.style.display = 'none'
         })        
     },
@@ -1720,40 +1749,176 @@ Z.fn.extend({
     toggle: function() {
         this.each(function(el) {
             if (el.style.display !== 'none') {
-                el.style.display = 'none'
+                $(el).hide()
             } else {
-                el.style.display = ''
+                $(el).show()
             }
-            
         })        
+    },
+
+    append: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.appendChild(node)
+            })
+        })
+    },
+
+    prepend: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.insertBefore(node, el.firstChild)
+            })
+        })
+    },
+
+    before: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el)
+                }
+            })
+        })
+    },
+
+    after: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el.nextSibling)
+                }
+            })
+        })
     }
+
 })
 
 forEach(['width', 'height'], function(name) {
+    // width/height content width
     Z.fn[name] = function(val) {
         var obj = this[0]
         if (!this.length) return
         if (val === undefined) {
             if ( Z.isWindow(obj) ) return getWinWH(name)
             if ( Z.isDocument(obj) ) return getDocWH(name)
-            return getWorH(obj, name)
+            return getWidthOrHeight(obj, name)
 
         } else {
-
+            if (!isNaN(val)) {
+                obj.style[name] = val + 'px'
+            }
         }
+    }
+
+    // innerWidth/innerHeight 包含content + padding
+    var cname = firstLetterUpper(name)
+    Z.fn['inner' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'inner')
+    }
+
+    // outerWidth/outerHeight 包含content + padding + border
+    Z.fn['outer' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'outer')
+    }
+
+    // marginWidth/marginHeight 包含content + padding + border + margin
+    Z.fn['margin' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'margin')    
     }
 })
 
+
 }(Z)
+
+Z.Cache = function() {
+    var seed = 0
+    var cache = {}
+    var id = '_uuid_'
+    Z.__cache__ = cache
+
+    // @private
+    function uuid(el) {
+        return el[id] || (el[id] = ++seed)
+    }
+
+    return {
+        set: function(el, key, val) {
+            if (!el) Z.error('setting failed, invalid element')
+
+            var id = uuid(el)
+            var c = cache[id] || (cache[id] = {})
+            if (key) c[key] = val
+
+            return c
+        },
+        get: function(el, key, create) {
+            if (!el) Z.error('getting failed, invalid element')
+
+            var id = uuid(el)
+            var elCache = cache[id] || (create && (cache[id] = {}))
+
+            if (!elCache) return null
+            return key !== undefined ? elCache[key] || null : elCache
+        },
+        has: function(el, key) {
+            return this.get(el, key) !== null
+        },
+        remove: function(el, key) {
+            var id = uuid(el)
+            var elCache = cache[id]
+
+            if (!elCache) return false
+
+            if (key !== undefined) {
+                delete elCache[key]
+            } else {
+                delete cache[id]
+            }
+
+            return true
+        }
+    }
+}()
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.Cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            return this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.Cache.remove(this, key)
+        })
+    }
+})
 
 ~function(Z) {
 
-var guid = 1
-var guidStr = '__guid__'
+// var guid = 1
+// var guidStr = '__guid__'
         
 // 存放所有事件handler, 以guid为key, cache[1] = {}
 // cache[1] = {handle: evnetHandle, events: {}}, events = {click: [handler1, handler2, ..]}
-var cache = {}
+// var cache = {}
+
+var eventId = '__event__'
 
 // 优先使用标准API
 var w3c = !!window.addEventListener
@@ -1799,11 +1964,14 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     
     var e = fix(e, elem)
     var type = e.type
-    var id = elem[guidStr]
-    var elData = cache[id]
-    var events = elData.events
+    // var id = elem[guidStr]
+    // var elData = cache[id] || {}
+    var elData = Z(elem).data(eventId) || {}
+    var events = elData.events || {}
     var handlers = events[type]
     
+    if (!handlers) Z.error('No Add Handler')
+
     var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
@@ -1871,8 +2039,9 @@ function Handler(config) {
     }
 }
 // 删除事件的注册，从缓存中去除
-function remove(elem, type, guid) {
-    var elData = cache[guid]
+function remove(elem, type) {
+    // var elData = cache[guid]
+    var elData = Z(elem).data(eventId)
     var handle = elData.handle
     var events = elData.events
     
@@ -1886,7 +2055,8 @@ function remove(elem, type, guid) {
         delete elData.elem
         delete elData.handle        
         delete elData.events
-        delete cache[guid]
+        // delete cache[guid]
+        Z(elem).removeData(eventId)
     }
 }
 // Custom event class
@@ -1958,8 +2128,8 @@ function fix(e, elem) {
         e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement
     }
     if (e.pageX == null && e.clientX != null) {
-        var docElem = document.documentElement
-        var body = document.body
+        var body = doc.body
+        var docElem = doc.documentElement
         e.pageX = e.clientX + 
             (docElem && docElem.scrollLeft || body && body.scrollLeft || 0) -
             (docElem && docElem.clientLeft || body && body.clientLeft || 0)
@@ -1986,8 +2156,14 @@ function fix(e, elem) {
 function bind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) return
     
-    var id = elem[guidStr] = elem[guidStr] || guid++
-    var elData = cache[id] = cache[id] || {}
+    // var id = elem[guidStr] = elem[guidStr] || guid++
+    // var elData = cache[id] = cache[id] || {}
+    var zElem = Z(elem)
+    var elData = zElem.data(eventId)
+    if (!elData) {
+        zElem.data(eventId, {})
+        elData = zElem.data(eventId)
+    }
     var events = elData.events
     var handle = elData.handle
     var handlerObj, eventType, i = 0, arrType, namespace
@@ -2085,8 +2261,9 @@ function bind(elem, type, handler) {
 // Remove event handler
 function unbind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    var elData = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     
@@ -2097,13 +2274,13 @@ function unbind(elem, type, handler) {
                 return true
             }
         })
-        if (handlers.length === 0) remove(elem, type, id)
+        if (handlers.length === 0) remove(elem, type)
     
     } else if (type) { // 传两个参数
-        remove(elem, type, id)
+        remove(elem, type)
     
     } else { // 传一个参数
-        for (var type in events) remove(elem, type, id)
+        for (var type in events) remove(elem, type)
     }
 }
 
@@ -2111,8 +2288,9 @@ function unbind(elem, type, handler) {
 function trigger(elem, type) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
 
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    var elData   = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     var args     = sliceArgs(arguments, 2)
@@ -2570,7 +2748,7 @@ function load(type, urls, option, callback) {
             
         // 已经加载的不再加载
         if (hash[url]) {
-            throw new Error('warning: ' + url + ' has loaded.')
+            Z.error('warning: ' + url + ' has loaded.')
         }
 
         if (type === 'js') {
@@ -2630,55 +2808,6 @@ Z.loadLink = function(urls, option, callback) {
 }
 
 }(Z)
-
-Z.cache = function() {
-    var seed = 0
-    var cache = {}
-    var id = '_uuid_'
-
-    // @private
-    function uuid(el) {
-        return el[id] || (el[id] = ++seed)
-    }
-
-    return {
-        set: function(el, key, val) {
-            if (!el) throw new Error('setting failed, invalid element')
-
-            var id = uuid(el)
-            var c = cache[id] || (cache[id] = {})
-            if (key) c[key] = val
-
-            return c
-        },
-        get: function(el, key, create) {
-            if (!el) throw new Error('getting failed, invalid element')
-
-            var id = uuid(el)
-            var elCache = cache[id] || (create && (cache[id] = {}))
-
-            if (!elCache) return null
-            return key !== undefined ? elCache[key] || null : elCache
-        },
-        has: function(el, key) {
-            return this.get(el, key) !== null
-        },
-        remove: function(el, key) {
-            var id = typeof el === 'object' ? uuid(el) : el
-            var elCache = cache[id]
-
-            if (!elCache) return false
-
-            if (key !== undefined) {
-                delete elCache[key]
-            } else {
-                delete cache[id]
-            }
-
-            return true
-        }
-    }
-}()
 
 
 // Expose Z to the global object or as AMD module

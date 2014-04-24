@@ -25,6 +25,10 @@ function Z(selector, context) {
 
 Z.identity = function(val) { return val }
 
+Z.error = function(msg) {
+    throw new Error(msg)
+}
+
 Z.viewSize = function() {
     var winObj = Z(window)
     return {

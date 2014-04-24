@@ -52,11 +52,11 @@ Z.String = function() {
         },
         toInt: function(str, base) {
             if (this.isNumberStr(str)) return parseInt(str, base||10)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         toFloat: function(str) {
             if (this.isNumberStr(str)) return parseFloat(str)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         urlAppend : function(url, str) {
             if (Z.isString(str) && str.length) {

@@ -66,7 +66,7 @@ function load(type, urls, option, callback) {
             
         // 已经加载的不再加载
         if (hash[url]) {
-            throw new Error('warning: ' + url + ' has loaded.')
+            Z.error('warning: ' + url + ' has loaded.')
         }
 
         if (type === 'js') {

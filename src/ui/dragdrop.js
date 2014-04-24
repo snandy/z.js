@@ -35,9 +35,22 @@ var ZF = Z.Function
 var axisReg = /^xy$/
 
 this.init = function(elem, option) {
-
     // 相关属性数据
     this.elem = Z.isElement(elem) ? elem : Z(elem)[0]
+
+    this.reset(option)
+
+    // 暂存配置对象
+    this.dragObj.data('originData', Z.extend({}, option))
+
+    // 鼠标mousedown
+    var mousedown = ZF.bind(this.onMousedown, this)
+    this.downObj.mousedown(function(ev) {
+        mousedown(ev)
+    })
+}
+
+this.reset = function(option) {
     this.handle = option.handle
     this.canDrag = option.canDrag !== false
     this.axis = option.axis || 'xy'
@@ -47,19 +60,8 @@ this.init = function(elem, option) {
     this.zIndex = option.zIndex || ''
     this.dragObj = Z(this.elem)
     this.downObj = this.handle ? this.dragObj.find(this.handle) : this.dragObj
-
-    // 暂存配置对象
-    // this.dragObj.data('optionData', option)
-    // this.dragObj.data('originData', Z.extend({}, option))
-
     // 设置鼠标状态
     this.downObj.css('cursor', this.cursor)
-
-    // 鼠标mousedown
-    var mousedown = ZF.bind(this.onMousedown, this)
-    this.downObj.mousedown(function(ev) {
-        mousedown(ev)
-    })
 }
 
 this.onMousedown = function(ev) {
@@ -171,6 +173,10 @@ this.stopDrag = function() {
 
 this.startDrag = function() {
     this.canDrag = true
+}
+
+this.setAxis = function(xy) {
+    this.axis = xy
 }
 
 })

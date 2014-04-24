@@ -93,7 +93,7 @@ var query = function() {
                 try {
                     return context.querySelectorAll('#' + id + ' ' + s)
                 } catch(e){
-                    throw new Error('querySelectorAll: ' + e)
+                    Z.error('querySelectorAll: ' + e)
                 } finally {
                     old ? context.id = old : context.removeAttribute('id')
                 }

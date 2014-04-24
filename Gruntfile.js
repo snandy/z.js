@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 		var lang = ['object', 'function', 'array', 'string', 'class'].map(function(fileName) {
 			return 'src/lang/' + fileName + '.js'
 		})
-		var core = ['selector', 'core', 'is', 'dom', 'event', 'io', 'loader','cache'].map(function(fileName) {
+		var core = ['selector', 'core', 'is', 'dom', 'cache', 'event', 'io', 'loader'].map(function(fileName) {
 			return 'src/' + fileName + '.js'
 		})
 		var outro = ['src/outro.js']
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 	}()
 
 	var ui = function() {
-		var arr = ['dragdrop', 'tab'].map(function(fileName) {
+		var arr = ['dragdrop', 'tab', 'suggest'].map(function(fileName) {
 			return 'src/ui/' + fileName + '.js'
 		})
 		return arr

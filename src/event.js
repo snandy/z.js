@@ -1,11 +1,13 @@
 ~function(Z) {
 
-var guid = 1
-var guidStr = '__guid__'
+// var guid = 1
+// var guidStr = '__guid__'
         
 // 存放所有事件handler, 以guid为key, cache[1] = {}
 // cache[1] = {handle: evnetHandle, events: {}}, events = {click: [handler1, handler2, ..]}
-var cache = {}
+// var cache = {}
+
+var eventId = '__event__'
 
 // 优先使用标准API
 var w3c = !!window.addEventListener
@@ -51,11 +53,14 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     
     var e = fix(e, elem)
     var type = e.type
-    var id = elem[guidStr]
-    var elData = cache[id]
-    var events = elData.events
+    // var id = elem[guidStr]
+    // var elData = cache[id] || {}
+    var elData = Z(elem).data(eventId) || {}
+    var events = elData.events || {}
     var handlers = events[type]
     
+    if (!handlers) Z.error('No Add Handler')
+
     var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
@@ -123,8 +128,9 @@ function Handler(config) {
     }
 }
 // 删除事件的注册，从缓存中去除
-function remove(elem, type, guid) {
-    var elData = cache[guid]
+function remove(elem, type) {
+    // var elData = cache[guid]
+    var elData = Z(elem).data(eventId)
     var handle = elData.handle
     var events = elData.events
     
@@ -138,7 +144,8 @@ function remove(elem, type, guid) {
         delete elData.elem
         delete elData.handle        
         delete elData.events
-        delete cache[guid]
+        // delete cache[guid]
+        Z(elem).removeData(eventId)
     }
 }
 // Custom event class
@@ -210,8 +217,8 @@ function fix(e, elem) {
         e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement
     }
     if (e.pageX == null && e.clientX != null) {
-        var docElem = document.documentElement
-        var body = document.body
+        var body = doc.body
+        var docElem = doc.documentElement
         e.pageX = e.clientX + 
             (docElem && docElem.scrollLeft || body && body.scrollLeft || 0) -
             (docElem && docElem.clientLeft || body && body.clientLeft || 0)
@@ -238,8 +245,14 @@ function fix(e, elem) {
 function bind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) return
     
-    var id = elem[guidStr] = elem[guidStr] || guid++
-    var elData = cache[id] = cache[id] || {}
+    // var id = elem[guidStr] = elem[guidStr] || guid++
+    // var elData = cache[id] = cache[id] || {}
+    var zElem = Z(elem)
+    var elData = zElem.data(eventId)
+    if (!elData) {
+        zElem.data(eventId, {})
+        elData = zElem.data(eventId)
+    }
     var events = elData.events
     var handle = elData.handle
     var handlerObj, eventType, i = 0, arrType, namespace
@@ -337,8 +350,9 @@ function bind(elem, type, handler) {
 // Remove event handler
 function unbind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    var elData = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     
@@ -349,13 +363,13 @@ function unbind(elem, type, handler) {
                 return true
             }
         })
-        if (handlers.length === 0) remove(elem, type, id)
+        if (handlers.length === 0) remove(elem, type)
     
     } else if (type) { // 传两个参数
-        remove(elem, type, id)
+        remove(elem, type)
     
     } else { // 传一个参数
-        for (var type in events) remove(elem, type, id)
+        for (var type in events) remove(elem, type)
     }
 }
 
@@ -363,8 +377,9 @@ function unbind(elem, type, handler) {
 function trigger(elem, type) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
 
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    var elData   = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     var args     = sliceArgs(arguments, 2)

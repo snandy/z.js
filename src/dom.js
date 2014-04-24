@@ -3,9 +3,25 @@
 var rcapital = /[A-Z]/g
 var ropa1 = /opacity=/i
 var ropa2 = /opacity=([^)]*)/i
+var rtagName = /<([\w:]+)/
 var rroot = /^(?:body|html)$/i
 var cssWidth = ['Left', 'Right']
-var cssHeight = ['Top', 'Botton']
+var cssHeight = ['Top', 'Bottom']
+var displays = {}
+
+function defaultDisplay(tagName) {
+    var display = displays[tagName]
+
+    if (!display) {
+        var elem = doc.createElement(tagName)
+        doc.body.appendChild(elem)
+        var display = Z(elem).css('display')
+        displays[tagName] = display
+        doc.body.removeChild(elem)
+    }
+
+    return display
+}
 
 function getWindow(el) {
     return Z.isWindow(el) ? el :
@@ -73,6 +89,12 @@ function camelFn(name) {
     })
 }
 
+function firstLetterUpper(name) {
+    return name.replace(/^(\w)/, function(match) {
+        return match.toUpperCase()
+    })
+}
+
 function getCSS(el, name) {
     if (name == 'opacity') {
         var opacity, filter, style
@@ -124,57 +146,47 @@ function setCSS(el, name, val) {
 // 获取元素宽高
 function getWidthOrHeight(el, name, extra) {
     // Start with offset property
-    var val = name === "width" ? el.offsetWidth : el.offsetHeight
-    var which = name === "width" ? cssWidth : cssHeight
-    
+    var val = name === 'width' ? el.offsetWidth : el.offsetHeight
+    var which = name === 'width' ? cssWidth : cssHeight
+
     // display is none
-    if(val === 0) {
+    if (val === 0) {
         return 0
     }
     
-    // css3 box-sizing
-    if(extra === 'border-box') {
-        return val
-    }
-    
-    for (var i = 0, a; a = which[i++];) {
-        val -= parseFloat( getCSS(el, "border" + a + "Width") ) || 0
-        val -= parseFloat( getCSS(el, "padding" + a) ) || 0
-    }
-
-    if (extra === undefined) {
-        return val
-    }
-
-    if (extra === 'padding' || extra === "margin" || extra === "border") {
+    if (extra === undefined) { // content
+        // 减去borderWidth和padding
         for (var i = 0, a; a = which[i++];) {
-            val += parseFloat( getCSS( el, extra + a + (extra==='border' ? 'Width' : '')) ) || 0
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+            val -= parseFloat( getCSS(el, 'padding' + a) ) || 0
+        }
+        return val
+    }
+
+    if (extra === 'inner') { // content+padding
+        for (var i = 0, a; a = which[i++];) {
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+        }
+        return val
+
+    } else if (extra === 'outer') { // content+padding+border
+        return val
+
+    } else if (extra === 'margin') { // content+padding+border+margin
+        for (var i = 0, a; a = which[i++];) {
+            val += parseFloat( getCSS( el, 'margin' + a ) ) || 0
         }
         return val
     }
 }
 
-function getWorH(el, wh, extra) {
-    switch(extra) {
-        case 'border-box':
-        case 'margin':
-        case 'padding':
-        case 'border':
-            return getWidthOrHeight(el, wh, extra)
-        default:
-            return getWidthOrHeight(el, wh)
-    }
-}
-
 // 获取文档宽高
 function getDocWH(name) {
-    name = name.replace(/^(\w)/, function(match) {
-        return match.toUpperCase()
-    })
+    name = firstLetterUpper(name)
     var val = Math.max(
-        doc.documentElement["client" + name],
-        doc.body["scroll" + name], doc.documentElement["scroll" + name],
-        doc.body["offset" + name], doc.documentElement["offset" + name]
+        doc.documentElement['client' + name],
+        doc.body['scroll' + name], doc.documentElement['scroll' + name],
+        doc.body['offset' + name], doc.documentElement['offset' + name]
     )
     return val
 }
@@ -187,6 +199,32 @@ function getWinWH(which) {
         return window['innerHeight'] || doc.documentElement.clientHeight
     }
 }
+
+function manipulationDOM(elem) {
+    if (Z.isElement(elem)) {
+        return [elem]
+    }
+    if (Z.isZ(elem)) {
+        return elem.toArray()
+    }
+    var div, nodes = []
+    if (Z.isString(elem)) {
+        if (rtagName.test(elem)) {
+            div = doc.createElement('div')
+            div.innerHTML = elem
+            while (div.firstChild) {
+                nodes.push(div.firstChild)
+                div.removeChild(div.firstChild)
+            }
+            div = null
+            return nodes
+        } else {
+            return [doc.createTextNode(elem)]
+        }
+    }
+}
+
+// Z.m = manipulationDOM
 
 Z.support = support
 
@@ -501,18 +539,14 @@ Z.fn.extend({
     },
 
 	show: function() {
-		this.each(function(el) {
-            var tagName = el.tagName
-            var elem = doc.createElement(tagName)
-            doc.body.appendChild(elem)
-            var displayVal = Z(elem).css('display')
-            doc.body.removeChild(elem)
+		return this.each(function(el) {
+            var displayVal = defaultDisplay(el.tagName)
 			el.style.display = displayVal
 		})
 	},
 
     hide: function() {
-        this.each(function(el) {
+        return this.each(function(el) {
             el.style.display = 'none'
         })        
     },
@@ -520,23 +554,64 @@ Z.fn.extend({
     toggle: function() {
         this.each(function(el) {
             if (el.style.display !== 'none') {
-                el.style.display = 'none'
+                $(el).hide()
             } else {
-                el.style.display = ''
+                $(el).show()
             }
-            
         })        
+    },
+
+    append: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.appendChild(node)
+            })
+        })
+    },
+
+    prepend: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.insertBefore(node, el.firstChild)
+            })
+        })
+    },
+
+    before: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el)
+                }
+            })
+        })
+    },
+
+    after: function(elem) {
+        this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el.nextSibling)
+                }
+            })
+        })
     }
+
 })
 
 forEach(['width', 'height'], function(name) {
+    // width/height content width
     Z.fn[name] = function(val) {
         var obj = this[0]
         if (!this.length) return
         if (val === undefined) {
             if ( Z.isWindow(obj) ) return getWinWH(name)
             if ( Z.isDocument(obj) ) return getDocWH(name)
-            return getWorH(obj, name)
+            return getWidthOrHeight(obj, name)
 
         } else {
             if (!isNaN(val)) {
@@ -544,6 +619,23 @@ forEach(['width', 'height'], function(name) {
             }
         }
     }
+
+    // innerWidth/innerHeight 包含content + padding
+    var cname = firstLetterUpper(name)
+    Z.fn['inner' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'inner')
+    }
+
+    // outerWidth/outerHeight 包含content + padding + border
+    Z.fn['outer' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'outer')
+    }
+
+    // marginWidth/marginHeight 包含content + padding + border + margin
+    Z.fn['margin' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'margin')    
+    }
 })
+
 
 }(Z)

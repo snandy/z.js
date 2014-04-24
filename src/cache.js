@@ -1,7 +1,8 @@
-Z.cache = function() {
+Z.Cache = function() {
     var seed = 0
     var cache = {}
     var id = '_uuid_'
+    Z.__cache__ = cache
 
     // @private
     function uuid(el) {
@@ -10,7 +11,7 @@ Z.cache = function() {
 
     return {
         set: function(el, key, val) {
-            if (!el) throw new Error('setting failed, invalid element')
+            if (!el) Z.error('setting failed, invalid element')
 
             var id = uuid(el)
             var c = cache[id] || (cache[id] = {})
@@ -19,7 +20,7 @@ Z.cache = function() {
             return c
         },
         get: function(el, key, create) {
-            if (!el) throw new Error('getting failed, invalid element')
+            if (!el) Z.error('getting failed, invalid element')
 
             var id = uuid(el)
             var elCache = cache[id] || (create && (cache[id] = {}))
@@ -31,7 +32,7 @@ Z.cache = function() {
             return this.get(el, key) !== null
         },
         remove: function(el, key) {
-            var id = typeof el === 'object' ? uuid(el) : el
+            var id = uuid(el)
             var elCache = cache[id]
 
             if (!elCache) return false
@@ -46,3 +47,27 @@ Z.cache = function() {
         }
     }
 }()
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.Cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            return this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.Cache.remove(this, key)
+        })
+    }
+})
