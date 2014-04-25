@@ -62,7 +62,10 @@ ul.toc_section {
   list-style-type: none;
 }
 .toc_section li {
-  margin: 0 0 3px 0;
+  margin: 0 0 5px 0;
+}
+.toc_section li:hover {
+  background: #F8F8FF;
 }
 .toc_section li a {
   text-decoration: none;
