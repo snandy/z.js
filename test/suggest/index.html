@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8"/>
-		<title>tab.js</title>
+		<title>suggest.js</title>
         <style type="text/css">
             body {margin:0;padding:0;}
             input {width:200px;}
@@ -28,23 +28,46 @@
         </style>
         <script src="../../z.src.js"></script>
 		<script src="../../ui.js"></script>
-        <script src="/zgit.com/lib/jquery/jquery-1.11.0.js"></script>
+        
 	</head>
 	<body>
-        <div id="cc" style="width:520px;height:100px;margin:30px auto;text-align:center;padding:10px;border:1px solid gray;">
+        <div id="cc" style="width:520px;height:100px;margin:30px auto;text-align:center;padding:10px;">
             <div style="float:left">
-                <label>新浪</label>
+                <label>Local</label>
                 <input type="text" id="sina"/>
             </div>
             <div style="float:right">
-                <label>搜狐</label>
+                <label>AJAX</label>
                 <input type="text" id="sohu"/>
             </div>
         </div>
 	</body>
     <script>
-        var suggest = Z.ui.Suggest('#sina', {
-            data: ['sina.cn','sina.com','vip.sina.com.cn','2008.sina.com','263.sina.com']
-        })
+Z.Class('MailSuggest', Z.ui.Suggest, function(supr) {
+    var reMail = /@.*/
+    this.init = function(input, option) {
+        supr.init.call(this, input, option)
+        this.processLi = function(v1, v2) {
+            v2 = v2.replace(reMail, '')
+            return v2+ '@' + v1
+        }
+        this.processVal = function(v1, v2) {
+            v2 = v2.replace(reMail, '')
+            return v2 + '@' + v1
+        }
+    }
+})
+
+var suggest1 = MailSuggest('#sina', {
+    data: ['sina.cn','sina.com','vip.sina.com.cn','2008.sina.com','263.sina.com']
+})
+
+var suggest2 = Z.ui.Suggest('#sohu', {
+    url: 's.json',
+    processData: function(data) {
+        return data.city
+    }
+})
+
     </script>
 </html>

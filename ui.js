@@ -1,6 +1,508 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-24 18:04:49
+ * @snandy 2014-04-25 14:19:52
  *
  */
-Z.declareUI("Dragdrop",function(){var t=Z(window),e=Z(document);e[0];var n=Z.Function,i=/^xy$/;this.init=function(t,e){this.elem=Z.isElement(t)?t:Z(t)[0],this.reset(e),this.dragObj.data("originData",Z.extend({},e));var i=n.bind(this.onMousedown,this);this.downObj.mousedown(function(t){i(t)})},this.reset=function(t){this.handle=t.handle,this.canDrag=t.canDrag!==!1,this.axis=t.axis||"xy",this.area=t.area||[],this.inwin=t.inwin||!1,this.cursor=t.cursor||"move",this.zIndex=t.zIndex||"",this.dragObj=Z(this.elem),this.downObj=this.handle?this.dragObj.find(this.handle):this.dragObj,this.downObj.css("cursor",this.cursor)},this.onMousedown=function(i){var r=this.dragObj[0];this.dragObj.css("position","absolute");var s=Z.viewSize();if(this.dragElemWidth=Math.max(r.offsetWidth,r.clientWidth),this.dragElemHeight=Math.max(r.offsetHeight,r.clientHeight),this.dragElemMarginTop=parseInt(r.style.marginTop,10)||0,this.dragElemMarginLeft=parseInt(r.style.marginLeft,10)||0,this.inwin){var a=s.width-this.dragElemWidth,o=s.height-this.dragElemHeight;this.area=[0,a,0,o]}var u=n.bind(this.onMousemove,this);this.mouseup=n.bind(this.onMouseup,this),this.mousemove=function(t){u(t)},window.captureEvents?(i.stopPropagation(),i.preventDefault(),t.blur(this.mouseup)):r.setCapture&&(r.setCapture(),i.cancelBubble=!0,this.dragObj.on("losecapture",this.mouseup)),this.diffX=i.clientX-r.offsetLeft,this.diffY=i.clientY-r.offsetTop,e.mousemove(this.mousemove),e.mouseup(this.mouseup),this.fire("start")},this.onMousemove=function(t){var e,n,r,s,a=t.clientX-this.diffX,o=t.clientY-this.diffY,u=this.dragObj,c=u[0],l=this.area;if(this.area&&(e=l[0],n=l[1],r=l[2],s=l[3],e>a&&(a=e),a>n&&(a=n),r>o&&(o=r),o>s&&(o=s)),this.canDrag){var f=this.axis;a-=this.dragElemMarginTop,o-=this.dragElemMarginLeft,("x"===f||i.test(f))&&(c.style.left=a+"px"),("y"===f||i.test(f))&&(c.style.top=o+"px")}this.fire("drag",a,o)},this.onMouseup=function(){var n=this.dragObj[0];e.off("mousemove",this.mousemove),e.off("mouseup",this.mouseup),window.releaseEvents?t.off("blur",this.mouseup):dargElem.releaseCapture&&(dragObj.off("losecapture",this.mouseup),n.releaseCapture()),this.fire("end")},this.stopDrag=function(){this.canDrag=!1},this.startDrag=function(){this.canDrag=!0},this.setAxis=function(t){this.axis=t}}),Z.declareUI("Tab",function(){Z.Function,this.init=function(t,e){var e=e||{};this.elem=Z.isElement(t)?t:Z(t)[0],this.eventType=e.eventType||"mouseover",this.currClass=e.currClass||"curr",this.autoPlay=e.autoPlay||!1,this.interval=e.interval||5e3,this.currIndex=e.currIndex||0,this.attrName=e.attrName||"data-ui",this.tabNavVal=e.tabNavVal||"tab-nav",this.tabConVal=e.tabConVal||"tab-content";var n=this.attrName,i=this.tabNavVal,r=this.tabConVal,s=this.elemObj=Z(this.elem),a=this.navObj=s.find("["+n+"="+i+"]"),o=this.contentObj=s.find("["+n+"="+r+"]");if(a.length!=o.length)throw Error("navObj and contentObj length must be equal");this.length=a.length,this.currIndex&&(a.removeClass(this.currClass),o.hide(),this.change(this.currIndex)),this.autoPlay&&this.play();var u=this;s.delegate("["+n+"="+i+"]",this.eventType,function(){var t=a.index(this);u.change(t)})},this.change=function(t){var e=this.navObj,n=this.contentObj,i=this.currClass,r=e.eq(t),s=n.eq(t);this._preNav=this._preNav?this._preNav:r,this._preCon=this._preCon?this._preCon:s,this._preNav.removeClass(i),r.addClass(i),this._preNav=r,this._preCon.hide(),s.show(),this._preCon=s,this.currIndex=t,this.fire("change",t)},this.play=function(){var t=this;this.timer=setInterval(function(){var e=t.currIndex+1;e===t.length&&(e=0),t.change(e)},this.interval)},this.stop=function(){clearInterval(this.timer)}}),Z.declareUI("Suggest",function(){function t(t,e){var n=document.createElement(t);return e&&(n.className=e),Z(n)}this.init=function(e,n){var e=this.input=Z(e);this.ulCls=n.ulCls||"",this.liCls=n.liCls||"suggest-li",this.currCls=n.currCls||"curr",this.url=n.url||"",this.data=n.data||[],this.buildLi=n.buildLi,this.currLi=null;var i=this.getInputPosition();this.div=t("div","suggest-div").hide(),this.div.css({position:"absolute",top:i.top+e[0].offsetHeight-1,left:i.left,width:e[0].offsetWidth-2}),this.ul=t("ul",n.ulCls),this.div[0].appendChild(this.ul[0]),document.body.appendChild(this.div[0]);var r=this;this.input.on("keyup",function(t){""===e.value?r.hide():r.onKeyup(t)})},this.getInputPosition=function(){return this.input.offset()},this.hide=function(){this.div.hide()},this.show=function(){this.div.show()},this.render=function(){this.ul.empty(),Z.each(this.data,function(e){var n=t("li",this.liCls);n.attr("data-val",e),Z.isFunction(this.buildLi)?n.html(this.buildLi(e)):n.html(e),this.ul[0].appendChild(n[0])},this),this.visible=!0,this.show()},this.onKeyup=function(t){this.div;var e=this.ul[0],n=this.input,i=this.liCls,r=this.currCls;if(this.visible)switch(t.keyCode){case 13:return this.currLi&&(n.value=this.currLi.firstChild.data,this.hide()),void 0;case 38:return null==this.currLi?(this.currLi=e.lastChild,this.currLi.className=r,n.val(this.currLi.firstChild.data)):null!=this.currLi.previousSibling?(this.currLi.className=i,this.currLi=this.currLi.previousSibling,this.currLi.className=r,n.val(this.currLi.firstChild.data)):(this.currLi.className=i,this.currLi=null,n[0].focus(),n.val(this.finalValue)),void 0;case 40:return null==this.currLi?(this.currLi=e.firstChild,this.currLi.className=r,n.val(this.currLi.firstChild.data)):null!=this.currLi.nextSibling?(this.currLi.className=i,this.currLi=this.currLi.nextSibling,this.currLi.className=r,n.val(this.currLi.firstChild.data)):(this.currLi.className=i,this.currLi=null,n[0].focus(),n.val(this.finalValue)),void 0;case 27:return this.hide(),n.val(this.finalValue),void 0}this.lis=[];var s=n.val();this.finalValue!==s&&(this.render(),this.finalValue=s)}});
+/**
+ * 拖拽插件
+ *
+ * 使用 Use
+ *   Z.ui.Dragable(option)
+ * 
+ * 配置 Option
+ *   elem:    // DOM元素
+ *   handle:  // @string   鼠标按下开始拖动的元素
+ *   canDrag: // @boolean  默认: true
+ *   axis:    // @string   拖拽方向，默认: "xy"。x: 仅水平方向，y: 仅垂直方向
+ *   area:    // @array    [minX,maxX,minY,maxY] 拖拽范围 默认任意拖动
+ *   inwin:   // @boolean  仅在浏览器窗口内拖动
+ *   cursor:  // @string   鼠标状态
+ *   zIndex:  // @number   拖拽时zIndex值
+ *   fixed:   // @boolean  出现滚动条时保持fixed 默认true
+ * 
+ * 方法 Method
+ *   stopDrag   // 停止拖拽
+ *   startDrag  // 开启拖拽
+ *
+ * 事件 Event 
+ *   start  开始拖拽 
+ *   drag   拖拽中
+ *   end    拖拽结束
+ *
+ */
+
+Z.declareUI('Dragdrop', function() {
+
+var winObj = Z(window)
+var docObj = Z(document)
+var doc  = docObj[0] 
+var ZF = Z.Function
+var axisReg = /^xy$/
+
+this.init = function(elem, option) {
+    // 相关属性数据
+    this.elem = Z.isElement(elem) ? elem : Z(elem)[0]
+
+    this.reset(option)
+
+    // 暂存配置对象
+    this.dragObj.data('originData', Z.extend({}, option))
+
+    // 鼠标mousedown
+    var mousedown = ZF.bind(this.onMousedown, this)
+    this.downObj.mousedown(function(ev) {
+        mousedown(ev)
+    })
+}
+
+this.reset = function(option) {
+    this.handle = option.handle
+    this.canDrag = option.canDrag !== false
+    this.axis = option.axis || 'xy'
+    this.area = option.area || []
+    this.inwin = option.inwin || false
+    this.cursor = option.cursor || 'move'
+    this.zIndex = option.zIndex || ''
+    this.dragObj = Z(this.elem)
+    this.downObj = this.handle ? this.dragObj.find(this.handle) : this.dragObj
+    // 设置鼠标状态
+    this.downObj.css('cursor', this.cursor)
+}
+
+this.onMousedown = function(ev) {
+    var dragElem = this.dragObj[0]
+    // 模拟拖拽，需要设置为绝对定位
+    this.dragObj.css('position', 'absolute')
+    
+    // 鼠标按下的时候计算下window的宽高，拖拽元素尺寸，不要再mousemove内计算
+    var viewSize = Z.viewSize()
+    this.dragElemWidth = Math.max(dragElem.offsetWidth, dragElem.clientWidth)
+    this.dragElemHeight = Math.max(dragElem.offsetHeight, dragElem.clientHeight)
+    this.dragElemMarginTop = parseInt(dragElem.style.marginTop, 10) || 0
+    this.dragElemMarginLeft = parseInt(dragElem.style.marginLeft, 10) || 0
+
+    // 仅在窗口可视范围内移动
+    if (this.inwin) {
+        var winX = viewSize.width - this.dragElemWidth
+        var winY = viewSize.height - this.dragElemHeight
+        this.area = [0, winX, 0, winY]
+    }
+
+    var mousemove = ZF.bind(this.onMousemove, this)
+    this.mouseup = ZF.bind(this.onMouseup, this)
+    this.mousemove = function(ev) {
+        mousemove(ev)
+    }
+
+    if (window.captureEvents) { //标准DOM
+        ev.stopPropagation()
+        ev.preventDefault()
+        winObj.blur(this.mouseup)
+    } else if(dragElem.setCapture) { //IE
+        dragElem.setCapture()
+        ev.cancelBubble = true
+        this.dragObj.on('losecapture', this.mouseup)
+    }
+    
+    this.diffX = ev.clientX - dragElem.offsetLeft
+    this.diffY = ev.clientY - dragElem.offsetTop
+
+    // 开始拖拽
+    docObj.mousemove(this.mousemove)
+    docObj.mouseup(this.mouseup)
+
+    // starg 事件
+    this.fire('start')
+}
+
+this.onMousemove = function(ev) {
+    var minX, maxX, minY, maxY    
+    var moveX = ev.clientX - this.diffX
+    var moveY = ev.clientY - this.diffY
+    var dragObj = this.dragObj 
+    var dragElem = dragObj[0]
+    var area = this.area
+    
+    // 设置拖拽范围
+    if (this.area) {
+        minX = area[0]
+        maxX = area[1]
+        minY = area[2]
+        maxY = area[3]
+        moveX < minX && (moveX = minX) // left 最小值
+        moveX > maxX && (moveX = maxX) // left 最大值
+        moveY < minY && (moveY = minY) // top 最小值
+        moveY > maxY && (moveY = maxY) // top 最大值
+    }
+
+    // 设置是否可拖拽，有时可能有取消元素拖拽行为的需求
+    if (this.canDrag) {
+        var axis = this.axis
+        //设置位置，并修正margin
+        moveX = moveX - this.dragElemMarginTop
+        moveY = moveY - this.dragElemMarginLeft
+        if (axis === 'x' || axisReg.test(axis)) {
+            dragElem.style.left = moveX + 'px'
+        }
+        if (axis === 'y' || axisReg.test(axis)) {
+            dragElem.style.top =  moveY + 'px'
+        }
+    }
+
+    // drag 事件
+    this.fire('drag', moveX, moveY)
+}
+
+this.onMouseup = function(ev) {
+    var self = this
+    var dragElem = this.dragObj[0]
+
+    // 删除事件注册
+    docObj.off('mousemove', this.mousemove)
+    docObj.off('mouseup', this.mouseup)
+
+    if (window.releaseEvents) { //标准DOM
+        winObj.off('blur', this.mouseup)
+    } else if (dargElem.releaseCapture) { //IE
+        dragObj.off('losecapture', this.mouseup)
+        dragElem.releaseCapture()
+    }
+
+    // end 事件
+    this.fire('end')
+}
+
+this.stopDrag = function() {
+    this.canDrag = false
+}
+
+this.startDrag = function() {
+    this.canDrag = true
+}
+
+this.setAxis = function(xy) {
+    this.axis = xy
+}
+
+})
+
+/**
+ * 页签组件
+ *
+ * 使用 Use
+ *   Z.ui.Tab(elem, option)
+ *   Z.ui.Tab('.single', {eventType: 'click'})
+ *
+ * 配置 Option
+ *   elem            // DOM元素或CSS选择器
+ *   eventType:      // 默认 "mouseover"，鼠标移动到上面时切换，可选 "click"
+ *   currClass:      // 默认 "curr"
+ *   autoPlay:       // 是否自动播放，默认false
+ *   interval:       // 自动播放时间间隔
+ *   attrName:       // tab的css属性选择器的key，默认为 data-ui
+ *   tabNavVal:      // tab的css属性选择器的key，默认为 tab-nav
+ *   tabConVal:      // tab content的css属性选择器的key，默认为 tab-content
+ *   index:          // 指定当前的tab, autoPlay必须为true
+ *
+ * 方法 Method
+ *   paly 播放
+ *   stop 停止播放
+ *
+ * 事件 Event
+ *   change 页签切换事件
+ *
+ */
+Z.declareUI('Tab', function() {
+
+var ZF = Z.Function
+
+this.init = function(elem, option) {
+    var option = option || {}
+    // 内部状态变量
+    this.elem = Z.isElement(elem) ? elem : Z(elem)[0]
+    this.eventType = option.eventType || 'mouseover'
+    this.currClass = option.currClass || 'curr'
+    this.autoPlay = option.autoPlay || false
+    this.interval = option.interval || 5000
+    this.currIndex = option.currIndex || 0
+    this.attrName = option.attrName || 'data-ui'
+    this.tabNavVal = option.tabNavVal || 'tab-nav'
+    this.tabConVal = option.tabConVal || 'tab-content'
+
+    // DOM element
+    var attrName = this.attrName
+    var tabNavVal = this.tabNavVal
+    var tabConVal = this.tabConVal
+
+    var elemObj = this.elemObj = Z(this.elem)
+    var navObj = this.navObj = elemObj.find('[' + attrName + '=' + tabNavVal + ']')
+    var contentObj = this.contentObj = elemObj.find('[' + attrName + '=' + tabConVal + ']')
+
+    if (navObj.length != contentObj.length) {
+        throw new Error('navObj and contentObj length must be equal')
+    }
+
+    // tab长度
+    this.length = navObj.length
+
+    // 设置当前tab，默认为第一个
+    if (this.currIndex) {
+        navObj.removeClass(this.currClass)
+        contentObj.hide()
+        this.change(this.currIndex)
+    }
+
+    // 自动播放
+    if (this.autoPlay) {
+        this.play()
+    }
+
+    // 事件
+    var self = this
+    elemObj.delegate('[' + attrName + '=' + tabNavVal + ']', this.eventType, function(ev) {
+        var index = navObj.index(this)
+        self.change(index)
+    })
+
+}
+
+this.change = function(index) {
+    var navObj = this.navObj
+    var contentObj = this.contentObj
+    var currClass = this.currClass
+
+    var nav = navObj.eq(index)
+    var content = contentObj.eq(index)
+
+    this._preNav = this._preNav ? this._preNav : nav
+    this._preCon = this._preCon ? this._preCon : content
+
+    // nav
+    this._preNav.removeClass(currClass)
+    nav.addClass(currClass)
+    this._preNav = nav
+
+    // content
+    this._preCon.hide()
+    content.show()
+    this._preCon = content
+
+    // 充值当前的索引
+    this.currIndex = index
+
+    // change事件
+    this.fire('change', index)
+}
+
+this.play = function() {
+    var self = this
+    this.timer = setInterval(function() {
+        // 递增顺序播放
+        var index = self.currIndex + 1
+        // 到达最后一个tab后，从第一个开始
+        if (index === self.length) {
+            index = 0
+        }
+        self.change(index)
+    }, this.interval)
+}
+
+this.stop = function() {
+    clearInterval(this.timer)
+}
+
+
+})
+
+Z.declareUI('Suggest', function() {
+
+function create(tag, cls) {
+    var el = document.createElement(tag)
+    if (cls) {
+        el.className = cls
+    }
+    return Z(el)
+}
+
+this.init = function(input, option) {
+    this.input = Z(input)
+    this.ulCls = option.ulCls || ''
+    this.liCls = option.liCls || 'suggest-li'
+    this.currCls = option.currCls || 'curr'
+    this.url = option.url || ''
+    this.data = option.data || []
+    this.processData = option.processData || function(data) {return data}
+    this.processLi = option.processLi || function(v1, v2) { return v1 }
+    this.processVal = option.processVal || function(v1, v2) { return v1 }
+    this.currLi = null
+
+    var posi = this.getInputPosition()
+    this.div = create('div', 'suggest-div').hide()
+    this.div.css({
+        position: 'absolute',
+        top: posi.top + this.input[0].offsetHeight - 1,
+        left: posi.left,
+        width: this.input[0].offsetWidth - 2
+    })
+    this.ul = create('ul', option.ulCls)
+    this.div.append(this.ul)
+    Z(document.body).append(this.div)
+
+    this.events()
+
+    this.fire('init')
+}
+
+this.events = function() {
+    this.input.on('keyup', {
+        context: this, 
+        handler: function(ev) {
+            if (this.input.value === '') {
+                this.hide()
+            } else {
+                this.onKeyup(ev)
+            }
+        }
+    }).on('blur', {
+        context: this, 
+        handler: function() {
+            this.hide()
+        }
+    })
+
+    var self = this
+    var currCls = self.currCls
+    this.ul.delegate('li', 'mousedown', function() {
+        var li = Z(this)
+        self.input.val( li.attr('data-val') )
+    }).delegate('li', 'mouseover', function() {
+        var li = Z(this)
+        li.addClass(currCls)
+        self.currLi = li
+    }).delegate('li', 'mouseout', function() {
+        var li = Z(this)
+        li.removeClass(currCls)
+    })
+}
+
+this.getInputPosition = function() {
+    return this.input.offset()
+}
+
+this.hide = function() {
+    this.div.hide()
+    this.visible = false
+    this.fire('hide')
+}
+
+this.show = function() {
+    this.div.show()
+    this.visible = true
+    this.fire('show')
+}
+
+this.render = function() {
+    var iVal = this.input.val()
+    if (iVal === '') {
+        this.hide()
+        return
+    }
+    this.ul.empty()
+    Z.each(this.data, function(it, i) {
+        var li = create('li', this.liCls)
+        var fVal = this.processVal(it, iVal)
+        li.attr('data-val', fVal)
+        li.html( this.processLi(it, iVal) )
+        this.ul.append(li)
+    }, this)
+    this.visible = true
+    this.show()
+    this.fire('render')
+}
+
+this.specKeys = function(keyCode) {
+    var ul = this.ul
+    var lis = ul.find('li')
+    var input = this.input
+    var currLi = this.currLi
+    var liCls = this.liCls
+    var currCls = this.currCls
+
+    switch (keyCode) {
+        case 13: // Enter
+            if (currLi) {
+                input.val( currLi.attr('data-val') )
+                this.hide()
+            }
+            return
+        case 38: // 方向键上
+            if (currLi == null) {
+                this.currLi = lis.last()
+                this.currLi.addClass(currCls)
+                input.val( this.currLi.attr('data-val') )
+            } else {
+                if (this.currLi.prev().length) {
+                    this.currLi.removeClass(currCls)
+                    this.currLi = this.currLi.prev()
+                    this.currLi.addClass(currCls)
+                    input.val( this.currLi.attr('data-val') )
+                } else {
+                    this.currLi.removeClass(currCls)
+                    this.currLi = null
+                    input[0].focus()
+                    input.val(this.finalValue)
+                }
+            }
+            return
+        case 40: // 方向键下
+            if (currLi == null) {
+                this.currLi = lis.first()
+                this.currLi.addClass(currCls)
+                input.val( this.currLi.attr('data-val') )
+            } else {
+                if (this.currLi.next().length) {
+                    this.currLi.removeClass(currCls)
+                    this.currLi = this.currLi.next()
+                    this.currLi.addClass(currCls)
+                    input.val( this.currLi.attr('data-val') )
+                } else {
+                    this.currLi.removeClass(currCls)
+                    this.currLi = null
+                    input[0].focus()
+                    input.val(this.finalValue)
+                }
+            }
+            return
+        case 27: // ESC键
+            this.hide();
+            input.val(this.finalValue)
+            return
+    }
+}
+
+this.onKeyup = function(ev) {
+    var self = this
+    var input = this.input
+    var keyCode = ev.keyCode
+    if ( (keyCode === 13 || keyCode === 27 || keyCode ===38 || keyCode === 40) && this.visible) {
+        this.specKeys(keyCode)
+    } else {
+        this.lis = []
+        var val = input.val()
+        if (this.finalValue !== val) {
+            if (this.url) {
+                Z.get(this.url, function(data) {
+                    self.data = self.process(data)
+                    self.render()
+                })
+            } else {
+                this.render()    
+            }
+            this.finalValue = val
+        }
+    }
+}
+
+
+
+})
