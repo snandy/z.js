@@ -65,6 +65,12 @@
                 <li><a href="#replaceClass">replaceClass</a></li>
                 <li><a href="#width">width</a></li>
                 <li><a href="#height">height</a></li>
+                <li><a href="#innerWidth">innerWidth</a></li>
+                <li><a href="#innerHeight">innerHeight</a></li>
+                <li><a href="#outerWidth">outerWidth</a></li>
+                <li><a href="#outerHeight">outerHeight</a></li>
+                <li><a href="#marginWidth">marginWidth</a></li>
+                <li><a href="#marginHeight">marginHeight</a></li>
                 <li><a href="#position">position</a></li>
                 <li><a href="#offset">offset</a></li>
                 <li><a href="#offsetParent">offsetParent</a></li>
@@ -73,7 +79,11 @@
                 <li><a href="#hide">hide</a></li>
                 <li><a href="#toggle">toggle</a></li>     
                 <li><a href="#remove">remove</a></li>
-                <li><a href="#empty">empty</a></li>                                
+                <li><a href="#empty">empty</a></li>
+                <li><a href="#append">append</a></li>
+                <li><a href="#prepend">prepend</a></li>
+                <li><a href="#after">after</a></li>
+                <li><a href="#before">before</a></li>                         
             </ul>
 
             <a class="toc_title" href="#event">Event</a>
@@ -807,6 +817,60 @@ height(function(index, oldHeight){ ... }) ⇒ self
 </div>
                 </article>
 
+                <article class=method id="innerWidth">
+                    <h3>innerWidth</h3>
+                    <pre class=signature><code>innerWidth() ⇒ number
+</code></pre>
+                    <p>
+                        获取元素的内宽度，即paddingLeft + width + paddingRight。
+                    </p>
+                </article>
+
+                <article class=method id="innerHeight">
+                    <h3>innerHeight</h3>
+                    <pre class=signature><code>innerHeight() ⇒ number
+</code></pre>
+                    <p>
+                        获取元素的内高度，即paddingTop + height + paddingBottm。
+                    </p>
+                </article>
+
+                <article class=method id="outerWidth">
+                    <h3>outerWidth</h3>
+                    <pre class=signature><code>outerWidth() ⇒ number
+</code></pre>
+                    <p>
+                        获取元素的外宽度，即borderLeft + paddingLeft + width + paddingRight + borderRight。
+                    </p>
+                </article>
+
+                <article class=method id="outerHeight">
+                    <h3>outerHeight</h3>
+                    <pre class=signature><code>outerHeight() ⇒ number
+</code></pre>
+                    <p>
+                        获取元素的外高度，即bordeTop + paddingTop + width + paddingBottom + borderBottom。
+                    </p>
+                </article>
+
+                <article class=method id="marginWidth">
+                    <h3>marginWidth</h3>
+                    <pre class=signature><code>marginWidth() ⇒ number
+</code></pre>
+                    <p>
+                        outerWidth再加左右下margin。
+                    </p>
+                </article>
+
+                <article class=method id="marginHeight">
+                    <h3>marginHeight</h3>
+                    <pre class=signature><code>marginHeight() ⇒ number
+</code></pre>
+                    <p>
+                        outerHeight再加上上下margin。
+                    </p>
+                </article>
+
 
                 <article class=method id="position">
                     <h3>position</h3>
@@ -908,6 +972,58 @@ scrollTop(top) ⇒ self
                     <p>
                         清空指定元素的所有子元素.
                     </p>
+                </article>
+
+                <article class=method id="append">
+                    <h3>append</h3>
+                    <pre class=signature><code>append(content) ⇒ self</code></pre>
+                    <p>
+                        在每个匹配元素内的结尾处插入指定的内容。content可以是DOM元素，HTML字符串和 <code>Z</code> 对象自身。
+                    </p>
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#nav&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span>)</span>
+</code></pre>
+</div>                    
+                </article>
+
+                <article class=method id="prepend">
+                    <h3>prepend</h3>
+                    <pre class=signature><code>prepend(content) ⇒ self</code></pre>
+                    <p>
+                        在每个匹配元素内的开头插入指定的内容。content可以是DOM元素，HTML字符串和 <code>Z</code> 对象自身。
+                    </p>
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#nav&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span>)</span>
+</code></pre>
+</div>                    
+                </article>
+
+                <article class=method id="after">
+                    <h3>after</h3>
+                    <pre class=signature><code>after(content) ⇒ self</code></pre>
+                    <p>
+                        在每个匹配元素的后面，插入指定的内容，作为其兄弟节点。content可以是DOM元素，HTML字符串和 <code>Z</code> 对象自身。
+                    </p>
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#nav&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">after</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span>)</span>
+</code></pre>
+</div>                    
+                </article>
+
+                <article class=method id="before">
+                    <h3>before</h3>
+                    <pre class=signature><code>before(content) ⇒ self</code></pre>
+                    <p>
+                        在每个匹配元素的前面，插入指定的内容，作为其兄弟节点。content可以是DOM元素，HTML字符串和 <code>Z</code> 对象自身。
+                    </p>
+              <div class="highlight">
+                        <pre><code class="js"><span class="kd">var</span> <span class="nx">elem</span> <span class="o">=</span> <span class="nx">Z</span><span class="p">(</span><span class="s1">&#39;#nav&#39;</span><span class="p">)</span>
+<span class="nx">elem</span><span class="p">.</span><span class="nx">before</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span>)</span>
+</code></pre>
+</div>                    
                 </article>
 
                 <hr>
