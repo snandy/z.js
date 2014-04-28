@@ -360,7 +360,11 @@ Z.fn.extend({
 
     removeClass: function(name) {
         return this.each( function(el) {
-            domClass.remove(el, name)
+            if (name) {
+                domClass.remove(el, name)    
+            } else {
+                el.className = ''
+            }
         })
     },
 

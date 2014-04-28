@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-25 14:19:52
+ * @snandy 2014-04-25 16:43:50
  *
  */
 ~function(window, undefined) {
@@ -1555,7 +1555,11 @@ Z.fn.extend({
 
     removeClass: function(name) {
         return this.each( function(el) {
-            domClass.remove(el, name)
+            if (name) {
+                domClass.remove(el, name)    
+            } else {
+                el.className = ''
+            }
         })
     },
 
