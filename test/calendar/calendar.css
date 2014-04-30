@@ -1,0 +1,41 @@
+/*cal*/
+.o-datepicker{padding:10px 0 10px 10px;z-index:10;border:1px solid #E5E5E5;background:#fff;position: absolute;}
+.datepicker { border-collapse: collapse;float:left;margin-right:10px;z-index: 9}
+.datepicker span {cursor: pointer;}
+.datepicker .controls th{height:26px;line-height:26px;background:#0560b1;color:#fff;font-size:12px;border:1px solid #0560b;}
+.datepicker .days th { height:26px; font-size: 12ipx;background:#ececec;color:#333;}
+.datepicker .days .org{color:#ff6501}
+.datepicker .days .sun{border-left:1px solid #E5E5E5}
+.datepicker .days .sat{border-right:1px solid #E5E5E5}
+.datepicker select {font-size: 11px; }
+.datepicker tfoot td {height: 18px;text-align: center; text-transform: capitalize; }
+.datepicker tfoot td {background: #eee; font: 10px/18px Verdana, Arial, Helvetica, sans-serif;}
+.datepicker th span, .datepicker tfoot td span {font-weight:bold;}
+.datepicker tbody td {width:25px;height:24px;border:1px solid #e5e5e5;font:14px/24px Arial, Helvetica, sans-serif;text-align: center;background: #fff;font-weight:bold;color: #999}
+.datepicker tbody td.date {cursor: pointer; color:#0964b4;}
+.datepicker tbody td.date.over {background-color:#dbf3ff;color:#fff}
+.datepicker tbody td.date.chosen { background-color: #ff6501;color:#fff }
+.datepicker .prevMonth{width:26px;height:26px;float:left;background:#3c9fd7;float:left;position:relative;}
+.datepicker .prevMonth s{position:absolute;top:4px;left:-3px;font-size:0;line-height:0;overflow:hidden;border:10px dashed transparent;border-right-style: solid;border-right-color:#fff;}
+.datepicker .nextMonth{width:26px;height:26px;float:left;background:#3c9fd7;float:right;position:relative;}
+.datepicker .nextMonth s{position:absolute;top:4px;left:10px;font-size:0;line-height:0;overflow:hidden;border:10px dashed transparent;border-left-style: solid;border-left-color:#fff;}
+.datepicker .disabled .prevMonth1{border-right-color:#999}
+.datepicker .disabled .nextMonth1{border-left-color:#999}
+/*datapicker*/
+.ui-datepicker{padding:10px 0 10px 10px;z-index:10;border:1px solid #E5E5E5;background:#fff;width: 430px;display: none}
+.ui-datepicker-group{float:left;margin-right:10px;width: 203px;}
+.ui-datepicker-header{background: none repeat scroll 0 0 #0560B1; color: #FFFFFF; font-size: 12px; height: 26px; line-height: 26px}
+.ui-datepicker-calendar{border-collapse: collapse;}
+.ui-datepicker th{height:26px; font-size: 12ipx;background:#ececec;color:#333;}
+.ui-datepicker td span, .ui-datepicker td a{background: none repeat scroll 0 0 #FFFFFF; border: 1px solid #E5E5E5; color: #0964B4; font: bold 14px/24px Arial,Helvetica,sans-serif; height: 24px; text-align: center; width: 25px;display: inline-block;}
+.ui-datepicker-week-end{color:#f80}
+.ui-datepicker td span{color: #999}
+.ui-datepicker-header a{background: none repeat scroll 0 0 #3C9FD7; float: left; height: 26px; position: relative; width: 26px;}
+.ui-datepicker-prev span{position:absolute;top:4px;left:-3px;font-size:0;line-height:0;overflow:hidden;border:10px dashed transparent;border-right-style: solid;border-right-color:#fff;}
+.ui-datepicker-next span{position:absolute;top:4px;left:10px;font-size:0;line-height:0;overflow:hidden;border:10px dashed transparent;border-left-style: solid;border-left-color:#fff;}
+.ui-state-hover{background-color:#dbf3ff;color:#fff}
+td.ui-datepicker-current-day a{background-color: #ff6501;color:#fff;border-color: #ff6501}
+.ui-datepicker-group-last{margin-right: 0}
+.ui-datepicker-title{float: left;text-align: center;width: 170px;}
+.ui-datepicker-header .ui-datepicker-next{float: right;}
+*html .ui-datepicker iframe{width: 420px;height: 210px;display: none}

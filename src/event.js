@@ -421,28 +421,30 @@ Z.fn.fire = function(type) {
 
 // Shorthand Methods
 forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mousemove,mouseup,keydown,keyup,keypress,focus,blur,losecapture'.split(','), function(name) {
-    Z.fn[name] = function(handler) {
+    Z.fn[name] = function(handler, context) {
         if (arguments.length === 0) {
             this.fire(name)
         } else {
-            this.on(name, handler)
+            this.on(name, {
+                handler: handler,
+                context: context
+            })
         }
         return this
     }
 })
 
 // Event delegate
-Z.fn.delegate = function(selector, type, handler) {
-    if (arguments.length === 2 && Z.isFunction(type)) {
-        fn = type
-        type = 'click'
-    }
+Z.fn.delegate = function(selector, type, handler, context) {
     return this.each(function(el) {
-        Z(el).on(type, function(e) {
-            var tar = e.target
-            Z(selector, this).each( function(el) {
-                if (tar == el || Z.contains(el, tar)) handler.call(el, e)
-            })
+        Z(el).on(type, {
+            context: context,
+            handler: function(e) {
+                var tar = e.target
+                Z(selector, this).each( function(el) {
+                    if (tar == el || Z.contains(el, tar)) handler.call(el, e)
+                })
+            }
         })
     })
 }

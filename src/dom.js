@@ -224,7 +224,7 @@ function manipulationDOM(elem) {
     }
 }
 
-// Z.m = manipulationDOM
+Z.dom = manipulationDOM
 
 Z.support = support
 
@@ -566,7 +566,7 @@ Z.fn.extend({
     },
 
     append: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 el.appendChild(node)
@@ -575,7 +575,7 @@ Z.fn.extend({
     },
 
     prepend: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 el.insertBefore(node, el.firstChild)
@@ -584,7 +584,7 @@ Z.fn.extend({
     },
 
     before: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 if (el.parentNode) {
@@ -595,7 +595,7 @@ Z.fn.extend({
     },
 
     after: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 if (el.parentNode) {

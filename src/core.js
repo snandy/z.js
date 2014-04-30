@@ -93,21 +93,25 @@ Z.prototype = {
         return Z( nextOrPrev(this[0], 'previousSibling') )
     },
     
-    each: function(iterator) {
-        forEach(this, iterator)
+    each: function(iterator, context) {
+        forEach(this, iterator, context)
         return this
     },
 
-    map: function(iterator) {
+    map: function(iterator, context) {
         return Z(map(this, function(el, i) {
             return iterator.call(el, el, i)
-        }))
+        }, context))
     },
 
     remove: function() {
         return this.each(function() {
             if (this.parentNode != null) {
+                // 清除事件绑定
+                Z(this).off()
+                // 清楚数据缓存
                 Z.Cache.remove(this)
+                // 删除DOM节点
                 this.parentNode.removeChild(this)
             }
         })
@@ -118,6 +122,7 @@ Z.prototype = {
             while(this.firstChild) {
                 var child = this.firstChild
                 if (Z.isElement(child)) {
+                    Z(child).off()
                     Z.Cache.remove(child)
                 }
                 this.removeChild(child)

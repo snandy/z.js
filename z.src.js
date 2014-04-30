@@ -1,13 +1,13 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-25 16:43:50
+ * @snandy 2014-04-30 14:02:19
  *
  */
 ~function(window, undefined) {
 
 var OP = Object.prototype
 var FP = Function.prototype
-var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
+var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean', 'Date']
 
 var toString = OP.toString
 var slice  = types.slice
@@ -1016,21 +1016,25 @@ Z.prototype = {
         return Z( nextOrPrev(this[0], 'previousSibling') )
     },
     
-    each: function(iterator) {
-        forEach(this, iterator)
+    each: function(iterator, context) {
+        forEach(this, iterator, context)
         return this
     },
 
-    map: function(iterator) {
+    map: function(iterator, context) {
         return Z(map(this, function(el, i) {
             return iterator.call(el, el, i)
-        }))
+        }, context))
     },
 
     remove: function() {
         return this.each(function() {
             if (this.parentNode != null) {
+                // 清除事件绑定
+                Z(this).off()
+                // 清楚数据缓存
                 Z.Cache.remove(this)
+                // 删除DOM节点
                 this.parentNode.removeChild(this)
             }
         })
@@ -1041,6 +1045,7 @@ Z.prototype = {
             while(this.firstChild) {
                 var child = this.firstChild
                 if (Z.isElement(child)) {
+                    Z(child).off()
                     Z.Cache.remove(child)
                 }
                 this.removeChild(child)
@@ -1419,7 +1424,7 @@ function manipulationDOM(elem) {
     }
 }
 
-// Z.m = manipulationDOM
+Z.dom = manipulationDOM
 
 Z.support = support
 
@@ -1761,7 +1766,7 @@ Z.fn.extend({
     },
 
     append: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 el.appendChild(node)
@@ -1770,7 +1775,7 @@ Z.fn.extend({
     },
 
     prepend: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 el.insertBefore(node, el.firstChild)
@@ -1779,7 +1784,7 @@ Z.fn.extend({
     },
 
     before: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 if (el.parentNode) {
@@ -1790,7 +1795,7 @@ Z.fn.extend({
     },
 
     after: function(elem) {
-        this.each(function(el) {
+        return this.each(function(el) {
             var nodes = manipulationDOM(elem)
             forEach(nodes, function(node) {
                 if (el.parentNode) {
@@ -2336,28 +2341,30 @@ Z.fn.fire = function(type) {
 
 // Shorthand Methods
 forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mousemove,mouseup,keydown,keyup,keypress,focus,blur,losecapture'.split(','), function(name) {
-    Z.fn[name] = function(handler) {
+    Z.fn[name] = function(handler, context) {
         if (arguments.length === 0) {
             this.fire(name)
         } else {
-            this.on(name, handler)
+            this.on(name, {
+                handler: handler,
+                context: context
+            })
         }
         return this
     }
 })
 
 // Event delegate
-Z.fn.delegate = function(selector, type, handler) {
-    if (arguments.length === 2 && Z.isFunction(type)) {
-        fn = type
-        type = 'click'
-    }
+Z.fn.delegate = function(selector, type, handler, context) {
     return this.each(function(el) {
-        Z(el).on(type, function(e) {
-            var tar = e.target
-            Z(selector, this).each( function(el) {
-                if (tar == el || Z.contains(el, tar)) handler.call(el, e)
-            })
+        Z(el).on(type, {
+            context: context,
+            handler: function(e) {
+                var tar = e.target
+                Z(selector, this).each( function(el) {
+                    if (tar == el || Z.contains(el, tar)) handler.call(el, e)
+                })
+            }
         })
     })
 }

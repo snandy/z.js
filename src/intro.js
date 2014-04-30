@@ -2,7 +2,7 @@
 
 var OP = Object.prototype
 var FP = Function.prototype
-var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
+var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean', 'Date']
 
 var toString = OP.toString
 var slice  = types.slice

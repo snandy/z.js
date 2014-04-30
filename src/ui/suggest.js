@@ -21,7 +21,7 @@ this.init = function(input, option) {
     this.processVal = option.processVal || function(v1, v2) { return v1 }
     this.currLi = null
 
-    var posi = this.getInputPosition()
+    var posi = this.input.offset()
     this.div = create('div', 'suggest-div').hide()
     this.div.css({
         position: 'absolute',
@@ -68,10 +68,6 @@ this.events = function() {
         var li = Z(this)
         li.removeClass(currCls)
     })
-}
-
-this.getInputPosition = function() {
-    return this.input.offset()
 }
 
 this.hide = function() {
@@ -177,7 +173,7 @@ this.onKeyup = function(ev) {
         if (this.finalValue !== val) {
             if (this.url) {
                 Z.get(this.url, function(data) {
-                    self.data = self.process(data)
+                    self.data = self.processData(data)
                     self.render()
                 })
             } else {
