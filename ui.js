@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-30 14:02:19
+ * @snandy 2014-04-30 16:56:20
  *
  */
 /**
@@ -568,10 +568,7 @@ function template() {
 
     var div = Z.dom('<div class="o-datepicker"></div>')
     div = Z(div)
-    div.append(table1).append(table2)
-    // Z('body').append(div)
-
-    return div
+    return div.append(table1).append(table2)
 }
 
 this.init = function(input, option) {
@@ -585,7 +582,6 @@ this.init = function(input, option) {
 
     this.currDate = new Date()
     this.input = Z(input)
-    
 
     var self = this
     this.input.click(function(ev) {

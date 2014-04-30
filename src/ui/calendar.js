@@ -65,10 +65,7 @@ function template() {
 
     var div = Z.dom('<div class="o-datepicker"></div>')
     div = Z(div)
-    div.append(table1).append(table2)
-    // Z('body').append(div)
-
-    return div
+    return div.append(table1).append(table2)
 }
 
 this.init = function(input, option) {
