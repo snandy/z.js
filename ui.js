@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-04-30 16:56:20
+ * @snandy 2014-05-03 17:21:18
  *
  */
 /**
@@ -663,7 +663,6 @@ this.events = function() {
            
     })
 
-
     Z(window).on('resize', {
         context: this,
         handler: this.setPosi
@@ -796,7 +795,7 @@ this.prevMonth = function() {
     this.fillDate()
 }
 
-this.fillDate = function($input, date) {
+this.fillDate = function() {
     var currDate  = this.currDate
     var startDate = this.startDate
     var endDate   = this.endDate

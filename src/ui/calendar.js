@@ -160,7 +160,6 @@ this.events = function() {
            
     })
 
-
     Z(window).on('resize', {
         context: this,
         handler: this.setPosi
@@ -293,7 +292,7 @@ this.prevMonth = function() {
     this.fillDate()
 }
 
-this.fillDate = function($input, date) {
+this.fillDate = function() {
     var currDate  = this.currDate
     var startDate = this.startDate
     var endDate   = this.endDate
