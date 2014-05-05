@@ -21,12 +21,20 @@
 	</head>
 	<body>
         <p>
-            <input type="text" value=""/>
+            单月显示：<input id="date1" type="text" value="">
+        </p>
+        <p>
+            双月显示：<input id="date2" type="text" value="">
         </p>
 	</body>
     <script>
 
-        var calendar = Z.ui.Calendar('input', {
+        var calendar1 = Z.ui.Calendar('#date1', {
+            startDate: '2014-05-04',
+            chosenDate: '2014-05-06'
+        })
+
+        var calendar2 = Z.ui.CalendarTwo('#date2', {
             startDate: '2014-04-19', 
             // endDate: '2014-4-15',
             chosenDate: '2014-04-26'

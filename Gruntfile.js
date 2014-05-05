@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 	}()
 
 	var ui = function() {
-		var arr = ['dragdrop', 'tab', 'suggest', 'calendar'].map(function(fileName) {
+		var arr = ['dragdrop', 'tab', 'suggest', 'calendar', 'calendarTwo'].map(function(fileName) {
 			return 'src/ui/' + fileName + '.js'
 		})
 		return arr

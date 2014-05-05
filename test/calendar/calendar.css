@@ -39,3 +39,63 @@ td.ui-datepicker-current-day a{background-color: #ff6501;color:#fff;border-color
 .ui-datepicker-title{float: left;text-align: center;width: 170px;}
 .ui-datepicker-header .ui-datepicker-next{float: right;}
 *html .ui-datepicker iframe{width: 420px;height: 210px;display: none}
+
+
+
+/* jdf-1.0.0/ calendar.css Date: 2014-03-20 18: 11: 25*/
+.ui-calendar {
+    position: absolute;
+    float: left;
+    padding: 4px;
+    color: #000;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font: 12px/150% Arial,Verdana,"宋体";
+}
+.ui-calendar-table tfoot tr {
+    text-align: center
+}
+.ui-calendar-table td,.ui-calendar-table th {
+    padding: 1px 3px;
+    text-align: center;
+    border-radius: 3px
+}
+.ui-calendar-table .day,
+.ui-calendar-table .next,
+.ui-calendar-table .prev,
+.ui-calendar-table .today,
+.ui-calendar-table .close {
+    cursor: pointer;
+}
+.ui-calendar-table .day {
+    color: #0964B4;
+}
+.ui-calendar-table .over {
+    background: #eee
+}
+.ui-calendar-table td {
+    width: 20px;
+    height: 20px
+}
+.ui-calendar-table .chosen {
+    background: #04c;
+    color: #fff
+}
+.ui-calendar-table .active: hover {
+    background: #04c
+}
+.ui-calendar-table .next i,.ui-calendar-table .prev i {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    width: 20px;
+    height: 14px;
+    margin-top: 1px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background: url(calendar.png) no-repeat 4px 3px
+}
+.ui-calendar-table .next i {
+    background-position: -20px 3px
+}
+

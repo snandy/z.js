@@ -1,72 +1,6 @@
-﻿
+
+
 Z.declareUI('Calendar', function() {
-//
-var week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
-var months = '31,28,31,30,31,30,31,31,30,31,30,31'.split(',')
-var reDate = /^\d{4}\-\d{1,2}\-\d{1,2}$/
-
-function format(date, hasDay) {
-    var arr, m, d, day
-
-    if (Z.isString(date)) {
-        arr = date.split('-')
-        date = new Date(arr[0], arr[1]-1, arr[2])
-    }
-
-    var mm = date.getMonth()
-    var dd = date.getDate()
-    if (mm < 11) {
-        m = '0' + (mm + 1)
-    } else {
-        m = mm + 1
-    }
-    if (dd < 10) {
-        d = '0' + dd
-    } else {
-        d = dd
-    }
-
-    var str = date.getFullYear() + '-' + m + '-' + d
-    if (hasDay) {
-        day = week[date.getDay()]
-        str += ' ' + day
-    }
-
-    return str
-}
-
-function template() {
-    var templ = '<table cellpadding="0" cellpadding="0" class="datepicker">' + 
-                    '<thead>' +
-                        '<tr class="controls"><th colspan="7"><span class="prevMonth"><s></s></span><span class="currDate"><span class="currYs"></span>年<span class="currMo"></span>月</span></th></tr>' +
-                        '<tr class="days"><th class="org sun">日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th class="org sat">六</th></tr>' +
-                    '</thead>' +
-                    '<tbody></tbody>' +
-                    '<tfoot><tr><td colspan="7"></td></tr></tfoot>' +
-                 '</table>'
-
-    var table1 = Z.dom(templ)[0]
-    table1 = Z(table1)
-    table1.find('tfoot').find('td').append('<span class="today">今天</span>')
-
-    var table2 = Z.dom(templ)[0]
-    table2 = Z(table2)
-    table2.find('.prevMonth').replaceClass('prevMonth', 'nextMonth')
-    table2.find('tfoot').find('td').append('<span class="close">关闭</span>')
-    
-    var tr = '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
-    var arr = []
-    for (var i = 0; i < 6; i++) {
-        arr[i] = tr
-    }
-    table1.find('tbody').html(arr.join(''))
-    table2.find('tbody').html(arr.join(''))
-
-
-    var div = Z.dom('<div class="o-datepicker"></div>')
-    div = Z(div)
-    return div.append(table1).append(table2)
-}
 
 this.init = function(input, option) {
     option = option || {}
@@ -77,6 +11,16 @@ this.init = function(input, option) {
     this.endDate    = option.endDate
     this.chosenDate = option.chosenDate
 
+    this.dateCls = option.dateCls || 'day'
+    this.chosenCls = option.chosenCls || 'chosen'
+    this.dateOverCls = option.dateOverCls || 'over'
+    this.prevHook  = option.prevHook || '.prev'
+    this.nextHook  = option.nextHook || '.next'
+    this.closeHook = option.closeHook || '.close'
+    this.todayHook = option.todayHook || '.today'
+    this.yearHook  = option.yearHook || '[data-cal=year]'
+    this.monthHook = option.monthHook || '[data-cal=month]'
+
     this.currDate = new Date()
     this.input = Z(input)
 
@@ -85,11 +29,8 @@ this.init = function(input, option) {
         var input = Z(this)
         // 已经初始化过直接返回
         if ( input.data('hasDatepicker') ) return
-        // console.log('init')
-        // ev.stopPropagation()
         self.render()
     })
-
 }
 
 this.setPosi = function() {
@@ -102,79 +43,46 @@ this.setPosi = function() {
         left: left,
         top: top
     })
-    // console.log('win resize')
 }
 
 this.onBodyClick = function(ev) {
     var target = Z(ev.target)
-    if (!target.closest('.datepicker').length && target[0] != this.input[0]) {
+    if (!target.closest('.o-datepicker').length && target[0] != this.input[0]) {
         this.remove()
     }
-    // console.log('bodyclick')
 }
 
-this.remove = function() {
-    this.div.remove()
-    this.input.val( format(this.currDate, this.hasDay) )
-    this.input.data('hasDatepicker', false)
-    Z(window).off('resize', this.setPosi)
-    Z(document).off('click', this.onBodyClick)
-}
+this.template = function() {
+    var templ = '<table cellpadding="0" cellpadding="0" class="ui-calendar-table">' + 
+                    '<thead>' +
+                        '<tr><th class="prev"><i></i></th><th colspan="5" class="switch"><span data-cal="year"></span>年<span data-cal="month"></span>月</th><th class="next"><i></i></th></tr>' +
+                        '<tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr>' +
+                    '</thead>' +
+                    '<tbody></tbody>' +
+                    '<tfoot><tr><td colspan="7"></td></tr></tfoot>' +
+                 '</table>'
 
-this.events = function() {
-    var self = this
-    this.div.delegate('.date', 'click', function(ev) {
-        var td    = Z(this)
-        var table = td.closest('table')
-        var year  = table.find('.currYs').text()
-        var month = table.find('.currMo').text() - 1
-        var date  = td.text()
-        self.currDate = new Date(year, month, date)
-        self.remove()
-        self.fire('select')
+    var table = Z.dom(templ)[0]
+    table = Z(table)
+    table.find('tfoot').html('<td colspan="2"><span class="today">今天</span></td><td></td><td></td><td></td><td colspan="2"><span class="close">关闭</span></td>')
+    
+    var tr = '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
+    var arr = []
+    for (var i = 0; i < 6; i++) {
+        arr[i] = tr
+    }
+    table.find('tbody').html(arr.join(''))
 
-    }).delegate('.date', 'mouseover', function() {
-        Z(this).addClass('over')
-
-    }).delegate('.date', 'mouseout', function() {
-        Z(this).removeClass('over')  
-
-    }).delegate('.today', 'click', function() {
-        self.currDate = new Date()
-        self.remove()
-        self.fire('select')  
-
-    }).delegate('.close', 'click', function() {
-        self.remove()
-        self.fire('close')
-
-    }).delegate('.prevMonth', 'click', function() {
-        var span = Z(this)
-        if (span.hasClass('disabled')) return false
-        self.prevMonth()
-
-    }).delegate('.nextMonth', 'click', function() {
-        var span = Z(this)
-        if (span.hasClass('disabled')) return false
-        self.nextMonth()     
-           
-    })
-
-    Z(window).on('resize', {
-        context: this,
-        handler: this.setPosi
-    })
-
-    Z(document).on('click', {
-        context: this,
-        handler: this.onBodyClick
-    })
+    var div = Z.dom('<div class="o-datepicker ui-calendar"></div>')
+    div = Z(div)
+    return div.append(table)
 }
 
 this.render = function() {
     var input = this.input
     var currDate = this.currDate
     var chosenDate = this.chosenDate
+    var reDate = Z.ui.Calendar.reDate
 
     var val = input.val()
     if ( val && reDate.test(val) ) {
@@ -191,23 +99,19 @@ this.render = function() {
         }
     }
 
-    this.div = template()
+    this.div = this.template()
 
-    var tables = this.div.find('table')
-    var table1 = this.table1 = tables.first()
-    var table2 = this.table2 = tables.last()
+    var table = this.table = this.div.find('table')
+    var yearSpan  = table.find(this.yearHook)
+    var monthSpan = table.find(this.monthHook)
     var cMonth = currDate.getMonth()
-    var cDate  = currDate.getFullYear()
+    var cYear  = currDate.getFullYear()
     if (cMonth == 11) {
-        table1.find('.currYs').text(cDate)
-        table1.find('.currMo').text(cMonth + 1)
-        table2.find('.currYs').text(cDate + 1)
-        table2.find('.currMo').text(1)
+        yearSpan.text(cYear)
+        monthSpan.text(cMonth + 1)
     } else {
-        table1.find('.currYs').text(cDate)
-        table1.find('.currMo').text(cMonth + 1)
-        table2.find('.currYs').text(cDate)
-        table2.find('.currMo').text(cMonth + 2)
+        yearSpan.text(cYear)
+        monthSpan.text(cMonth + 1)
     }
 
     // 回填 '天'
@@ -222,35 +126,147 @@ this.render = function() {
     Z('body').append(this.div)
 }
 
-this.nextMonth = function() {
-    var year1  = this.table1.find('.currYs')
-    var year2  = this.table2.find('.currYs')
-    var month1 = this.table1.find('.currMo')
-    var month2 = this.table2.find('.currMo')
-    var y1  = year1.text() - 0
-    var y2  = year2.text() - 0
-    var m1 = month1.text() - 1
-    var m2 = month2.text() - 1
+this.fillDate = function() {
+    var currDate  = this.currDate
+    var startDate = this.startDate
+    var endDate   = this.endDate
+    var reDate = Z.ui.Calendar.reDate
+    var months = Z.ui.Calendar.months
 
-    switch (m2) {
+    // fill td
+    var table  = this.table
+    var tds    = table.find('tbody').find('td').empty().removeClass()
+    var cYear  = table.find(this.yearHook).text() - 0
+    var cMonth = table.find(this.monthHook).text() - 1
+    var qDate  = new Date(cYear, cMonth, 1)
+    var rDate  = new Date()
+    var aDay = qDate.getDay()
+    var start = 0
+    var hasDate = true
+    var day1 = months[cMonth]
+    var day2 = months[cMonth]
+    
+    // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
+    if ( 1 == cMonth && ((cYear % 4 == 0 && cYear % 100 != 0) || cYear % 400 == 0) ) {
+        day2 = 29
+    }
+
+    // 填充数字，并高亮当前天
+    for (var i = 0; i < day2; i++) {
+        var td = tds.eq(i + aDay)
+        td.text(i + 1)
+        // 年月日都一样就高亮显示
+        if (i + 1 == currDate.getDate() && cMonth == currDate.getMonth() && cYear == currDate.getFullYear()) {
+            td.addClass(this.chosenCls)
+        }
+    }
+
+    if ( startDate && reDate.test(startDate) ) {
+        var arr   = startDate.split('-')
+        var year  = arr[0] - 0
+        var month = arr[1] - 1
+        var day   = arr[2] - 1
+        if (cMonth == month && cYear == year) {
+            start = day
+        }
+        if (cYear < year || cMonth < month && cYear <= year) {
+            hasDate = false
+        }                
+    }
+
+    if ( endDate && reDate.test(endDate) ) {
+        var arr   = endDate.split('-')
+        var year  = arr[0] - 0
+        var month = arr[1] - 1
+        if (cMonth == month && cYear == year) {
+            day1 = arr[2]
+        }
+        if (cYear > year || cMonth > month && cYear == year) {
+            hasDate = false
+        }
+    }
+
+    if (hasDate) {
+        for (var u = start; u < day1; u++) {
+            var td = tds.eq(u + aDay)
+            td.addClass('day')
+        }
+    }
+
+}
+
+this.events = function() {
+    var self = this
+    var dateCls = '.' + this.dateCls
+    var dateOverCls = this.dateOverCls
+
+    this.div.delegate(dateCls, 'click', function(ev) {
+        var td    = Z(this)
+        var table = td.closest('table')
+        var year  = table.find(self.yearHook).text()
+        var month = table.find(self.monthHook).text() - 1
+        var date  = td.text()
+        self.currDate = new Date(year, month, date)
+        self.remove()
+        self.fire('select')
+
+    }).delegate(dateCls, 'mouseover', function() {
+        Z(this).addClass(dateOverCls)
+
+    }).delegate(dateCls, 'mouseout', function() {
+        Z(this).removeClass(dateOverCls)
+
+    }).delegate(this.todayHook, 'click', function() {
+        self.currDate = new Date()
+        self.remove()
+        self.fire('select')
+
+    }).delegate(this.closeHook, 'click', function() {
+        self.remove()
+        self.fire('close')
+
+    }).delegate(this.prevHook, 'click', function() {
+        var span = Z(this)
+        if (span.hasClass('disabled')) return false
+        self.prevMonth()
+
+    }).delegate(this.nextHook, 'click', function() {
+        var span = Z(this)
+        if (span.hasClass('disabled')) return false
+        self.nextMonth()
+           
+    })
+
+    Z(window).on('resize', {
+        context: this,
+        handler: this.setPosi
+    })
+
+    Z(document).on('click', {
+        context: this,
+        handler: this.onBodyClick
+    })
+}
+
+this.nextMonth = function() {
+    var year  = this.table.find(this.yearHook)
+    var month = this.table.find(this.monthHook)
+    var y  = year.text() - 0
+    var m  = month.text() - 1
+
+    switch (m) {
         case 11:
-            year1.text(y1)
-            month1.text(12)
-            year2.text(y1 + 1)
-            month2.text(1)
+            year.text(y+1)
+            month.text(1)
             break
         case 0:
-            year1.text(y2)
-            month1.text(1)
-            year2.text(y2)
-            month2.text(2)
+            year.text(y)
+            month.text(2)
             break
         default:
-            m1 += 1
-            month1.text(m1 + 1)
-            month2.text(m1 + 2)
-            year1.text(y1)
-            year2.text(y1)
+            m += 1
+            year.text(y)
+            month.text(m + 1)
             break
     }
 
@@ -258,108 +274,66 @@ this.nextMonth = function() {
 }
 
 this.prevMonth = function() {
-    var year1  = this.table1.find('.currYs')
-    var year2  = this.table2.find('.currYs')
-    var month1 = this.table1.find('.currMo')
-    var month2 = this.table2.find('.currMo')
-    var y1  = year1.text() - 0
-    var y2  = year2.text() - 0
-    var m1 = month1.text() - 1
-    var m2 = month2.text() - 1
+    var year  = this.table.find(this.yearHook)
+    var month = this.table.find(this.monthHook)
+    var y  = year.text() - 0
+    var m  = month.text() - 1
 
-    switch (m1) {
-        case 11:
-            year1.text(y1)
-            month1.text(11)
-            year2.text(y1)
-            month2.text(12)
-            break
+    switch (m) {
         case 0:
-            year1.text(y1 - 1)
-            month1.text(12)
-            year2.text(y1)
-            month2.text(1)
+            year.text(y-1)
+            month.text(12)
             break
         default:
-            m1 -= 1
-            month1.text(m1 + 1)
-            month2.text(m1 + 2)
-            year1.text(y1)
-            year2.text(y1)
+            year.text(y)
+            month.text(m)
             break
     }
 
     this.fillDate()
 }
 
-this.fillDate = function() {
-    var currDate  = this.currDate
-    var startDate = this.startDate
-    var endDate   = this.endDate
-
-    this.div.find('table').each(function(el, i) {
-        var table  = Z(el)
-        var tds    = table.find('tbody').find('td').off().empty().removeClass()
-        var cYear  = table.find('.currYs').text() - 0
-        var cMonth = table.find('.currMo').text() - 1
-        var qDate  = new Date(cYear, cMonth, 1)
-        var rDate  = new Date()
-        var aDay = qDate.getDay()
-        var start = 0
-        var hasDate = true
-        var day1 = months[cMonth]
-        var day2 = months[cMonth]
-        
-        // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
-        if ( 1 == cMonth && ((cYear % 4 == 0 && cYear % 100 != 0) || cYear % 400 == 0) ) {
-            day2 = 29
-        }
-
-        // 填充数字，并高亮当前天
-        for (var i = 0; i < day2; i++) {
-            var td = tds.eq(i + aDay)
-            td.text(i + 1)
-            // 年月日都一样就高亮显示
-            if (i + 1 == currDate.getDate() && cMonth == currDate.getMonth() && cYear == currDate.getFullYear()) {
-                td.addClass('chosen')
-            }
-        }
-
-        if ( startDate && reDate.test(startDate) ) {
-            var arr   = startDate.split('-')
-            var year  = arr[0] - 0
-            var month = arr[1] - 1
-            var day   = arr[2] - 1
-            if (cMonth == month && cYear == year) {
-                start = day
-            }
-            if (cYear < year || cMonth < month && cYear <= year) {
-                hasDate = false
-            }                
-        }
-
-        if ( endDate && reDate.test(endDate) ) {
-            var arr   = endDate.split('-')
-            var year  = arr[0] - 0
-            var month = arr[1] - 1
-            if (cMonth == month && cYear == year) {
-                day1 = arr[2]
-            }
-            if (cYear > year || cMonth > month && cYear == year) {
-                hasDate = false
-            }
-        }
-
-        if (hasDate) {
-            for (var u = start; u < day1; u++) {
-                var td = tds.eq(u + aDay)
-                td.addClass('date')
-            }
-        }
-
-    })
-
+this.remove = function() {
+    this.div.remove()
+    this.input.val( Z.ui.Calendar.format(this.currDate, this.hasDay) )
+    this.input.data('hasDatepicker', false)
+    Z(window).off('resize', this.setPosi)
+    Z(document).off('click', this.onBodyClick)
 }
 
+})
 
+Z.statics(Z.ui.Calendar, {
+    reDate: /^\d{4}\-\d{1,2}\-\d{1,2}$/,
+    week: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+    months: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    format: function (date, hasDay) {
+        var arr, m, d, day
+
+        if (Z.isString(date)) {
+            arr = date.split('-')
+            date = new Date(arr[0], arr[1]-1, arr[2])
+        }
+
+        var mm = date.getMonth()
+        var dd = date.getDate()
+        if (mm < 9) {
+            m = '0' + (mm + 1)
+        } else {
+            m = mm + 1
+        }
+        if (dd < 10) {
+            d = '0' + dd
+        } else {
+            d = dd
+        }
+
+        var str = date.getFullYear() + '-' + m + '-' + d
+        if (hasDay) {
+            day = week[date.getDay()]
+            str += ' ' + day
+        }
+
+        return str
+    }
 })
