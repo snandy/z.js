@@ -193,12 +193,19 @@ function getDocWH(name) {
 
 // 获取window的宽高
 function getWinWH(which) {
+    var width = window['innerWidth'] || doc.documentElement.clientWidth
+    var height = window['innerHeight'] || doc.documentElement.clientHeight
     if (which === 'width') {
-        return window['innerWidth'] || doc.documentElement.clientWidth
+        return width
     } else if (which === 'height') {
-        return window['innerHeight'] || doc.documentElement.clientHeight
+        return height
+    }
+    return {
+        width: width,
+        height: height
     }
 }
+Z.winSize = getWinWH
 
 function manipulationDOM(elem) {
     if (Z.isElement(elem)) {

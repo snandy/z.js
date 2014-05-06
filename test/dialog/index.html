@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>dialog.js</title>
+        <style type="text/css">
+            body {margin:0;padding:0;height:2000px;}
+            p {
+                text-align: center;
+            }
+        </style>
+        <link rel="stylesheet" href="../base.css">
+        <script src="../../z.src.js"></script>
+		<script src="../../ui.js"></script>
+	</head>
+	<body>
+        <p>
+            <input id="d1" type="button" value="弹框1">
+        </p>
+        <p>
+            <input id="d2" type="button" value="弹框2">
+        </p>
+	</body>
+    <script>
+
+        Z('#d1').click(function() {
+            var dialog1 = Z.ui.Dialog({
+                title: '短信提醒',
+                width: 300,
+                height: 200,
+                autoReposi: true,
+                content: '<p>发送成功，请注意查收</p>'
+            })            
+        })
+
+
+        // var dialog2 = Z.ui.Dialog({
+        // })
+
+    </script>
+</html>
