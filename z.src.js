@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-06 18:33:22
+ * @snandy 2014-05-06 18:35:43
  *
  */
 ~function(window, undefined) {

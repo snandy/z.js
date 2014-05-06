@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-06 18:33:22
+ * @snandy 2014-05-06 18:35:43
  *
  */
 /**
@@ -1302,7 +1302,7 @@ this.events = function() {
 
     if (Z.ie6) {
         this.div.css('position', 'absolute')
-        this.div.on('scroll', {
+        Z(window).on('scroll', {
             content: this,
             handler: this.setPosi
         })
