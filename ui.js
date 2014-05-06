@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-06 18:21:45
+ * @snandy 2014-05-06 18:31:01
  *
  */
 /**
@@ -1285,6 +1285,13 @@ this.setPosi = function(top, left) {
         left: left,
         position: 'fixed'
     })
+    if (Z.ie6) {
+        this.div.css('position', 'absolute')
+        this.div.on('scroll', {
+            content: this,
+            handler: this.setPosi
+        })
+    }
 }
 
 this.events = function() {
