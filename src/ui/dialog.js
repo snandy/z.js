@@ -73,14 +73,16 @@ this.setRect = function(width, height) {
     })
 }
 
-this.setPosi = function(top, left) {
+this.setPosi = function() {
     var obj = Z.winSize()
-    var top = top || (obj.height-50)/2 - this.div[0].clientHeight/2
-    var left = left || obj.width/2 - this.div[0].clientWidth/2
+    var top = (obj.height-50)/2 - this.div[0].clientHeight/2
+    var left = obj.width/2 - this.div[0].clientWidth/2
+    if (Z.ie6) {
+        top += document.documentElement.scrollTop
+    }
     this.div.css({
         top: top,
-        left: left,
-        position: 'fixed'
+        left: left
     })
 }
 
@@ -94,15 +96,17 @@ this.events = function() {
         Z(window).on('resize', {
             context: this,
             handler: this.setPosi
-        })        
+        })
     }
 
     if (Z.ie6) {
         this.div.css('position', 'absolute')
         Z(window).on('scroll', {
-            content: this,
+            context: this,
             handler: this.setPosi
         })
+    } else {
+        this.div.css('position', 'fixed')
     }
 }
 
