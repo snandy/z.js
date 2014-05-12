@@ -115,6 +115,7 @@ this.remove = this.close = function() {
     this.mask.remove()
     this.iframe.remove()
     Z(window).off('resize', this.setPosi)
+    Z(window).off('scroll', this.setPosi)
     this.fire('close')
 }
 

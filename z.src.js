@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-06 19:36:46
+ * @snandy 2014-05-08 15:42:41
  *
  */
 ~function(window, undefined) {
@@ -2283,6 +2283,8 @@ function unbind(elem, type, handler) {
     var events   = elData && elData.events
     var handlers = events && events[type]
     
+    if (!handlers || !handlers.length) return
+
     if (handler) { // 传3个参数
         each(handlers, function(handlerObj, i) {
             if (handlerObj.handler === handler || handlerObj.special === handler) {

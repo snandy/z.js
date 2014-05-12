@@ -356,6 +356,8 @@ function unbind(elem, type, handler) {
     var events   = elData && elData.events
     var handlers = events && events[type]
     
+    if (!handlers || !handlers.length) return
+
     if (handler) { // 传3个参数
         each(handlers, function(handlerObj, i) {
             if (handlerObj.handler === handler || handlerObj.special === handler) {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>scroll.js</title>
+        <style type="text/css">
+            body {margin:0;padding:0;height:2000px;}
+            #mscroll {
+                width: 900px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .list {
+                position: relative;
+                overflow: hidden;
+                width: 781px;
+                height: 171px;
+            }
+            #mscroll ul {
+                width: 5000px;
+                height: 171px;
+                margin: 0;
+                padding: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+            #mscroll li {
+                float: left;
+                list-style: none;
+                padding-right: 10px;
+            }
+            
+        </style>
+        <script src="../../z.src.js"></script>
+		<script src="../../ui.js"></script>
+	</head>
+	<body>
+<div id="mscroll" class="tscroll">
+    <a id="mscroll-ctrl-prev" class="ctrl" href="javascript://;"><b></b></a>
+    <a id="mscroll-ctrl-next" class="ctrl" href="javascript://;"><b></b></a>
+    <div id="mscroll-list" class="list">
+        <ul class="brand">
+            <li>
+                <img class="err-product" src="http://img13.360buyimg.com/tuangou/g10/M00/1D/0C/rBEQWVNfYPsIAAAAAADlFwn8dNAAAFwgwKvOMIAAOUv180.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img10.360buyimg.com/tuangou/g15/M03/1B/12/rBEhWFNmAn0IAAAAAADjJwPXYVsAAM1zADDPwAAAOM_423.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img14.360buyimg.com/tuangou/g12/M00/0F/09/rBEQYVNnPQQIAAAAAADb0TIjsMIAAFhaAPV7-gAANvp906.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img10.360buyimg.com/tuangou/g12/M00/07/0B/rBEQYVNHtoAIAAAAAADVkaYPK8cAAEQpwFiR1UAANWp938.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img10.360buyimg.com/tuangou/g15/M08/1B/19/rBEhWlNnTmsIAAAAAADO7VqstPIAAM4_gEQ_uYAAM8F532.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img10.360buyimg.com/tuangou/g10/M00/1E/13/rBEQWVNnUCsIAAAAAADYlNMR1JwAAGAEgPVVWIAANis950.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img12.360buyimg.com/tuangou/g15/M02/01/04/rBEhWlLMv3cIAAAAAAC8bMOuRCIAAHrrgAHIsYAALyE203.jpg" data-img="1" height="167" width="251">
+            </li>
+            <li>
+                <img class="err-product" src="http://img13.360buyimg.com/tuangou/g10/M00/1E/0C/rBEQWFNmB0kIAAAAAAE7b0dLdgEAAF80AKJFrwAATuH093.jpg" data-img="1" height="167" width="251">
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+<script>
+    Z.ui.Scroll('#mscroll', {
+        autoScroll: true
+    })
+</script>
+    </body>
+</html>
