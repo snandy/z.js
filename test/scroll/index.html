@@ -33,6 +33,7 @@
             
         </style>
         <script src="../../z.src.js"></script>
+        <script src="../../src/ui/animate.js"></script>
 		<script src="../../ui.js"></script>
 	</head>
 	<body>
@@ -71,7 +72,10 @@
 </body>
 <script>
     Z.ui.Scroll('#mscroll', {
-        autoScroll: true
+        autoScroll: true,
+        autoPlayTime: 3000,
+        visibleNum: 3
+
     })
 </script>
     </body>

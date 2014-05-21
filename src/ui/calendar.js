@@ -2,6 +2,49 @@
 
 Z.declareUI('Calendar', function() {
 
+var reDate = /^\d{4}\-\d{1,2}\-\d{1,2}$/
+var week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+var months = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+// 是否是闰年
+function isLeapYear(year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+}
+
+function calculateDate(year, month) {
+
+}
+
+function format(date, hasDay) {
+    var arr, m, d, day
+
+    if (Z.isString(date)) {
+        arr = date.split('-')
+        date = new Date(arr[0], arr[1]-1, arr[2])
+    }
+
+    var mm = date.getMonth()
+    var dd = date.getDate()
+    if (mm < 9) {
+        m = '0' + (mm + 1)
+    } else {
+        m = mm + 1
+    }
+    if (dd < 10) {
+        d = '0' + dd
+    } else {
+        d = dd
+    }
+
+    var str = date.getFullYear() + '-' + m + '-' + d
+    if (hasDay) {
+        day = week[date.getDay()]
+        str += ' ' + day
+    }
+
+    return str
+}
+
 this.init = function(input, option) {
     option = option || {}
     this.x = option.x || 0
@@ -80,9 +123,7 @@ this.template = function() {
 
 this.render = function() {
     var input = this.input
-    var currDate = this.currDate
     var chosenDate = this.chosenDate
-    var reDate = Z.ui.Calendar.reDate
 
     var val = input.val()
     if ( val && reDate.test(val) ) {
@@ -98,9 +139,9 @@ this.render = function() {
             }
         }
     }
+    currDate = this.currDate
 
     this.div = this.template()
-
     var table = this.table = this.div.find('table')
     var yearSpan  = table.find(this.yearHook)
     var monthSpan = table.find(this.monthHook)
@@ -130,8 +171,6 @@ this.fillDate = function() {
     var currDate  = this.currDate
     var startDate = this.startDate
     var endDate   = this.endDate
-    var reDate = Z.ui.Calendar.reDate
-    var months = Z.ui.Calendar.months
 
     // fill td
     var table  = this.table
@@ -143,16 +182,15 @@ this.fillDate = function() {
     var aDay = qDate.getDay()
     var start = 0
     var hasDate = true
-    var day1 = months[cMonth]
-    var day2 = months[cMonth]
+    var days = months[cMonth]
     
     // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
-    if ( 1 == cMonth && ((cYear % 4 == 0 && cYear % 100 != 0) || cYear % 400 == 0) ) {
-        day2 = 29
+    if ( 1 == cMonth && isLeapYear(cYear) ) {
+        days = 29
     }
 
     // 填充数字，并高亮当前天
-    for (var i = 0; i < day2; i++) {
+    for (var i = 0; i < days; i++) {
         var td = tds.eq(i + aDay)
         td.text(i + 1)
         // 年月日都一样就高亮显示
@@ -178,16 +216,13 @@ this.fillDate = function() {
         var arr   = endDate.split('-')
         var year  = arr[0] - 0
         var month = arr[1] - 1
-        if (cMonth == month && cYear == year) {
-            day1 = arr[2]
-        }
         if (cYear > year || cMonth > month && cYear == year) {
             hasDate = false
         }
     }
 
     if (hasDate) {
-        for (var u = start; u < day1; u++) {
+        for (var u = start; u < days; u++) {
             var td = tds.eq(u + aDay)
             td.addClass('day')
         }
@@ -279,15 +314,12 @@ this.prevMonth = function() {
     var y  = year.text() - 0
     var m  = month.text() - 1
 
-    switch (m) {
-        case 0:
-            year.text(y-1)
-            month.text(12)
-            break
-        default:
-            year.text(y)
-            month.text(m)
-            break
+    if (m == 0) {
+        year.text(y-1)
+        month.text(12)
+    } else {
+        year.text(y)
+        month.text(m)
     }
 
     this.fillDate()
@@ -295,45 +327,10 @@ this.prevMonth = function() {
 
 this.remove = function() {
     this.div.remove()
-    this.input.val( Z.ui.Calendar.format(this.currDate, this.hasDay) )
+    this.input.val( format(this.currDate, this.hasDay) )
     this.input.data('hasDatepicker', false)
     Z(window).off('resize', this.setPosi)
     Z(document).off('click', this.onBodyClick)
 }
 
-})
-
-Z.statics(Z.ui.Calendar, {
-    reDate: /^\d{4}\-\d{1,2}\-\d{1,2}$/,
-    week: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-    months: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-    format: function (date, hasDay) {
-        var arr, m, d, day
-
-        if (Z.isString(date)) {
-            arr = date.split('-')
-            date = new Date(arr[0], arr[1]-1, arr[2])
-        }
-
-        var mm = date.getMonth()
-        var dd = date.getDate()
-        if (mm < 9) {
-            m = '0' + (mm + 1)
-        } else {
-            m = mm + 1
-        }
-        if (dd < 10) {
-            d = '0' + dd
-        } else {
-            d = dd
-        }
-
-        var str = date.getFullYear() + '-' + m + '-' + d
-        if (hasDay) {
-            day = week[date.getDay()]
-            str += ' ' + day
-        }
-
-        return str
-    }
 })

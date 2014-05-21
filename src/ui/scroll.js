@@ -46,9 +46,10 @@ this.play = function() {
     clearInterval(this.timer)
     this.timer = setInterval(function() {
         var left = parseInt(ul.css('left'), 10)
-        ul.css({
-            left: -length+left
-        })
+        // ul.css({
+        //     // left: -length+left
+        // })
+        animate(ul[0], {left: -length+left}, 0.4, 'lin')
     }, this.autoPlayTime)
 }
 

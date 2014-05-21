@@ -169,7 +169,6 @@ this.events = function() {
 
 this.render = function() {
     var input = this.input
-    var currDate = this.currDate
     var chosenDate = this.chosenDate
 
     var val = input.val()
@@ -186,6 +185,7 @@ this.render = function() {
             }
         }
     }
+    var currDate = this.currDate
 
     this.div = template()
 
@@ -303,16 +303,15 @@ this.fillDate = function() {
         var aDay = qDate.getDay()
         var start = 0
         var hasDate = true
-        var day1 = months[cMonth]
-        var day2 = months[cMonth]
+        var days = months[cMonth]
         
         // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
         if ( 1 == cMonth && ((cYear % 4 == 0 && cYear % 100 != 0) || cYear % 400 == 0) ) {
-            day2 = 29
+            days = 29
         }
 
         // 填充数字，并高亮当前天
-        for (var i = 0; i < day2; i++) {
+        for (var i = 0; i < days; i++) {
             var td = tds.eq(i + aDay)
             td.text(i + 1)
             // 年月日都一样就高亮显示
@@ -338,16 +337,13 @@ this.fillDate = function() {
             var arr   = endDate.split('-')
             var year  = arr[0] - 0
             var month = arr[1] - 1
-            if (cMonth == month && cYear == year) {
-                day1 = arr[2]
-            }
             if (cYear > year || cMonth > month && cYear == year) {
                 hasDate = false
             }
         }
 
         if (hasDate) {
-            for (var u = start; u < day1; u++) {
+            for (var u = start; u < days; u++) {
                 var td = tds.eq(u + aDay)
                 td.addClass('date')
             }
