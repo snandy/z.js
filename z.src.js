@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-30 13:36:19
+ * @snandy 2014-05-30 15:21:16
  *
  */
 ~function(window, undefined) {
@@ -916,14 +916,21 @@ var query = function() {
 
 var matches = function() {
     var tempParent = document.createElement('div')
+    var matchesSelector = tempParent.webkitMatchesSelector || tempParent.mozMatchesSelector 
+        || tempParent.oMatchesSelector || tempParent.msMatchesSelector || tempParent.matchesSelector    
     return function(el, selector) {
         if (!el || el.nodeType !== 1) return false
-        var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                              el.oMatchesSelector || el.matchesSelector
-        if (matchesSelector) return matchesSelector.call(el, selector)
+        if (matchesSelector) {
+            return matchesSelector.call(el, selector)    
+        }
+
         // fall back to performing a selector:
-        var match, parent = el.parentNode, temp = !parent
-        if (temp) (parent = tempParent).appendChild(el)
+        var match
+        var parent = el.parentNode
+        var temp = !parent
+        if (temp) {
+            (parent = tempParent).appendChild(el)   
+        }
         match = query(selector, parent)
         temp && tempParent.removeChild(el)
         return !!match.length
@@ -1426,8 +1433,8 @@ var td    = ['<td>', '</td>']
 
 var wrapMap = {
     thead: [ 1, table[0], table[1] ],
-    tr: [ 2, table[0] + thead[0], thead[1] + table[1] ],
-    td: [ 3, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
+    tr: [ 3, table[0] + thead[0], thead[1] + table[1] ],
+    td: [ 4, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
 }
 wrapMap.tbody = wrapMap.tfoot = wrapMap.thead
 wrapMap.th = wrapMap.td
@@ -1447,18 +1454,23 @@ function manipulationDOM(elem) {
 
             if (rtable.test(tag)) {
                 var map = wrapMap[tag]
+                var deps = map[0]
                 elem = map[1] + elem + map[2]
                 div.innerHTML = elem
-                while (map[0]--) {
+                while (deps--) {
                     div = div.firstChild
                 }
-                nodes.push(div)
+                while (div) {
+                    nodes.push(div)
+                    div = div.nextSibling
+                }
+                
             } else {
                 div.innerHTML = elem
                 while (div.firstChild) {
                     nodes.push(div.firstChild)
                     div.removeChild(div.firstChild)
-                }                
+                }         
             }
             div = null
             return nodes

@@ -215,8 +215,8 @@ var td    = ['<td>', '</td>']
 
 var wrapMap = {
     thead: [ 1, table[0], table[1] ],
-    tr: [ 2, table[0] + thead[0], thead[1] + table[1] ],
-    td: [ 3, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
+    tr: [ 3, table[0] + thead[0], thead[1] + table[1] ],
+    td: [ 4, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
 }
 wrapMap.tbody = wrapMap.tfoot = wrapMap.thead
 wrapMap.th = wrapMap.td
@@ -236,18 +236,23 @@ function manipulationDOM(elem) {
 
             if (rtable.test(tag)) {
                 var map = wrapMap[tag]
+                var deps = map[0]
                 elem = map[1] + elem + map[2]
                 div.innerHTML = elem
-                while (map[0]--) {
+                while (deps--) {
                     div = div.firstChild
                 }
-                nodes.push(div)
+                while (div) {
+                    nodes.push(div)
+                    div = div.nextSibling
+                }
+                
             } else {
                 div.innerHTML = elem
                 while (div.firstChild) {
                     nodes.push(div.firstChild)
                     div.removeChild(div.firstChild)
-                }                
+                }         
             }
             div = null
             return nodes
