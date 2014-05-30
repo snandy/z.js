@@ -25,6 +25,17 @@ var support = function() {
         sliceOnNodeList = false
     }
 
+    var tableInnerHTML = true
+    var table = doc.createElement('table')
+    var tbody = doc.createElement('tbody')
+    table.appendChild(tbody)
+    var boo = true
+    try {
+        tbody.innerHTML = '<tr></tr>'
+    } catch(e) {
+        tableInnerHTML = false
+    }
+
     return {
         setAttr : setAttr,
         cssText : cssText,
@@ -32,7 +43,7 @@ var support = function() {
         classList : !!div.classList,
         cssFloat : !!a.style.cssFloat,
         getComputedStyle : getComputedStyle,
-        sliceOnNodeList: sliceOnNodeList
-
+        sliceOnNodeList: sliceOnNodeList,
+        tableInnerHTML: tableInnerHTML
     }
 }()

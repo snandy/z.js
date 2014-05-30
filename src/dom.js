@@ -5,6 +5,7 @@ var ropa1 = /opacity=/i
 var ropa2 = /opacity=([^)]*)/i
 var rtagName = /<([\w:]+)/
 var rroot = /^(?:body|html)$/i
+var rtable = /^t(?:head|body|foot|r|d|h)$/i
 var cssWidth = ['Left', 'Right']
 var cssHeight = ['Top', 'Bottom']
 var displays = {}
@@ -207,6 +208,19 @@ function getWinWH(which) {
 }
 Z.winSize = getWinWH
 
+var table = ['<table>', '</table>']
+var thead = ['<tbody>', '</tbody>']
+var tr    = ['<tr>', '</tr>']
+var td    = ['<td>', '</td>']
+
+var wrapMap = {
+    thead: [ 1, table[0], table[1] ],
+    tr: [ 2, table[0] + thead[0], thead[1] + table[1] ],
+    td: [ 3, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
+}
+wrapMap.tbody = wrapMap.tfoot = wrapMap.thead
+wrapMap.th = wrapMap.td
+
 function manipulationDOM(elem) {
     if (Z.isElement(elem)) {
         return [elem]
@@ -214,17 +228,30 @@ function manipulationDOM(elem) {
     if (Z.isZ(elem)) {
         return elem.toArray()
     }
-    var div, nodes = []
+    var div, tag, nodes = []
     if (Z.isString(elem)) {
         if (rtagName.test(elem)) {
+            tag = rtagName.exec(elem)[1].toLowerCase()
             div = doc.createElement('div')
-            div.innerHTML = elem
-            while (div.firstChild) {
-                nodes.push(div.firstChild)
-                div.removeChild(div.firstChild)
+
+            if (rtable.test(tag)) {
+                var map = wrapMap[tag]
+                elem = map[1] + elem + map[2]
+                div.innerHTML = elem
+                while (map[0]--) {
+                    div = div.firstChild
+                }
+                nodes.push(div)
+            } else {
+                div.innerHTML = elem
+                while (div.firstChild) {
+                    nodes.push(div.firstChild)
+                    div.removeChild(div.firstChild)
+                }                
             }
             div = null
             return nodes
+
         } else {
             return [doc.createTextNode(elem)]
         }

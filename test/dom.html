@@ -48,26 +48,13 @@
             aa
             <a href="#ss">ss</a>
 		</div>
-		<p data-attr="ppp" data~pp="ss" style="opacity:0.1">attr</p>
+		<table id="t1"></table>
         <button>TEST</button>
 	<script>
-		
-		Z('button').on('click', function() {
-			// var top = Z('#p2').scrollTop()
-            // alert(top)
 
-            var top = Z(window).scrollTop(130)
-            // alert(top)
-		})
-
-function nextOrPrev(elem, op) {
-    var dest 
-    while ( elem && (dest=elem[op]) && (dest.nodeType !== 1 || dest.tagName === 'BR') ) {
-        elem = dest
-    }
-    return dest
-}
-var ss = nextOrPrev(Z('ul')[0], 'previousSibling')
+// Z('#p2').append('<span>sss</span>')
+Z('#t1')
+	.append('<tr><td>addd</td></tr>')
 	</script>
 	</body>
 </html>

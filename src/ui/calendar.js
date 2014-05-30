@@ -11,8 +11,16 @@ function isLeapYear(year) {
     return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
 
-function calculateDate(year, month) {
-
+/*
+ * 根据年月计算天数
+ */
+function calculateDays(year, month) {
+    var days = months[month]
+    // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
+    if ( 1 == month && isLeapYear(year) ) {
+        days = 29
+    }
+    return days
 }
 
 function format(date, hasDay) {
@@ -180,14 +188,7 @@ this.fillDate = function() {
     var qDate  = new Date(cYear, cMonth, 1)
     var rDate  = new Date()
     var aDay = qDate.getDay()
-    var start = 0
-    var hasDate = true
-    var days = months[cMonth]
-    
-    // 2月比较特殊，非闰年28天，闰年29天，如2008年2月为29天
-    if ( 1 == cMonth && isLeapYear(cYear) ) {
-        days = 29
-    }
+    var days = calculateDays(cYear, cMonth)
 
     // 填充数字，并高亮当前天
     for (var i = 0; i < days; i++) {
@@ -199,30 +200,37 @@ this.fillDate = function() {
         }
     }
 
+    var start = 0
+    var end   = days
+    var hasDate = true
     if ( startDate && reDate.test(startDate) ) {
         var arr   = startDate.split('-')
         var year  = arr[0] - 0
         var month = arr[1] - 1
         var day   = arr[2] - 1
-        if (cMonth == month && cYear == year) {
+        if (cYear == year && cMonth == month) {
             start = day
         }
         if (cYear < year || cMonth < month && cYear <= year) {
             hasDate = false
-        }                
+        }
     }
 
     if ( endDate && reDate.test(endDate) ) {
         var arr   = endDate.split('-')
         var year  = arr[0] - 0
         var month = arr[1] - 1
+        var day   = arr[2] - 1
+        if (cYear == year && cMonth == month) {
+            end = day
+        }
         if (cYear > year || cMonth > month && cYear == year) {
             hasDate = false
         }
     }
 
     if (hasDate) {
-        for (var u = start; u < days; u++) {
+        for (var u = start; u < end; u++) {
             var td = tds.eq(u + aDay)
             td.addClass('day')
         }
