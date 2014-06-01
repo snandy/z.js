@@ -212,7 +212,6 @@ var table = ['<table>', '</table>']
 var thead = ['<tbody>', '</tbody>']
 var tr    = ['<tr>', '</tr>']
 var td    = ['<td>', '</td>']
-
 var wrapMap = {
     thead: [ 1, table[0], table[1] ],
     tr: [ 3, table[0] + thead[0], thead[1] + table[1] ],

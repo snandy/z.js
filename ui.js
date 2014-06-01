@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-30 15:21:16
+ * @snandy 2014-05-31 12:09:51
  *
  */
 /**
@@ -600,16 +600,16 @@ this.setPosi = function() {
 }
 
 this.onBodyClick = function(ev) {
-    console.log(ev.target)
     var target = Z(ev.target)
     var datePicker = target.closest('.o-datepicker')
-    console.log(datePicker[0])
     if (!datePicker.length && target[0] != this.input[0]) {
         this.remove()
     }
 }
 
 this.template = function() {
+    var div = Z.dom('<div class="o-datepicker ui-calendar"></div>')
+    div = Z(div)
     var templ = '<table cellpadding="0" cellpadding="0" class="ui-calendar-table">' + 
                     '<thead>' +
                         '<tr><th class="prev"><i></i></th><th colspan="5" class="switch"><span data-cal="year"></span>年<span data-cal="month"></span>月</th><th class="next"><i></i></th></tr>' +
@@ -619,8 +619,8 @@ this.template = function() {
                     '<tfoot></tfoot>' +
                  '</table>'
 
-    var table = Z.dom(templ)[0]
-    table = Z(table)
+    div.append(templ)
+    table = div.find('table')
     table.find('tfoot').append('<tr><td colspan="2"><span class="today">今天</span></td><td></td><td></td><td></td><td colspan="2"><span class="close">关闭</span></td></tr>')
     
     var tr = '<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>'
@@ -629,9 +629,7 @@ this.template = function() {
         arr[i] = tr
     }
     table.find('tbody').append(arr.join(''))
-
-    var div = Z.dom('<div class="o-datepicker ui-calendar"></div>')
-    div = Z(div)
+    
     return div.append(table)
 }
 
@@ -910,8 +908,8 @@ function template() {
     for (var i = 0; i < 6; i++) {
         arr[i] = tr
     }
-    table1.find('tbody').html(arr.join(''))
-    table2.find('tbody').html(arr.join(''))
+    table1.find('tbody').append(arr.join(''))
+    table2.find('tbody').append(arr.join(''))
 
 
     var div = Z.dom('<div class="o-datepicker"></div>')

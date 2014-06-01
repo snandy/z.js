@@ -1,4 +1,4 @@
-﻿
+
 Z.declareUI('CalendarTwo', function() {
 //
 var week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -59,8 +59,8 @@ function template() {
     for (var i = 0; i < 6; i++) {
         arr[i] = tr
     }
-    table1.find('tbody').html(arr.join(''))
-    table2.find('tbody').html(arr.join(''))
+    table1.find('tbody').append(arr.join(''))
+    table2.find('tbody').append(arr.join(''))
 
 
     var div = Z.dom('<div class="o-datepicker"></div>')

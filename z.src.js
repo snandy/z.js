@@ -1,6 +1,6 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-05-30 15:21:16
+ * @snandy 2014-05-31 12:09:51
  *
  */
 ~function(window, undefined) {
@@ -927,13 +927,26 @@ var matches = function() {
         // fall back to performing a selector:
         var match
         var parent = el.parentNode
-        var temp = !parent
-        if (temp) {
-            (parent = tempParent).appendChild(el)   
+        // 已经存在与DOM结构里的元素
+        if (parent) {
+            match = query(selector, parent)
+            var len = match.length
+            if (len) {
+                while (len--) {
+                    if (match[len] == el) {
+                        return true
+                    }
+                }
+                return false
+            } else {
+                return false
+            }
+        } else { // 动态创建的元素，尚未添加到页面结构里
+            tempParent.appendChild(el)
+            match = query(selector, tempParent)
+            tempParent.removeChild(el)
+            return !!match.length
         }
-        match = query(selector, parent)
-        temp && tempParent.removeChild(el)
-        return !!match.length
     }
 }()
 
@@ -1430,7 +1443,6 @@ var table = ['<table>', '</table>']
 var thead = ['<tbody>', '</tbody>']
 var tr    = ['<tr>', '</tr>']
 var td    = ['<td>', '</td>']
-
 var wrapMap = {
     thead: [ 1, table[0], table[1] ],
     tr: [ 3, table[0] + thead[0], thead[1] + table[1] ],
