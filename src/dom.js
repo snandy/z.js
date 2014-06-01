@@ -562,7 +562,13 @@ Z.fn.extend({
         if (Z.isFunction(val)) {
             val = val()
         }
-        return this.prop('innerHTML', val)
+        try {
+            return this.prop('innerHTML', val)
+        } catch(e) {
+            // IE低版本table,tbody,thead,tfoot,tr,select等innerHTML不能赋值
+            return this.empty().append(val)
+        }
+        
     },
 
     val: function(val) {
