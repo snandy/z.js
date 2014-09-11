@@ -1,13 +1,13 @@
 /*!
  * Z.js v0.1.0
- * @snandy 2014-03-27 17:56:41
+ * @snandy 2014-06-26 20:17:00
  *
  */
 ~function(window, undefined) {
 
 var OP = Object.prototype
 var FP = Function.prototype
-var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean']
+var types = ['Array', 'Function', 'Object', 'String', 'Number', 'Boolean', 'Date']
 
 var toString = OP.toString
 var slice  = types.slice
@@ -30,6 +30,17 @@ function Z(selector, context) {
 
 Z.identity = function(val) { return val }
 
+Z.error = function(msg) {
+    throw new Error(msg)
+}
+
+Z.viewSize = function() {
+    var winObj = Z(window)
+    return {
+        width: winObj.width(),
+        height: winObj.height()
+    }
+}
 
 // 特性检测
 var support = function() {
@@ -58,6 +69,17 @@ var support = function() {
         sliceOnNodeList = false
     }
 
+    var tableInnerHTML = true
+    var table = doc.createElement('table')
+    var tbody = doc.createElement('tbody')
+    table.appendChild(tbody)
+    var boo = true
+    try {
+        tbody.innerHTML = '<tr></tr>'
+    } catch(e) {
+        tableInnerHTML = false
+    }
+
     return {
         setAttr : setAttr,
         cssText : cssText,
@@ -65,8 +87,8 @@ var support = function() {
         classList : !!div.classList,
         cssFloat : !!a.style.cssFloat,
         getComputedStyle : getComputedStyle,
-        sliceOnNodeList: sliceOnNodeList
-
+        sliceOnNodeList: sliceOnNodeList,
+        tableInnerHTML: tableInnerHTML
     }
 }()
 // For IE9/Firefox/Safari/Chrome/Opera
@@ -122,6 +144,21 @@ function now() {
     return (new Date).getTime()
 }
 
+function noop() {
+    return function() {}
+}
+
+/*
+ * op: nextSibling | previousSibling
+ */
+function nextOrPrev(elem, op) {
+    var dest 
+    while ( elem && (dest=elem[op]) && (dest.nodeType !== 1 || dest.tagName === 'BR') ) {
+        elem = dest
+    }
+    return dest
+}
+
 /**
  * Browser Detect
  * Browser.ie(6,7,8,9,10) / browser.firefox / browser.chrome ...
@@ -158,6 +195,9 @@ var Browser = function(ua) {
     return b
 }(navigator.userAgent.toLowerCase())
 
+Z.declareUI = function(name, superClass, factory) {
+    Z.Class('Z.ui.' + name, superClass, factory)
+}
 
 /**
  * @class Z.Object
@@ -217,7 +257,9 @@ var Browser = function(ua) {
  * Create a function bound to a given object (assigning `this`, and arguments, optionally)
  * @singleton
  */
+
 Z.Function = function() {
+    var emptyClass = noop()
     function bind(func, context) {
         var args, bound
         if (func.bind === nativeBind && nativeBind) return nativeBind.apply(func, sliceArgs(arguments, 1))
@@ -225,9 +267,9 @@ Z.Function = function() {
         args = sliceArgs(arguments, 2)
         return bound = function() {
             if (!(this instanceof bound)) return func.apply(context, args.concat(sliceArgs(arguments)))
-            noop.prototype = func.prototype
-            var self = new noop
-            noop.prototype = null
+            emptyClass.prototype = func.prototype
+            var self = new emptyClass
+            emptyClass.prototype = null
             var result = func.apply(self, args.concat(sliceArgs(arguments)))
             if (Object(result) === result) return result
             return self
@@ -436,11 +478,11 @@ Z.String = function() {
         },
         toInt: function(str, base) {
             if (this.isNumberStr(str)) return parseInt(str, base||10)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         toFloat: function(str) {
             if (this.isNumberStr(str)) return parseFloat(str)
-            throw new Error('not a number')
+            Z.error('not a number')
         },
         urlAppend : function(url, str) {
             if (Z.isString(str) && str.length) {
@@ -618,7 +660,7 @@ var Event = {
 
 // initialize namespace
 function namespace(classPath, globalNamespace) {
-    if ( !Z.isString(classPath) ) throw new Error('classPath must be a string')
+    if ( !Z.isString(classPath) ) Z.error('classPath must be a string')
     globalNamespace = Z.isObject(globalNamespace) ? globalNamespace : window
     var arr = classPath.split('.')
     var namespace = globalNamespace
@@ -634,7 +676,7 @@ function namespace(classPath, globalNamespace) {
     }
 
     var clazz = namespace[className]
-    if ( Z.isFunction(clazz) ) throw new Error(className + ' is already defined')
+    if ( Z.isFunction(clazz) ) Z.error(className + ' is already defined')
     namespace[className] = undefined
     return {
         namespace: namespace,
@@ -656,18 +698,33 @@ var create = Object.create ?
 function Class(name, superClass, factory) {
     if (!factory) {
         if (!superClass) {
-            throw new Error('class create failed, verify definitions')
+            Z.error('class create failed, verify definitions')
         }
         factory = superClass
         superClass = Object
     }
 
     function Constructor() {
+        var args = arguments
+        var len = args.length
+
+        // 去new，暂支持最长4个参数，建议使用1-2个参数，对象属性方式可以添加更多
+        if ( !(this instanceof Constructor) ) {
+            switch (len) {
+                case 1: return new Constructor(args[0])
+                case 2: return new Constructor(args[0], args[1])
+                case 3: return new Constructor(args[0], args[1], args[2])
+                case 4: return new Constructor(args[0], args[1], args[2], args[3])
+                default: return new Constructor()
+            }
+        }
+
+        // 调用真正构造器初始化字段/属性
         if ( Z.isFunction(this.init) ) {
-            this.init.apply(this, arguments)
+            this.init.apply(this, args)
         }
     }
-    Constructor.toString = function() { return name }
+    Constructor.toString = function() { return 'Class ' + name + '\n' + factory}
 
     var supr = superClass.prototype
     // var proto = Constructor.prototype = new superClass
@@ -690,7 +747,7 @@ Z.statics = function(clazz, obj) {
 Z.methods = function(clazz, obj, override) {
     var proto = clazz.prototype
     for (var m in obj) {
-        if ( !Z.isFunction(obj[m]) ) throw new Error(m + ' is not a function')
+        if ( !Z.isFunction(obj[m]) ) Z.error(m + ' is not a function')
         if (override) {
             proto[m] = obj[m]
         } else {
@@ -757,9 +814,6 @@ return Class
  *
  */
 
-function byId(id) {
-    return document.getElementById(id)
-}
 var query = function() {
     // selector regular expression
     var rId = /^#[\w\-]+/
@@ -767,6 +821,9 @@ var query = function() {
     var rCls = /^([\w\-]+)?\.([\w\-]+)/
     var rAttr = /^([\w]+)?\[([\w]+-?[\w]+?)(=(\w+))?\]/
 
+    function byId(id) {
+        return document.getElementById(id)
+    }
     function check(attr, val, node) {
         var reg = RegExp('(?:^|\\s+)' + val + '(?:\\s+|$)')
         var attribute = attr === 'className' ? node.className : node.getAttribute(attr)
@@ -817,7 +874,7 @@ var query = function() {
                 try {
                     return context.querySelectorAll('#' + id + ' ' + s)
                 } catch(e){
-                    throw new Error('querySelectorAll: ' + e)
+                    Z.error('querySelectorAll: ' + e)
                 } finally {
                     old ? context.id = old : context.removeAttribute('id')
                 }
@@ -857,19 +914,41 @@ var query = function() {
 
 }()
 
-var tempParent = document.createElement('div')
-function matches(el, selector) {
-    if (!el || el.nodeType !== 1) return false
-    var matchesSelector = el.webkitMatchesSelector || el.mozMatchesSelector ||
-                          el.oMatchesSelector || el.matchesSelector
-    if (matchesSelector) return matchesSelector.call(el, selector)
-    // fall back to performing a selector:
-    var match, parent = el.parentNode, temp = !parent
-    if (temp) (parent = tempParent).appendChild(el)
-    match = query(selector, parent)
-    temp && tempParent.removeChild(el)
-    return !!match.length
-}
+var matches = function() {
+    var tempParent = document.createElement('div')
+    var matchesSelector = tempParent.webkitMatchesSelector || tempParent.mozMatchesSelector 
+        || tempParent.oMatchesSelector || tempParent.msMatchesSelector || tempParent.matchesSelector    
+    return function(el, selector) {
+        if (!el || el.nodeType !== 1) return false
+        if (matchesSelector) {
+            return matchesSelector.call(el, selector)    
+        }
+
+        // fall back to performing a selector:
+        var match
+        var parent = el.parentNode
+        // 已经存在与DOM结构里的元素
+        if (parent) {
+            match = query(selector, parent)
+            var len = match.length
+            if (len) {
+                while (len--) {
+                    if (match[len] == el) {
+                        return true
+                    }
+                }
+                return false
+            } else {
+                return false
+            }
+        } else { // 动态创建的元素，尚未添加到页面结构里
+            tempParent.appendChild(el)
+            match = query(selector, tempParent)
+            tempParent.removeChild(el)
+            return !!match.length
+        }
+    }
+}()
 
 Z.matches = matches
 
@@ -885,15 +964,15 @@ Z.prototype = {
         // For Z() object
         if ( Z.isZ(selector) ) return selector
 
-        // For Array or nodes
-        if ( Z.isArrayLike(selector) && !Z.isString(selector) ) return this.pushStack(selector)
-
         // For HTMLElement or window
         if (selector.nodeType || selector === window) {
             this[0] = selector
             this.length = 1
             return
         }
+
+        // For Array or nodes
+        if ( Z.isArrayLike(selector) ) return this.pushStack(selector)
 
         // For CSS selector
         var nodes = query(selector, context)
@@ -942,28 +1021,74 @@ Z.prototype = {
             (i < 0 ? this.slice(i)[0] : this[i])
     },
 
-    each: function(iterator) {
-        forEach(this, iterator)
+    index: function(obj) {
+        var elem = obj, index = false
+        if (Z.isZ(obj)) {
+            elem = obj[0]
+        }
+        this.each(function(el, i) {
+            if (el == elem) {
+                index = i
+                return true
+            }
+        })
+        return index
+    },
+
+    parent: function() {
+        return Z( this[0].parentNode )
+    },
+    
+    next: function() {
+        return Z( nextOrPrev(this[0], 'nextSibling') )
+    },
+
+    prev: function() {
+        return Z( nextOrPrev(this[0], 'previousSibling') )
+    },
+    
+    each: function(iterator, context) {
+        forEach(this, iterator, context)
         return this
     },
 
-    map: function(iterator) {
+    map: function(iterator, context) {
         return Z(map(this, function(el, i) {
             return iterator.call(el, el, i)
-        }))
+        }, context))
     },
 
     remove: function() {
         return this.each(function() {
-            if (this.parentNode != null)
-            this.parentNode.removeChild(this)
+            if (this.parentNode != null) {
+                // 清除事件绑定
+                Z(this).off()
+                // 清楚数据缓存
+                Z.Cache.remove(this)
+                // 删除DOM节点
+                this.parentNode.removeChild(this)
+            }
+        })
+    },
+
+    empty: function() {
+        return this.each(function() {
+            while(this.firstChild) {
+                var child = this.firstChild
+                if (Z.isElement(child)) {
+                    Z(child).off()
+                    Z.Cache.remove(child)
+                }
+                this.removeChild(child)
+            }
         })
     },
 
     closest: function(selector, context) {
         var node = this[0], collection = false
-        while ( node && !matches(node, selector) )
+        while ( node && !matches(node, selector) ) {
             node = node !== context && !Z.isDocument(node) && node.parentNode
+        }
         return Z(node)
     },
 
@@ -1039,34 +1164,12 @@ Z.now = now
 // Z.firefox, Z.chrome, Z.safari, Z.opera, Z.ie, Z.ie6, Z.ie7, Z.ie8, Z.ie9, Z.ie10, Z.sogou, Z.maxthon
 Z.extend(Browser)
 
-// data, removeData
-Z.fn.extend({
-    data: function(key, value) {
-        var el = this[0]
-        var cache = Z.cache
-        if (key === undefined) {
-            return cache.get(el)
-        }
-        
-        if (value === undefined) {
-            return cache.get(el, key)
-        } else {
-            this.each(function() {
-                cache.set(this, key, value)
-            })
-        }
-    },
-    removeData: function(key) {
-        return this.each(function() {
-            Z.cache.remove(this, key)
-        });        
-    }
-})
 
 
 // Z.isArray, Z.isBoolean, ...
 forEach(types, function(name) {
     Z['is' + name] = function(obj) {
+        if (obj === undefined || obj === null) return false
         return toString.call(obj) === '[object ' + name + ']'
     }
 })
@@ -1126,8 +1229,318 @@ Z.isEmail = function(str) {
     var regEmail = /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
     return regEmail.test(str)
 }
+~function(Z) {
 
+var rcapital = /[A-Z]/g
+var ropa1 = /opacity=/i
+var ropa2 = /opacity=([^)]*)/i
+var rtagName = /<([\w:]+)/
 var rroot = /^(?:body|html)$/i
+var rtable = /^t(?:head|body|foot|r|d|h)$/i
+var cssWidth = ['Left', 'Right']
+var cssHeight = ['Top', 'Bottom']
+var displays = {}
+
+function defaultDisplay(tagName) {
+    var display = displays[tagName]
+
+    if (!display) {
+        var elem = doc.createElement(tagName)
+        doc.body.appendChild(elem)
+        var display = Z(elem).css('display')
+        displays[tagName] = display
+        doc.body.removeChild(elem)
+    }
+
+    return display
+}
+
+function getWindow(el) {
+    return Z.isWindow(el) ? el :
+        el.nodeType === 9 ?
+        el.defaultView || el.parentWindow : false
+}
+
+function getOffset(el, doc, docElem, box) {
+    try {
+        box = el.getBoundingClientRect()
+    } catch(e) {}
+
+    if ( !box || !Z.contains(docElem, el) ) {
+        return box ? {top: box.top, left: box.left} : {top: 0, left: 0}
+    }
+
+    var body = doc.body
+    var win = getWindow(doc)
+    var clientTop  = docElem.clientTop  || body.clientTop  || 0
+    var clientLeft = docElem.clientLeft || body.clientLeft || 0
+    var scrollTop  = win.pageYOffset || docElem.scrollTop  || body.scrollTop
+    var scrollLeft = win.pageXOffset || docElem.scrollLeft || body.scrollLeft
+    var top  = box.top  + scrollTop  - clientTop
+    var left = box.left + scrollLeft - clientLeft
+
+    return {top: top, left: left}
+}
+
+function setOffset(el, options) {
+    var curElem = Z(el)
+    var posi = curElem.css('position')
+    
+    if (posi === 'static') el.style.position = 'relative'
+    
+    var top = 'top'
+    var left = 'left'
+    var curOffset = curElem.offset()
+    var curCSSTop = curElem.css('top')
+    var curCSSLeft = curElem.css('left')
+    var calculatePosition = (posi === 'absolute' || posi === 'fixed') && ([curCSSTop, curCSSLeft].join(',')).indexOf('auto') > -1
+    var props = {}, curPosition = {}, curTop, curLeft
+        
+    if (calculatePosition) {
+        curPosition = curElem.pos()
+        curTop = curPosition.top
+        curLeft = curPosition.left
+    } else {
+        curTop = parseFloat(curCSSTop) || 0
+        curLeft = parseFloat(curCSSLeft) || 0
+    }
+
+    if (options.top != null) {
+        props.top = (options.top - curOffset.top) + curTop
+    }
+    if (options.left != null) {
+        props.left = (options.left - curOffset.left) + curLeft
+    }
+    
+    curElem.css(props)
+}
+
+function camelFn(name) {
+    return name.replace(rcapital, function(match) {
+        return '-' + match.toLowerCase()
+    })
+}
+
+function firstLetterUpper(name) {
+    return name.replace(/^(\w)/, function(match) {
+        return match.toUpperCase()
+    })
+}
+
+function getCSS(el, name) {
+    if (name == 'opacity') {
+        var opacity, filter, style
+        if (support.opacity) {
+            style = window.getComputedStyle(el, null)
+            opacity = style.opacity
+            // http://www.cnblogs.com/snandy/archive/2011/07/27/2118441.html
+            if (opacity.length > 1) {
+                opacity = opacity.substr(0, 3)
+            }
+            return parseFloat(opacity)
+        } else {
+            style = el.currentStyle
+            filter = style.filter
+            return ropa1.test(filter) ? parseFloat(filter.match(ropa2)[1]) / 100 : 1
+        }
+    } else {
+        var cssName = camelFn(name)
+        if (window.getComputedStyle) {
+            return window.getComputedStyle(el, null).getPropertyValue(cssName)
+        }
+        if (doc.defaultView && doc.defaultView.getComputedStyle) {
+            var computedStyle = doc.defaultView.getComputedStyle(el, null)
+            if (computedStyle) {
+                return computedStyle.getPropertyValue(cssName)
+            }
+        }
+        if (el.currentStyle) {
+            return el.currentStyle[name]
+        }
+        return el.style[name]
+    }
+}
+
+function setCSS(el, name, val) {
+    if (name == 'opacity') {
+        if (support.opacity) {
+            el.style.opacity = (val == 1 ? '' : '' + val)
+        } else {
+            el.style.filter = 'alpha(opacity=' + val * 100 + ');'
+            el.style.zoom = 1
+        }
+    } else {
+        if ( Z.isNumber(val) ) val += 'px'
+        el.style[name] = val
+    }
+}
+
+// 获取元素宽高
+function getWidthOrHeight(el, name, extra) {
+    // Start with offset property
+    var val = name === 'width' ? el.offsetWidth : el.offsetHeight
+    var which = name === 'width' ? cssWidth : cssHeight
+
+    // display is none
+    if (val === 0) {
+        return 0
+    }
+    
+    if (extra === undefined) { // content
+        // 减去borderWidth和padding
+        for (var i = 0, a; a = which[i++];) {
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+            val -= parseFloat( getCSS(el, 'padding' + a) ) || 0
+        }
+        return val
+    }
+
+    if (extra === 'inner') { // content+padding
+        for (var i = 0, a; a = which[i++];) {
+            val -= parseFloat( getCSS(el, 'border' + a + 'Width') ) || 0
+        }
+        return val
+
+    } else if (extra === 'outer') { // content+padding+border
+        return val
+
+    } else if (extra === 'margin') { // content+padding+border+margin
+        for (var i = 0, a; a = which[i++];) {
+            val += parseFloat( getCSS( el, 'margin' + a ) ) || 0
+        }
+        return val
+    }
+}
+
+// 获取文档宽高
+function getDocWH(name) {
+    name = firstLetterUpper(name)
+    var val = Math.max(
+        doc.documentElement['client' + name],
+        doc.body['scroll' + name], doc.documentElement['scroll' + name],
+        doc.body['offset' + name], doc.documentElement['offset' + name]
+    )
+    return val
+}
+
+// 获取window的宽高
+function getWinWH(which) {
+    var width = window['innerWidth'] || doc.documentElement.clientWidth
+    var height = window['innerHeight'] || doc.documentElement.clientHeight
+    if (which === 'width') {
+        return width
+    } else if (which === 'height') {
+        return height
+    }
+    return {
+        width: width,
+        height: height
+    }
+}
+Z.winSize = getWinWH
+
+var table = ['<table>', '</table>']
+var thead = ['<tbody>', '</tbody>']
+var tr    = ['<tr>', '</tr>']
+var td    = ['<td>', '</td>']
+var wrapMap = {
+    thead: [ 1, table[0], table[1] ],
+    tr: [ 3, table[0] + thead[0], thead[1] + table[1] ],
+    td: [ 4, table[0] + thead[0] + tr[0], tr[1] + thead[1] + table[1] ]
+}
+wrapMap.tbody = wrapMap.tfoot = wrapMap.thead
+wrapMap.th = wrapMap.td
+
+function manipulationDOM(elem) {
+    if (Z.isElement(elem)) {
+        return [elem]
+    }
+    if (Z.isZ(elem)) {
+        return elem.toArray()
+    }
+    var div, tag, nodes = []
+    if (Z.isString(elem)) {
+        if (rtagName.test(elem)) {
+            tag = rtagName.exec(elem)[1].toLowerCase()
+            div = doc.createElement('div')
+
+            if (rtable.test(tag)) {
+                var map = wrapMap[tag]
+                var deps = map[0]
+                elem = map[1] + elem + map[2]
+                div.innerHTML = elem
+                while (deps--) {
+                    div = div.firstChild
+                }
+                while (div) {
+                    nodes.push(div)
+                    div = div.nextSibling
+                }
+                
+            } else {
+                div.innerHTML = elem
+                while (div.firstChild) {
+                    nodes.push(div.firstChild)
+                    div.removeChild(div.firstChild)
+                }         
+            }
+            div = null
+            return nodes
+
+        } else {
+            return [doc.createTextNode(elem)]
+        }
+    }
+}
+
+Z.dom = manipulationDOM
+
+Z.support = support
+
+Z.contains = function(a, b) {
+    try {
+        return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
+    } catch(e) {}
+}
+
+Z.ready = function(callback) {
+    var done = false, top = true
+
+    var root = doc.documentElement
+    var add = doc.addEventListener ? 'addEventListener' : 'attachEvent'
+    var rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent'
+    var pre = doc.addEventListener ? '' : 'on'
+
+    function init(e) {
+        if (e.type == 'readystatechange' && doc.readyState != 'complete') return
+        (e.type == 'load' ? window : doc)[rem](pre + e.type, init, false)
+        if (!done && (done = true)) callback(Z)
+    }
+
+    function poll() {
+        try { 
+            root.doScroll('left') 
+        } catch(e) { 
+            setTimeout(poll, 50)
+            return
+        }
+        init('poll')
+    }
+
+    if (doc.readyState == 'complete') {
+        callback(Z)
+    } else {
+        if (doc.createEventObject && root.doScroll) {
+            try {
+                top = !window.frameElement
+            } catch(e) { }
+            if (top) poll()
+        }
+        doc[add](pre + 'DOMContentLoaded', init, false)
+        doc[add](pre + 'readystatechange', init, false)
+        window[add](pre + 'load', init, false)
+    }
+}
 
 // 元素class属性操作
 var domClass = function() {
@@ -1203,118 +1616,6 @@ var domClass = function() {
     }
 }()
 
-function getWindow(el) {
-    return Z.isWindow(el) ? el :
-        el.nodeType === 9 ?
-        el.defaultView || el.parentWindow : false
-}
-
-function getOffset(el, doc, docElem, box) {
-    try {
-        box = el.getBoundingClientRect()
-    } catch(e) {}
-
-    if ( !box || !Z.contains(docElem, el) ) {
-        return box ? {top: box.top, left: box.left} : {top: 0, left: 0}
-    }
-
-    var body = doc.body
-    var win = getWindow(doc)
-    var clientTop  = docElem.clientTop  || body.clientTop  || 0
-    var clientLeft = docElem.clientLeft || body.clientLeft || 0
-    var scrollTop  = win.pageYOffset || docElem.scrollTop  || body.scrollTop
-    var scrollLeft = win.pageXOffset || docElem.scrollLeft || body.scrollLeft
-    var top  = box.top  + scrollTop  - clientTop
-    var left = box.left + scrollLeft - clientLeft
-
-    return {top: top, left: left}
-}
-
-function setOffset(el, options) {
-    var curElem = Z(el)
-    var posi = curElem.css('position')
-    
-    if (posi === 'static') el.style.position = 'relative'
-    
-    var top = 'top'
-    var left = 'left'
-    var curOffset = curElem.offset()
-    var curCSSTop = curElem.css('top')
-    var curCSSLeft = curElem.css('left')
-    var calculatePosition = (posi === 'absolute' || posi === 'fixed') && ([curCSSTop, curCSSLeft].join(',')).indexOf('auto') > -1
-    var props = {}, curPosition = {}, curTop, curLeft
-        
-    if (calculatePosition) {
-        curPosition = curElem.pos()
-        curTop = curPosition.top
-        curLeft = curPosition.left
-    } else {
-        curTop = parseFloat(curCSSTop) || 0
-        curLeft = parseFloat(curCSSLeft) || 0
-    }
-
-    if (options.top != null) {
-        props.top = (options.top - curOffset.top) + curTop
-    }
-    if (options.left != null) {
-        props.left = (options.left - curOffset.left) + curLeft
-    }
-    
-    curElem.css(props)
-}
-
-function camelFn(name) {
-    return name.replace(/[A-Z]/g, function(match) {
-        return '-' + match.toLowerCase()
-    })
-}
-
-Z.support = support
-Z.contains = function(a, b) {
-    try {
-        return a.contains ? a != b && a.contains(b) : !!(a.compareDocumentPosition(b) & 16)
-    } catch(e) {}
-}
-
-Z.ready = function(callback) {
-    var done = false, top = true
-
-    var root = doc.documentElement
-    var add = doc.addEventListener ? 'addEventListener' : 'attachEvent'
-    var rem = doc.addEventListener ? 'removeEventListener' : 'detachEvent'
-    var pre = doc.addEventListener ? '' : 'on'
-
-    function init(e) {
-        if (e.type == 'readystatechange' && doc.readyState != 'complete') return
-        (e.type == 'load' ? window : doc)[rem](pre + e.type, init, false)
-        if (!done && (done = true)) callback(Z)
-    }
-
-    function poll() {
-        try { 
-            root.doScroll('left') 
-        } catch(e) { 
-            setTimeout(poll, 50)
-            return
-        }
-        init('poll')
-    }
-
-    if (doc.readyState == 'complete') {
-        callback(Z)
-    } else {
-        if (doc.createEventObject && root.doScroll) {
-            try {
-                top = !window.frameElement
-            } catch(e) { }
-            if (top) poll()
-        }
-        doc[add](pre + 'DOMContentLoaded', init, false)
-        doc[add](pre + 'readystatechange', init, false)
-        window[add](pre + 'load', init, false)
-    }
-}
-
 Z.fn.extend({
     hasClass: function(name) {
         return domClass.has(this[0], name)
@@ -1328,7 +1629,11 @@ Z.fn.extend({
 
     removeClass: function(name) {
         return this.each( function(el) {
-            domClass.remove(el, name)
+            if (name) {
+                domClass.remove(el, name)    
+            } else {
+                el.className = ''
+            }
         })
     },
 
@@ -1363,23 +1668,33 @@ Z.fn.extend({
             }
         } else {
             this.each( function(el) {
-                if (val === null) {
-                    el.removeAttribute(name)
-                } else {
-                    switch (name) {
-                        case 'class':
-                            el.className = val
-                            break
-                        case 'style':
-                            el.style.cssText = val
-                            break
-                        default:
-                            el.setAttribute(name, val)
-                    }
+                switch (name) {
+                    case 'class':
+                        el.className = val
+                        break
+                    case 'style':
+                        el.style.cssText = val
+                        break
+                    default:
+                        el.setAttribute(name, val)
                 }
             })
             return this
         }
+    },
+
+    removeAttr: function(name) {
+        if (Z.isString(name)) {
+            this.each( function(el) {
+                el.removeAttribute(name)
+            })
+        }
+        return this
+    },
+
+    hasAttr: function(name) {
+        if (this.attr(name)) return true
+        return false
     },
 
     prop: function(name, val) {
@@ -1405,55 +1720,13 @@ Z.fn.extend({
             return
         }
         if (val === undefined) {
-            var el = this[0], style
-            if (name == 'opacity') {
-                var opacity, filter
-                var reg = /opacity=/i
-                if (support.opacity) {
-                    style = window.getComputedStyle(el, null)
-                    opacity = style.opacity
-                    // http://www.cnblogs.com/snandy/archive/2011/07/27/2118441.html
-                    if (opacity.length > 1) {
-                        opacity = opacity.substr(0, 3)
-                    }
-                    return parseFloat(opacity)
-                } else {
-                    style = el.currentStyle
-                    filter = style.filter
-                    return reg.test(filter) ? parseFloat(filter.match(/opacity=([^)]*)/i)[1]) / 100 : 1
-                }
-            } else {
-                if (window.getComputedStyle) {
-                    return window.getComputedStyle(el, null).getPropertyValue(camelFn(name))
-                }
-                if (doc.defaultView && doc.defaultView.getComputedStyle) {
-                    var computedStyle = doc.defaultView.getComputedStyle(el, null)
-                    if (computedStyle) {
-                        return computedStyle.getPropertyValue(camelFn(name))
-                    }
-                }
-                if (el.currentStyle) {
-                    return el.currentStyle[name]
-                }
-                return el.style[name]
-            }
+            return getCSS(this[0], name)
         } else {
             this.each(function(el) {
-                if (name == 'opacity') {
-                    if (support.opacity) {
-                        el.style.opacity = (val == 1 ? '' : '' + val)
-                    } else {
-                        el.style.filter = 'alpha(opacity=' + val * 100 + ');'
-                        el.style.zoom = 1
-                    }
-                } else {
-                    if ( Z.isNumber(val) ) val += 'px'
-                    el.style[name] = val
-                }
+                setCSS(el, name, val)
             })
             return this
         }
-
     },
 
     offsetParent: function() {
@@ -1479,7 +1752,6 @@ Z.fn.extend({
 
     position: function() {
         if (!this[0]) return
-        
         var $parent = this.offsetParent()
         var offset  = this.offset()
         var parentOffset = rroot.test($parent[0].nodeName) ? {top: 0, left: 0} : $parent.offset()
@@ -1495,15 +1767,45 @@ Z.fn.extend({
         }
     },
 
+    scrollTop: function(top) {
+        var isWindow = this[0] == window
+        if (top === undefined) {
+            if (isWindow) {
+                return window.pageXOffset || doc.documentElement.scrollTop || doc.body.scrollTop
+            }
+            return this[0].scrollTop
+        } else {
+            if ( isWindow ) {
+                window.scrollTo(0, top)
+            }
+            this.each(function() {
+                this.scrollTop = top
+            })
+            return this
+        }
+    },
+
     text: function(val) {
         return this.prop(this[0].innerText === undefined ? 'textContent' : 'innerText', val)
     },
 
     html: function(val) {
-        return this.prop('innerHTML', val)
+        if (Z.isFunction(val)) {
+            val = val()
+        }
+        try {
+            return this.prop('innerHTML', val)
+        } catch(e) {
+            // IE低版本table,tbody,thead,tfoot,tr,select等innerHTML不能赋值
+            return this.empty().append(val)
+        }
+        
     },
-    
+
     val: function(val) {
+        if (Z.isFunction(val)) {
+            val = val()
+        }
         if (val === undefined) {
             var el = this[0]
             if (el.tagName == 'INPUT' && /checkbox|radio/.test(el.type)) {
@@ -1514,22 +1816,193 @@ Z.fn.extend({
             return this.prop('value', val)
         }
     },
-	
+
 	show: function() {
-		this.each(function(el) {
-			el.style.display = ''
+		return this.each(function(el) {
+            var displayVal = defaultDisplay(el.tagName)
+			el.style.display = displayVal
 		})
-	}
+	},
+
+    hide: function() {
+        return this.each(function(el) {
+            el.style.display = 'none'
+        })        
+    },
+
+    toggle: function() {
+        this.each(function(el) {
+            if (el.style.display !== 'none') {
+                $(el).hide()
+            } else {
+                $(el).show()
+            }
+        })        
+    },
+
+    append: function(elem) {
+        return this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.appendChild(node)
+            })
+        })
+    },
+
+    prepend: function(elem) {
+        return this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                el.insertBefore(node, el.firstChild)
+            })
+        })
+    },
+
+    before: function(elem) {
+        return this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el)
+                }
+            })
+        })
+    },
+
+    after: function(elem) {
+        return this.each(function(el) {
+            var nodes = manipulationDOM(elem)
+            forEach(nodes, function(node) {
+                if (el.parentNode) {
+                    el.parentNode.insertBefore(node, el.nextSibling)
+                }
+            })
+        })
+    }
+
+})
+
+forEach(['width', 'height'], function(name) {
+    // width/height content width
+    Z.fn[name] = function(val) {
+        var obj = this[0]
+        if (!this.length) return
+        if (val === undefined) {
+            if ( Z.isWindow(obj) ) return getWinWH(name)
+            if ( Z.isDocument(obj) ) return getDocWH(name)
+            return getWidthOrHeight(obj, name)
+
+        } else {
+            if (!isNaN(val)) {
+                obj.style[name] = val + 'px'
+            }
+        }
+    }
+
+    // innerWidth/innerHeight 包含content + padding
+    var cname = firstLetterUpper(name)
+    Z.fn['inner' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'inner')
+    }
+
+    // outerWidth/outerHeight 包含content + padding + border
+    Z.fn['outer' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'outer')
+    }
+
+    // marginWidth/marginHeight 包含content + padding + border + margin
+    Z.fn['margin' + cname] = function() {
+        return getWidthOrHeight(this[0], name, 'margin')    
+    }
 })
 
 
+}(Z)
 
-var guid = 1
-var guidStr = '__guid__'
+Z.Cache = function() {
+    var seed = 0
+    var cache = {}
+    var id = '_uuid_'
+    Z.__cache__ = cache
+
+    // @private
+    function uuid(el) {
+        return el[id] || (el[id] = ++seed)
+    }
+
+    return {
+        set: function(el, key, val) {
+            if (!el) Z.error('setting failed, invalid element')
+
+            var id = uuid(el)
+            var c = cache[id] || (cache[id] = {})
+            if (key) c[key] = val
+
+            return c
+        },
+        get: function(el, key, create) {
+            if (!el) Z.error('getting failed, invalid element')
+
+            var id = uuid(el)
+            var elCache = cache[id] || (create && (cache[id] = {}))
+
+            if (!elCache) return null
+            return key !== undefined ? elCache[key] || null : elCache
+        },
+        has: function(el, key) {
+            return this.get(el, key) !== null
+        },
+        remove: function(el, key) {
+            var id = uuid(el)
+            var elCache = cache[id]
+
+            if (!elCache) return false
+
+            if (key !== undefined) {
+                delete elCache[key]
+            } else {
+                delete cache[id]
+            }
+
+            return true
+        }
+    }
+}()
+
+// data, removeData
+Z.fn.extend({
+    data: function(key, value) {
+        var el = this[0]
+        var cache = Z.Cache
+        if (key === undefined) {
+            return cache.get(el)
+        }
+        
+        if (value === undefined) {
+            return cache.get(el, key)
+        } else {
+            return this.each(function() {
+                cache.set(this, key, value)
+            })
+        }
+    },
+    removeData: function(key) {
+        return this.each(function() {
+            Z.Cache.remove(this, key)
+        })
+    }
+})
+
+~function(Z) {
+
+// var guid = 1
+// var guidStr = '__guid__'
         
 // 存放所有事件handler, 以guid为key, cache[1] = {}
 // cache[1] = {handle: evnetHandle, events: {}}, events = {click: [handler1, handler2, ..]}
-var cache = {}
+// var cache = {}
+
+var eventId = '__event__'
 
 // 优先使用标准API
 var w3c = !!window.addEventListener
@@ -1541,12 +2014,11 @@ var debounceFunc = ZFunc.debounce
 var throttleFunc = ZFunc.throttle
 
 // Utility functions ---------------------------------------------------------------------------
-function each(arr, callback) {
+var each = function(arr, callback) {
     for (var i=0; i<arr.length; i++) {
         if ( callback(arr[i], i) === true ) return
     }
 }
-
 var addListener = function() {
     if (w3c) {
         return function(el, type, handler) { el.addEventListener(type, handler, false) } 
@@ -1576,11 +2048,14 @@ function excuteHandler(elem, e, args /*only for trigger*/) {
     
     var e = fix(e, elem)
     var type = e.type
-    var id = elem[guidStr]
-    var elData = cache[id]
-    var events = elData.events
+    // var id = elem[guidStr]
+    // var elData = cache[id] || {}
+    var elData = Z(elem).data(eventId) || {}
+    var events = elData.events || {}
     var handlers = events[type]
     
+    if (!handlers) return Z.error('No Add Handler')
+
     var ret = null
     for (var i = 0, handlerObj; handlerObj = handlers[i++];) {
         if (args) handlerObj.args = handlerObj.args.concat(args)
@@ -1625,8 +2100,18 @@ function callback(elem, type, e, handlerObj) {
     if (data) e.data = data
     
     if (stopBubble) e.stopPropagation()
+
+    // mouseenter, mouseleave
+    if ( handlerObj.defEvtName ) {
+        var curTarget = e.currentTarget
+        var relTarget = e.relatedTarget
+        if (!Z.contains(curTarget, relTarget) && curTarget != relTarget ) {
+            return handler.apply(context, args)
+        }
+    } else {
+        return handler.apply(context, args)    
+    }
     
-    return handler.apply(context, args)
 }
 // handlerObj class
 function Handler(config) {
@@ -1648,8 +2133,9 @@ function Handler(config) {
     }
 }
 // 删除事件的注册，从缓存中去除
-function remove(elem, type, guid) {
-    var elData = cache[guid]
+function remove(elem, type) {
+    // var elData = cache[guid]
+    var elData = Z(elem).data(eventId)
     var handle = elData.handle
     var events = elData.events
     
@@ -1663,7 +2149,8 @@ function remove(elem, type, guid) {
         delete elData.elem
         delete elData.handle        
         delete elData.events
-        delete cache[guid]
+        // delete cache[guid]
+        Z(elem).removeData(eventId)
     }
 }
 // Custom event class
@@ -1735,8 +2222,8 @@ function fix(e, elem) {
         e.relatedTarget = e.fromElement === e.target ? e.toElement : e.fromElement
     }
     if (e.pageX == null && e.clientX != null) {
-        var docElem = document.documentElement
-        var body = document.body
+        var body = doc.body
+        var docElem = doc.documentElement
         e.pageX = e.clientX + 
             (docElem && docElem.scrollLeft || body && body.scrollLeft || 0) -
             (docElem && docElem.clientLeft || body && body.clientLeft || 0)
@@ -1757,22 +2244,40 @@ function fix(e, elem) {
     return e
 }
 
+function getEventName(type) {
+    // fix noIE mouseenter/mouseleave
+    var type = type
+    if (!Browser.ie) {
+        type = 
+            type === 'mouseenter' ? 'mouseover' :
+            type === 'mouseleave' ? 'mouseout' :
+            type
+    }
+    return type
+}
+
 // Public functions -----------------------------------------------------------------------------
 
 // Add event handler
 function bind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8 || !type) return
     
-    var id = elem[guidStr] = elem[guidStr] || guid++
-    var elData = cache[id] = cache[id] || {}
+    // var id = elem[guidStr] = elem[guidStr] || guid++
+    // var elData = cache[id] = cache[id] || {}
+    var zElem = Z(elem)
+    var elData = zElem.data(eventId)
+    if (!elData) {
+        zElem.data(eventId, {})
+        elData = zElem.data(eventId)
+    }
     var events = elData.events
     var handle = elData.handle
-    var handlerObj, eventType, i = 0, arrType, namespace
+    var handlerObj, eventName, i = 0, arrType, namespace
     
     // 批量添加, 递归
     if ( Z.isObject(type) ) {
-        for (eventType in type) {
-            bind(elem, eventType, type[eventType])
+        for (eventName in type) {
+            bind(elem, eventName, type[eventName])
         }
         return
     } else {
@@ -1834,11 +2339,11 @@ function bind(elem, type, handler) {
     // elem暂存到handle
     elData.elem = elem
     
-    while ( eventType=arrType[i++] ) {
+    while ( eventName = arrType[i++] ) {
         // Namespaced event handlers
-        if ( eventType.indexOf('.') > -1 ) {
+        if ( eventName.indexOf('.') > -1 ) {
             namespace = type.split('.')
-            eventType = namespace[0]
+            eventName = namespace[0]
             handlerObj.namespace = namespace[1]
         } else {
             handlerObj.namespace = ''
@@ -1846,12 +2351,16 @@ function bind(elem, type, handler) {
         
         // 取指定类型事件(如click)的所有handlers, 如果有则是一个数组, 第一次是undefined则初始化为空数组
         // 也仅在handlers为undefined时注册事件, 即每种类型事件仅注册一次, 再次添加handler只是push到数组handlers中
-        handlers  = events[eventType]
+        handlers  = events[eventName]
         if (!handlers) {
-            handlers = events[eventType] = []
-            addListener(elem, eventType, handle)
+            var evtName = getEventName(eventName)
+            handlers = events[evtName] = []
+            addListener(elem, evtName, handle)
         }
         // 添加到数组
+        if (eventName === 'mouseenter' || eventName === 'mouseleave') {
+            handlerObj.defEvtName = eventName
+        }
         handlers.push(handlerObj)
     }
     
@@ -1862,11 +2371,15 @@ function bind(elem, type, handler) {
 // Remove event handler
 function unbind(elem, type, handler) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    type = getEventName(type)
+    var elData = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     
+    if (!handlers || !handlers.length) return
+
     if (handler) { // 传3个参数
         each(handlers, function(handlerObj, i) {
             if (handlerObj.handler === handler || handlerObj.special === handler) {
@@ -1874,13 +2387,13 @@ function unbind(elem, type, handler) {
                 return true
             }
         })
-        if (handlers.length === 0) remove(elem, type, id)
+        if (handlers.length === 0) remove(elem, type)
     
     } else if (type) { // 传两个参数
-        remove(elem, type, id)
+        remove(elem, type)
     
     } else { // 传一个参数
-        for (var type in events) remove(elem, type, id)
+        for (var type in events) remove(elem, type)
     }
 }
 
@@ -1888,8 +2401,9 @@ function unbind(elem, type, handler) {
 function trigger(elem, type) {
     if (!elem || elem.nodeType === 3 || elem.nodeType === 8) return
 
-    var id       = elem[guidStr]
-    var elData   = id && cache[id]
+    // var id       = elem[guidStr]
+    // var elData   = id && cache[id]
+    var elData   = Z(elem).data(eventId)
     var events   = elData && elData.events
     var handlers = events && events[type]
     var args     = sliceArgs(arguments, 2)
@@ -1930,29 +2444,31 @@ Z.fn.fire = function(type) {
 }
 
 // Shorthand Methods
-forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mouseup,keydown,keyup,keypress,focus,blur'.split(','), function(name) {
-    Z.fn[name] = function(handler) {
+forEach('click,dblclick,mouseover,mouseout,mouseenter,mouseleave,mousedown,mousemove,mouseup,keydown,keyup,keypress,focus,blur,losecapture'.split(','), function(name) {
+    Z.fn[name] = function(handler, context) {
         if (arguments.length === 0) {
             this.fire(name)
         } else {
-            this.on(name, handler)
+            this.on(name, {
+                handler: handler,
+                context: context
+            })
         }
         return this
     }
 })
 
 // Event delegate
-Z.fn.delegate = function(selector, type, handler) {
-    if (arguments.length === 2 && Z.isFunction(type)) {
-        fn = type
-        type = 'click'
-    }
+Z.fn.delegate = function(selector, type, handler, context) {
     return this.each(function(el) {
-        Z(el).on(type, function(e) {
-            var tar = e.target
-            Z(selector, this).each( function(el) {
-                if (tar == el || Z.contains(el, tar)) handler.call(el, e)
-            })
+        Z(el).on(type, {
+            context: context,
+            handler: function(e) {
+                var tar = e.target
+                Z(selector, this).each( function(el) {
+                    if (tar == el || Z.contains(el, tar)) handler.call(el, e)
+                })
+            }
         })
     })
 }
@@ -1962,7 +2478,11 @@ Z.fn.undelegate = function(type, fn) {
     })
 }
 
+}(Z)
 
+~function(Z) {
+
+var emptyFunc = noop()
 
 // parse json string
 function parseJSON(str) {
@@ -1978,10 +2498,6 @@ function parseJSON(str) {
 
 // exports 
 Z.parseJSON = parseJSON
-    
-// empty function
-function noop() {}
-
 
 /**
  *  Ajax API
@@ -2014,8 +2530,8 @@ function ajax(url, options) {
     var credential = options.credential
     var data       = options.data
     var scope      = options.scope
-    var success    = options.success || noop
-    var failure    = options.failure || noop
+    var success    = options.success || emptyFunc
+    var failure    = options.failure || emptyFunc
     
     // 大小写都行，但大写是匹配HTTP协议习惯
     method  = method.toUpperCase()
@@ -2120,13 +2636,12 @@ forEach(ajaxOptions, function(val, key) {
     })
 })
 
-
 /**
  *  JSONP API
  *  Z.jsonp
  *  
  */    
-var ie678 = !-[1,]
+var ie678 = Z.ie6 || Z.ie7 || Z.ie8
 var opera = window.opera
 var head = doc.head || doc.getElementsByTagName('head')[0]
 var jsonpDone = false
@@ -2160,8 +2675,8 @@ function jsonp(url, options) {
     var url     = url + '?'
     var data    = options.data
     var charset = options.charset
-    var success = options.success || noop
-    var failure = options.failure || noop
+    var success = options.success || emptyFunc
+    var failure = options.failure || emptyFunc
     var scope   = options.scope || window
     var timestamp = options.timestamp
     var jsonpName = options.jsonpName || 'callback'
@@ -2277,55 +2792,138 @@ Z.param = function(obj, traditional) {
     serialize(params, obj, traditional)
     return params.join('&').replace(/%20/g, '+')
 }
-Z.cache = function() {
-    var seed = 0
-    var cache = {}
-    var id = '_uuid_'
 
-    // @private
-    function uuid(el) {
-        return el[id] || (el[id] = ++seed)
+}(Z)
+
+/**
+ * js/css LazyLoad
+ * 
+ * 变量hash记录已经加载过的资源，避免重复加载
+ * 
+ * Z.loadScript('a.js', function() { ... })
+ *
+ * Z.loadScript('a.js', option, function() { ... })
+ * 
+ * 加载多个js后才回调，缺陷是js文件不存在，那么也将触发回调
+ * Z.loadScript(['a.js','b.js','c.js'], function() { ... })
+ * 
+ * option
+ *   charset: 'utf-8'
+ *   scope: xx
+ * 
+ * 加载多个css后才回调，IE6/7/8/9和Opera中支持link的onreadystatechange事件
+ * Firefox/Safari/Chrome既不支持onreadystatechange，也不支持onload。使用setTimeout延迟加载
+ *
+ * Z.loadLink('a.css', function() { ... })
+ * 
+ */
+
+~function(Z) {
+
+var hash = {}
+var emptyFunc = noop()
+var head = doc.head || doc.getElementsByTagName('head')[0]
+
+function createEl(type, attrs) {
+    var el = doc.createElement(type), attr
+    for (attr in attrs) {
+        el.setAttribute(attr, attrs[attr])
+    }
+    return el
+}
+function done(list, obj) {
+    hash[obj.url] = true
+    list.shift()
+    if (!list.length) {
+        obj.callback.call(obj.scope)
+    }
+}
+function load(type, urls, option, callback) {
+
+    if (Z.isString(urls)) {
+        urls = [urls]
     }
 
-    return {
-        set: function(el, key, val) {
-            if (!el) throw new Error('setting failed, invalid element')
+    if (Z.isFunction(option)) {
+        callback = option
+        option = {}
+    }
 
-            var id = uuid(el)
-            var c = cache[id] || (cache[id] = {})
-            if (key) c[key] = val
+    option = option || {}
 
-            return c
-        },
-        get: function(el, key, create) {
-            if (!el) throw new Error('getting failed, invalid element')
+    var obj = {
+        scope: option.scope || window,
+        callback: callback || emptyFunc
+    }
+    var list = [].concat(urls)
+    var charset = option.charset || 'utf-8'
 
-            var id = uuid(el)
-            var elCache = cache[id] || (create && (cache[id] = {}))
-
-            if (!elCache) return null
-            return key !== undefined ? elCache[key] || null : elCache
-        },
-        has: function(el, key) {
-            return this.get(el, key) !== null
-        },
-        remove: function(el, key) {
-            var id = typeof el === 'object' ? uuid(el) : el
-            var elCache = cache[id]
-
-            if (!elCache) return false
-
-            if (key !== undefined) {
-                delete elCache[key]
-            } else {
-                delete cache[id]
-            }
-
-            return true
+    forEach(urls, function(url, i) {
+        var el = null
+            
+        // 已经加载的不再加载
+        if (hash[url]) {
+            Z.error('warning: ' + url + ' has loaded.')
         }
-    }
 
-}()
+        if (type === 'js') {
+            el = createEl('script', {
+                src: url,
+                async: 'async',
+                charset: charset
+            })
+        } else {
+            el = createEl('link', {
+                href: url,
+                rel: 'stylesheet',
+                type: 'text/css'
+            })
+        }
+
+        (function(url) {
+            if (Z.ie) {
+                el.onreadystatechange = function() {
+                    var readyState = this.readyState
+                    if(readyState === 'loaded' || readyState === 'complete') {
+                        obj.url = url
+                        this.onreadystatechange = null
+                        done(list, obj)
+                    }
+                }
+            } else {
+                if (type == 'js') {
+                    el.onload = el.onerror = function() {
+                        obj.url = url
+                        done(list, obj)
+                    }
+                } else {
+                    setTimeout(function() {
+                        obj.url = url
+                        done(list, obj)
+                    }, 100)
+                }
+            }
+        })(url)
+        
+        if (type === 'js') {
+            head.insertBefore(el, head.firstChild)
+        } else {
+            head.appendChild(el)
+        }
+    })
+
+}
+
+Z.loadScript = function(urls, option, callback) {
+    load('js', urls, option, callback)
+}
+
+Z.loadLink = function(urls, option, callback) {
+    load('css', urls, option, callback)
+}
+
+}(Z)
+
 
 // Expose Z to the global object or as AMD module
 if (typeof define === 'function' && define.amd) {
