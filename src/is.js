@@ -1,5 +1,5 @@
 
-// Z.isArray, Z.isBoolean, ...
+// Z.isArray, Z.isBoolean ...
 forEach(types, function(name) {
     Z['is' + name] = function(obj) {
         if (obj === undefined || obj === null) return false
@@ -37,8 +37,8 @@ Z.isWindow = function(obj) {
     return obj != null && obj === obj.window
 }
 
-Z.isDocument = function(obj) { 
-    return obj != null && obj.nodeType === obj.DOCUMENT_NODE 
+Z.isDocument = function(obj) {
+    return obj != null && obj.nodeType === obj.DOCUMENT_NODE
 }
 
 Z.isElement = function(obj) {
